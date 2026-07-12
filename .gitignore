@@ -60,3 +60,6 @@ crashlytics-build.properties
 # OS junk
 .DS_Store
 Thumbs.db
+
+# My own diagnostic batch-run logs (not part of the project)
+/unity*.log
