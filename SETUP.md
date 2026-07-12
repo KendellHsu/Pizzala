@@ -38,6 +38,8 @@
 
 ## 3. 場景組裝順序
 
+> 每個 Prefab 的詳細建置步驟與驗收清單在 **[Docs/PREFABS.md](Docs/PREFABS.md)**,本節只列場景層級的組裝順序。
+
 ### 3-1. Systems 物件
 建空物件 `Systems`,掛上這四支:
 `SessionLogger`、`DirtManager`、`ActivityTracker`、`GameManager`
