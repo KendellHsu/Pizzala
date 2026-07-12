@@ -36,7 +36,15 @@ public static class RestaurantEnvironmentPrefabBuilder
         return prefab;
     }
 
-    public static GameObject EnsurePrefab() => BuildPrefab();
+    // Unlike the other placeholder builders, this one does NOT always rebuild: once real
+    // Blender art replaces the placeholder cubes inside this prefab, re-running the scene
+    // builder must not wipe that work back to cubes. Delete the prefab file and re-run
+    // "Build Restaurant Environment Prefab" if you ever want a fresh cube version again.
+    public static GameObject EnsurePrefab()
+    {
+        var existing = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+        return existing != null ? existing : BuildPrefab();
+    }
 
     static void SetColor(GameObject go, Color color)
     {
