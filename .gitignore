@@ -1,0 +1,37 @@
+# ── Unity 自動生成,絕對不要進版控 ──
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]serSettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# IDE 產生的專案檔(Unity 會重新生成)
+*.csproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+.vs/
+.idea/
+.vsconfig
+
+# 建置輸出
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# 作業系統雜訊
+.DS_Store
+Thumbs.db
+desktop.ini
