@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 // fields, so the lookup logic and asset path only live in one place.
 public static class XRActionFinder
 {
-    public const string InputActionsPath = "Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/XRI Default Input Actions.inputactions";
+    public const string InputActionsPath = "Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/XRI Default Input Actions.inputactions";
 
     public static InputActionReference FindAction(string mapName, string actionName)
     {

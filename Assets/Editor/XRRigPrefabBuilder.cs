@@ -40,8 +40,8 @@ public static class XRRigPrefabBuilder
         var hitDetector = mainCamGO.AddComponent<PlayerHitDetector>();
         hitDetector.config = config;
 
-        var leftHandInput = CreateControllerCube("LeftHand Controller", cameraOffset.transform, "LeftHand", new Color(0.2f, 0.6f, 1f));
-        var rightHandInput = CreateControllerCube("RightHand Controller", cameraOffset.transform, "RightHand", new Color(1f, 0.4f, 0.2f));
+        var leftHandInput = CreateControllerCube("LeftHand Controller", cameraOffset.transform, "Left", new Color(0.2f, 0.6f, 1f));
+        var rightHandInput = CreateControllerCube("RightHand Controller", cameraOffset.transform, "Right", new Color(1f, 0.4f, 0.2f));
 
         var thrower = xrOrigin.AddComponent<PizzaThrower>();
         thrower.leftHand = leftHandInput;
@@ -62,6 +62,8 @@ public static class XRRigPrefabBuilder
     // Code-generated placeholder prefab - always rebuild to stay in sync with the scripts.
     public static GameObject EnsurePrefab() => BuildPrefab();
 
+    // hand: "Left" or "Right" - matches the "XRI Left"/"XRI Right" map names in XRI 3.x's
+    // default input actions (renamed from "XRI LeftHand"/"XRI RightHand" in XRI 2.x).
     static XRControllerInput CreateControllerCube(string name, Transform parent, string hand, Color color)
     {
         var go = GameObject.CreatePrimitive(PrimitiveType.Cube);

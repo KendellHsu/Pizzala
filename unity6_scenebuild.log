@@ -1,0 +1,661 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.3/staging' branch; Version is '6000.3.19f1 (7689f4515d75) revision 7768564'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-user" at "2026-07-12T11:00:37.8548175Z"
+OS: 'Windows 11  (10.0.26200) Core' Language: 'zh' Physical Memory: 16013 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-07-12T11:00:37Z
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Unity.exe
+-batchmode
+-quit
+-projectPath
+D:\DATA\user\Desktop\openHCI_Claude
+-executeMethod
+SceneBuilder.BuildRestaurantScene
+-logFile
+D:\DATA\user\Desktop\openHCI_Claude\unity6_scenebuild.log
+Successfully changed project path to: D:\DATA\user\Desktop\openHCI_Claude
+D:/DATA/user/Desktop/openHCI_Claude
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+Player connection [49036]  Target information:
+
+Player connection [49036]  * "[IP] 192.168.0.153 [Port] 55504 [Flags] 2 [Guid] 1535420906 [EditorId] 1535420906 [Version] 1048832 [Id] WindowsEditor(7,LAPTOP-GUIPJ202) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [49036] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [49036] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Package Manager] Connected to IPC stream "Upm-49680" after 0.2 seconds.
+[Licensing::Module] Licensing is not yet initialized.
+[Licensing::Client] Error: HandshakeResponse reported an error:
+	ResponseCode: 505
+	ResponseStatus: Unsupported protocol version '1.18.1'.
+[Licensing::Module] Error: Failed to handshake to channel: "LicenseClient-user"
+[Licensing::IpcConnector] LicenseClient-user channel disconnected successfully.
+[Licensing::IpcConnector] Channel LicenseClient-user-6000.3.19 doesn't exist
+[Licensing::Module] Successfully launched the LicensingClient (PId: 49044)
+Starting IPC server.
+Waiting for clients to connect on \\.\pipe\Unity-LicenseClient-user-6000.3.19, press Ctrl-C to exit.
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-user-6000.3.19" at "2026-07-12T11:00:39.2550095Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 49044, path: "C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              a0cb1554cfb8420db388a04ec4328703
+  Correlation Id:          179bdebeb12e4f19d229baf65a4aaccd
+  External correlation Id: 1086695138195231257
+  Machine Id:              P2lT7j56JmaOk9o8I7wWDopvViE=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-user-6000.3.19" (connect: 0.37s, validation: 0.24s, handshake: 0.01s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-user-6000.3.19-notifications" at "2026-07-12T11:00:39.4963825Z"
+[Licensing::Module] Connected to LicensingClient (PId: 49044, launch time: 0.00, total connection time: 0.62s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T11:57:43Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T11:57:43Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Module] Licensing Background thread has ended after 1.67s
+[Licensing::Module] Licensing is initialized (took 0.95s).
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T11:57:43Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Artifact Garbage Collection - Removed 243 unused hashed content files
+Refreshing native plugins compatible for Editor in 1.26 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.3.19f1 (7689f4515d75)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path D:/DATA/user/Desktop/openHCI_Claude/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: Intel(R) Iris(R) Xe Graphics (ID=0xa7a0)
+    Vendor:   Intel
+    VRAM:     8006 MB
+    Driver:   32.0.101.5768
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56680
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T12:00:40Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T12:00:40Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll
+Registered in 0.032958 seconds.
+- Loaded All Assemblies, in  0.715 seconds
+[usbmuxd] Start listen thread
+[usbmuxd] Listen thread started
+Native extension for iOS target not found
+Native extension for Android target not found
+Native extension for WindowsStandalone target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:False
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.408 seconds
+Domain Reload Profiling: 1124ms
+	BeginReloadAssembly (325ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (37ms)
+	RebuildCommonClasses (102ms)
+	RebuildNativeTypeToScriptingClass (12ms)
+	initialDomainReloadingComplete (77ms)
+	LoadAllAssembliesAndSetupDomain (198ms)
+		LoadAssemblies (286ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (192ms)
+			TypeCache.Refresh (190ms)
+				TypeCache.ScanAssembly (174ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (410ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (371ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (64ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (71ms)
+			ProcessInitializeOnLoadAttributes (133ms)
+			ProcessInitializeOnLoadMethodAttributes (100ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (1ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T12:00:40Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 45 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.inputsystem@1.19.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.inputsystem@21a28c3a6c83)
+    com.unity.xr.interaction.toolkit@3.3.2 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.interaction.toolkit@8a8cfde33e41)
+    com.unity.xr.management@4.5.4 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.management@e3a3882b360a)
+    com.unity.xr.oculus@4.5.2 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.oculus@44578ba4bd45)
+    com.unity.xr.core-utils@2.6.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.core-utils@a8b900321199)
+    com.unity.xr.legacyinputhelpers@2.1.13 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.legacyinputhelpers@9535ff2c27ac)
+    com.unity.mathematics@1.3.3 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+  Built-in packages:
+    com.unity.multiplayer.center@1.0.1 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.multiplayer.center@f01f4ba8d00a)
+    com.unity.modules.accessibility@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.accessibility)
+    com.unity.modules.adaptiveperformance@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.adaptiveperformance)
+    com.unity.modules.ai@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.androidjni@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.androidjni)
+    com.unity.modules.animation@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.assetbundle@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.assetbundle)
+    com.unity.modules.audio@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.cloth@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.cloth)
+    com.unity.modules.director@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.imageconversion@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.imgui@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.modules.particlesystem@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.modules.physics@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.screencapture@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.terrain@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.terrainphysics@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.terrainphysics)
+    com.unity.modules.tilemap@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.tilemap)
+    com.unity.modules.ui@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.uielements@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.umbra@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.umbra)
+    com.unity.modules.unityanalytics@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unityanalytics)
+    com.unity.modules.unitywebrequest@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unitywebrequestaudio)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unitywebrequesttexture)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unitywebrequestwww)
+    com.unity.modules.vectorgraphics@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.vectorgraphics)
+    com.unity.modules.vehicles@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.vehicles)
+    com.unity.modules.video@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.video)
+    com.unity.modules.vr@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.vr)
+    com.unity.modules.wind@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.wind)
+    com.unity.modules.xr@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.xr)
+    com.unity.modules.subsystems@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.subsystems)
+    com.unity.modules.hierarchycore@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.hierarchycore)
+    com.unity.ugui@2.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.ugui@b95364aab964)
+[Subsystems] Looking for new subsystems at path D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.oculus@44578ba4bd45
+[Subsystems] Novel subsystem found at Library/PackageCache/com.unity.xr.oculus@44578ba4bd45/Runtime/UnitySubsystemsManifest.json
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path D:/DATA/user/Desktop/openHCI_Claude/Assets
+[Subsystems] Discovering subsystems at path D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.oculus@44578ba4bd45
+[Subsystems] No descriptors matched for  examples in Library/PackageCache/com.unity.xr.oculus@44578ba4bd45/Runtime/UnitySubsystemsManifest.json.
+[Subsystems] 1 'inputs' descriptors matched in Library/PackageCache/com.unity.xr.oculus@44578ba4bd45/Runtime/UnitySubsystemsManifest.json
+[Subsystems] 1 'displays' descriptors matched in Library/PackageCache/com.unity.xr.oculus@44578ba4bd45/Runtime/UnitySubsystemsManifest.json
+[Subsystems] No descriptors matched for  meshings in Library/PackageCache/com.unity.xr.oculus@44578ba4bd45/Runtime/UnitySubsystemsManifest.json.
+[Package Manager] Done registering packages in 0.03 seconds
+[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:80
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\DATA\user\Desktop\openHCI_Claude\
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc - - 200 - application/grpc 30.6557ms
+Starting: C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: D:/DATA/user/Desktop/openHCI_Claude
+DisplayProgressbar: Compiling Scripts
+ExitCode: 4 Duration: 0s284ms
+Rebuilding DAG because FileSignature timestamp changed: Library/Bee/1900b0aE-inputdata.json
+[406/412    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll (+2 others)
+Assets\Scripts\Gameplay\PizzaProjectile.cs(43,13): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity'
+
+Assets\Scripts\Gameplay\PizzaProjectile.cs(63,17): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity'
+*** Tundra requires additional run (0.24 seconds), 1 items updated, 405 evaluated
+[ApiUpdater] Total time: 885ms, Parse response file: 85ms, Collect updater configs: 254ms, Update: 544ms, Save: 2ms Files: 1 modified / 1 visited / 13 total (Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll).
+Starting: C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Data\netcorerun\netcorerun.exe "C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Data\Tools\BuildPipeline\ScriptCompilationBuildProgram.exe" "Library/Bee/1900b0aE.dag.json" "Library/Bee/1900b0aE-inputdata.json" "Library\Bee\buildprogram0.traceevents"
+WorkingDir: D:/DATA/user/Desktop/openHCI_Claude
+ExitCode: 0 Duration: 0s340ms
+Starting: C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --dagfilejson="Library\Bee\1900b0aE.dag.json" --profile="Library/Bee/backend2.traceevents" ScriptAssemblies
+WorkingDir: D:/DATA/user/Desktop/openHCI_Claude
+ExitCode: 0 Duration: 0s955ms
+Finished compiling graph: 442 nodes, 6593 flattened edges (6047 ToBuild, 66 ToUse), maximum node priority 305
+[263/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll.mvfrm.rsp
+[264/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.UnityAdditionalFile.txt
+[265/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.rsp
+[266/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.rsp
+[267/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.UnityAdditionalFile.txt
+[268/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll.mvfrm.rsp
+[269/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.rsp2
+[385/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.dll.mvfrm.rsp
+[386/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.dll.mvfrm.rsp
+[409/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.UnityAdditionalFile.txt
+[410/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.rsp2
+[411/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.dll.mvfrm.rsp
+[412/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.rsp
+[413/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.rsp
+[414/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.rsp2
+[415/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.rsp
+[416/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.dll.mvfrm
+[417/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.dll.mvfrm
+[418/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.dll.mvfrm
+[419/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.dll (+2 others)
+[420/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.dll (+2 others)
+[421/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.dll (+2 others)
+[422/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.pdb
+[423/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.pdb
+[424/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.pdb
+[425/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.dll
+[426/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.ref.dll_CE8B080C07253616.mvfrm
+[427/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.ref.dll_62B10D93E579B8A7.mvfrm
+[428/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.ref.dll_47844EB97FE7EF4B.mvfrm
+[429/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.dll
+[430/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.dll
+[431/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll.mvfrm
+[432/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll.mvfrm
+[433/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll (+2 others)
+Assets\Scripts\Gameplay\PizzaProjectile.cs(43,13): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity'
+
+Assets\Scripts\Gameplay\PizzaProjectile.cs(63,17): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity'
+[434/439    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+[435/439    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+[436/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
+Assets\Editor\PlaySmokeTest.cs(37,29): warning CS0618: 'Object.FindObjectsOfType<T>()' is obsolete: 'Object.FindObjectsOfType has been deprecated. Use Object.FindObjectsByType instead which lets you decide whether you need the results sorted or not.  FindObjectsOfType sorts the results by InstanceID but if you do not need this using FindObjectSortMode.None is considerably faster.'
+
+Assets\Editor\SpawnLogicSmokeTest.cs(77,176): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity'
+[437/439    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+[438/439    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+*** Tundra build success (0.93 seconds), 39 items updated, 439 evaluated
+[ApiUpdater] Total time: 660ms, Parse response file: 47ms, Collect updater configs: 211ms, Update: 400ms, Save: 2ms Files: 1 modified / 1 visited / 13 total (Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll).
+[ApiUpdater] Total time: 769ms, Parse response file: 58ms, Collect updater configs: 173ms, Update: 535ms, Save: 3ms Files: 1 modified / 1 visited / 12 total (Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll).
+[API Updater] Updated Files:
+Skipping ScriptUpdater consent dialog. Consent declined based on command line parameters.
+Finished running ScriptUpdaters
+Assets\Scripts\Gameplay\PizzaProjectile.cs(43,13): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity'
+Assets\Scripts\Gameplay\PizzaProjectile.cs(63,17): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity'
+Assets\Editor\PlaySmokeTest.cs(37,29): warning CS0618: 'Object.FindObjectsOfType<T>()' is obsolete: 'Object.FindObjectsOfType has been deprecated. Use Object.FindObjectsByType instead which lets you decide whether you need the results sorted or not.  FindObjectsOfType sorts the results by InstanceID but if you do not need this using FindObjectSortMode.None is considerably faster.'
+Assets\Editor\SpawnLogicSmokeTest.cs(77,176): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity'
+AssetDatabase: script compilation time: 4.172767s
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  1.310 seconds
+Refreshing native plugins compatible for Editor in 5.25 ms, found 3 plugins.
+Native extension for iOS target not found
+Native extension for Android target not found
+Native extension for WindowsStandalone target not found
+[XR] OculusXRPlugin: registering subsystems
+[Subsystems] OculusXRPlugin successfully registered Provider for oculus display
+[XR] Oculus Input lifecycle provider registered.
+[Subsystems] OculusXRPlugin successfully registered Provider for oculus input
+[Subsystems] OculusXRPlugin successfully registered Provider for oculus display
+[XR] OVRP version 1.92.0
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.626 seconds
+Domain Reload Profiling: 1936ms
+	BeginReloadAssembly (325ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (33ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (165ms)
+	RebuildCommonClasses (30ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (15ms)
+	LoadAllAssembliesAndSetupDomain (929ms)
+		LoadAssemblies (958ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (60ms)
+			TypeCache.Refresh (38ms)
+				TypeCache.ScanAssembly (30ms)
+			BuildScriptInfoCaches (15ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (627ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (482ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (33ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (109ms)
+			ProcessInitializeOnLoadAttributes (269ms)
+			ProcessInitializeOnLoadMethodAttributes (63ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (24ms)
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/XRI Default Input Actions.inputactions using Guid(c348712bda248c246b8c49b3db54643f) (ScriptedImporter) -> (artifact id: 'd1438c0f6a35cf234b746ede5122c3ff') in 0.1510348 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/UI/TextButton.prefab using Guid(e5db301629853dd4a99835fa70099d79) (PrefabImporter) -> (artifact id: '7fb6864cf7e50025d775dd2adad62ef1') in 0.057605 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/UI/ModalSingleButton.prefab using Guid(c24a7635b5761984d81cf6c4aac26e0d) (PrefabImporter) -> (artifact id: '5164452a71b48a258805171dba864f9c') in 0.0174891 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/Prefabs/Controllers/XR Controller Left.prefab using Guid(1392f805216c47742996d4742c80721c) (PrefabImporter) -> (artifact id: '795f72fb6a0e4946efd6d78f2a8b83b2') in 0.0159239 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/UI/Icon Toggle.prefab using Guid(541ed11e270c6994ca5910042c7e04da) (PrefabImporter) -> (artifact id: 'e5e3a2fc5496cc52c4a51634ad568870') in 0.0073632 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/Climb/Multi Floor Ladder.prefab using Guid(652585f331bff7e44afb8fe71ec2119f) (PrefabImporter) -> (artifact id: 'b5d3874f733bd5dfb8d8137e2248cc57') in 0.0529255 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/UI/Icon Button.prefab using Guid(56686f82f64b0af4688a89676403a500) (PrefabImporter) -> (artifact id: '13570e2f6da28fd672a55842815afe41') in 0.0044606 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/Interactables/Push Button.prefab using Guid(76f3439a0ae796e4b81bee3f91f888ee) (PrefabImporter) -> (artifact id: 'b4a5552accefd337e77ced82255ab825') in 0.0153252 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/Prefabs/Controllers/XR Controller Right.prefab using Guid(9f3369e30fbd31f4bb596b1a99babe83) (PrefabImporter) -> (artifact id: '9d6c8aa8f3e395a063ef657109870058') in 0.0038439 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/Prefabs/Interactors/Gaze Interactor.prefab using Guid(b84cd05e1160fe34cab2585022c8cd99) (PrefabImporter) -> (artifact id: '5410e99a35134ed5b8e44b7f355b34db') in 0.0158225 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/Prefabs/XR Origin (XR Rig).prefab using Guid(f6336ac4ac8b4d34bc5072418cdc62a0) (PrefabImporter) -> (artifact id: '8be93ade4239c419d608eecb5addaae1') in 0.0721602 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/Poke Interactions Sample.prefab using Guid(88246f8e9c3765d49be8da34eca3c630) (PrefabImporter) -> (artifact id: '47ebdcc161f741cf20ba1ce6774f2978') in 0.0186559 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/UI/Text Toggle.prefab using Guid(6a448845c7017044e8a9f3d711cfe825) (PrefabImporter) -> (artifact id: '7670b970832efc09c603520fe16218d4') in 0.0031844 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/XR Device Simulator/UI/XR Device Simulator UI.prefab using Guid(ead42e0472b7547fbba6c229aeaf37d3) (PrefabImporter) -> (artifact id: '1fc34ee2535a7c3cef86ae16a8529d26') in 0.0402149 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/Prefabs/Permissions Manager.prefab using Guid(faf53399145e13c4b992b14c97b5f4c0) (PrefabImporter) -> (artifact id: '80429f3c43a5ee9e52e15b37cf4195ad') in 0.0046551 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/UI/Interactive Controls.prefab using Guid(7bbb1960bab3e75459304488d8d1ffba) (PrefabImporter) -> (artifact id: '563267dd49385d2420905841e49849b2') in 0.0191523 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/UI Sample.prefab using Guid(fd28f23af44f73f4a95e33435872ad15) (PrefabImporter) -> (artifact id: '214e096d479181eee5ad053d43073ac6') in 0.0214818 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/Climb/Climb Sample.prefab using Guid(2ea572d587ee60f44bd5baa3bc2d6503) (PrefabImporter) -> (artifact id: '863031925091721eef3562e81c9de54a') in 0.0230047 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/Climb/ClimbTeleportReticle.prefab using Guid(6eb816e9b7ce30f4cadff3d4ad7ad10c) (PrefabImporter) -> (artifact id: '1c3e044ffdc2f9324251aae97b646da7') in 0.0045371 seconds
+Start importing Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/DemoSceneAssets/Prefabs/GazeActivationZone.prefab using Guid(4f7b6e4d9c721834e97d07d4cd95bf74) (PrefabImporter) -> (artifact id: '95cb2619f411a07d78092dea4f779b92') in 0.0053874 seconds
+Refreshing native plugins compatible for Editor in 1.58 ms, found 3 plugins.
+Preloading 1 native plugins for Editor in 29.55 ms.
+Asset Pipeline Refresh (id=d303f8c55a6e7e042a8038a3d53f4fe6): Total: 7.648 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=20 (actual=20, local cache=0, cache server=0)
+		Asset DB Process Time: managed=5 ms, native=1540 ms
+		Asset DB Callback time: managed=497 ms, native=100 ms
+		Scripting: domain reloads=1, domain reload time=1310 ms, compile time=4175 ms, other=18 ms
+		Project Asset Count: scripts=546, non-scripts=516
+		Asset File Changes: new=0, changed=5, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeCustomDependenciesCallbacks: 0.002ms
+	InvokePackagesCallback: 33.680ms
+	ApplyChangesToAssetFolders: 0.758ms
+	Scan: 97.108ms
+	OnSourceAssetsModified: 1.250ms
+	CategorizeAssetsWithTransientArtifact: 45.368ms
+	ProcessAssetsWithTransientArtifactChanges: 24.178ms
+	CategorizeAssets: 16.456ms
+	ImportOutOfDateAssets: 1254.923ms (-3536.211ms without children)
+		ImportManagerImport: 615.045ms (20.529ms without children)
+			ImportInProcess: 594.354ms
+			UpdateCategorizedAssets: 0.161ms
+		CompileScripts: 4174.913ms
+		ReloadNativeAssets: 0.031ms
+		UnloadImportedAssets: 0.178ms
+		ReloadImportedAssets: 0.002ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.153ms
+		InitializingProgressBar: 0.008ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 0.804ms
+	PostProcessAllAssets: 528.793ms
+	Hotreload: 35.790ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.003ms
+	UnloadStreamsBegin: 1.175ms
+	PersistCurrentRevisions: 0.141ms
+	UnloadStreamsEnd: 0.001ms
+	GenerateScriptTypeHashes: 3.861ms
+	Untracked: 5608.647ms
+
+Application.AssetDatabase Initial Refresh End
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.03 seconds
+Scanning for USB devices : 2.330ms
+Initializing Unity extensions:
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-openHCI_Claude
+Unloading 8 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 1890 unused Assets / (2.2 MB). Loaded Objects now: 2520.
+Memory consumption went from 161.2 MB to 159.0 MB.
+Total: 7.341100 ms (FindLiveObjects: 0.197600 ms CreateObjectMapping: 0.078200 ms MarkObjects: 5.758600 ms  DeleteObjects: 1.305300 ms)
+
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 0 unused Assets / (0 B). Loaded Objects now: 2527.
+Memory consumption went from 157.9 MB to 157.9 MB.
+Total: 4.157500 ms (FindLiveObjects: 0.106600 ms CreateObjectMapping: 0.031500 ms MarkObjects: 4.012900 ms  DeleteObjects: 0.005900 ms)
+
+Start importing Assets/Prefabs/Pizza.prefab using Guid(9d51ebe9dd797fc4d9bbf34c4474ef8b) (PrefabImporter) -> (artifact id: '609d5ca773ec99dec03e66b930467a7d') in 0.0039018 seconds
+Refreshing native plugins compatible for Editor in 1.70 ms, found 3 plugins.
+Preloading 1 native plugins for Editor in 0.06 ms.
+Asset Pipeline Refresh (id=1056a6fcb4729084982e8206a28772aa): Total: 0.073 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+PizzaPrefabBuilder: Pizza prefab created at Assets/Prefabs/Pizza.prefab
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+PizzaPrefabBuilder:BuildPrefab () (at Assets/Editor/PizzaPrefabBuilder.cs:32)
+PizzaPrefabBuilder:EnsurePrefab () (at Assets/Editor/PizzaPrefabBuilder.cs:39)
+XRRigPrefabBuilder:BuildPrefab () (at Assets/Editor/XRRigPrefabBuilder.cs:18)
+XRRigPrefabBuilder:EnsurePrefab () (at Assets/Editor/XRRigPrefabBuilder.cs:63)
+SceneBuilder:BuildRestaurantScene () (at Assets/Editor/SceneBuilder.cs:30)
+
+(Filename: Assets/Editor/PizzaPrefabBuilder.cs Line: 32)
+
+Start importing Assets/Prefabs/XRRig.prefab using Guid(acb41cb8d6086a4409caee052a122500) (PrefabImporter) -> (artifact id: '6db7c265c0bb18ee50e757c878a8ac6d') in 0.0033887 seconds
+Refreshing native plugins compatible for Editor in 1.50 ms, found 3 plugins.
+Preloading 1 native plugins for Editor in 0.06 ms.
+Asset Pipeline Refresh (id=b9a57f3db4213614c80bd9f79ca48002): Total: 0.028 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+XRRigPrefabBuilder: XR Rig prefab created at Assets/Prefabs/XRRig.prefab
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+XRRigPrefabBuilder:BuildPrefab () (at Assets/Editor/XRRigPrefabBuilder.cs:58)
+XRRigPrefabBuilder:EnsurePrefab () (at Assets/Editor/XRRigPrefabBuilder.cs:63)
+SceneBuilder:BuildRestaurantScene () (at Assets/Editor/SceneBuilder.cs:30)
+
+(Filename: Assets/Editor/XRRigPrefabBuilder.cs Line: 58)
+
+Start importing Assets/Prefabs/RestaurantEnvironment.prefab using Guid(aac269e5da03a4949966a19f76cd4321) (PrefabImporter) -> (artifact id: '438a2c0cc18be2e19ab85eb11c461bf4') in 0.0029527 seconds
+Refreshing native plugins compatible for Editor in 1.90 ms, found 3 plugins.
+Preloading 1 native plugins for Editor in 0.11 ms.
+Asset Pipeline Refresh (id=168d769a5a8f4ba4688c4440a41e8283): Total: 0.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+RestaurantEnvironmentPrefabBuilder: prefab created at Assets/Prefabs/RestaurantEnvironment.prefab
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+RestaurantEnvironmentPrefabBuilder:BuildPrefab () (at Assets/Editor/RestaurantEnvironmentPrefabBuilder.cs:35)
+RestaurantEnvironmentPrefabBuilder:EnsurePrefab () (at Assets/Editor/RestaurantEnvironmentPrefabBuilder.cs:39)
+SceneBuilder:BuildRestaurantScene () (at Assets/Editor/SceneBuilder.cs:31)
+
+(Filename: Assets/Editor/RestaurantEnvironmentPrefabBuilder.cs Line: 35)
+
+Start importing Assets/Prefabs/Customer.prefab using Guid(8a25a318654753e47b736007596a5a9e) (PrefabImporter) -> (artifact id: 'ead637e6ac25ed79a48acb89a308ad48') in 0.0102087 seconds
+Refreshing native plugins compatible for Editor in 1.56 ms, found 3 plugins.
+Preloading 1 native plugins for Editor in 0.06 ms.
+Asset Pipeline Refresh (id=af3e58daabe196d4d8e03c6803361a22): Total: 0.054 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+CustomerPrefabBuilder: Customer prefab created at Assets/Prefabs/Customer.prefab
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+CustomerPrefabBuilder:BuildPrefab () (at Assets/Editor/CustomerPrefabBuilder.cs:51)
+CustomerPrefabBuilder:EnsurePrefab () (at Assets/Editor/CustomerPrefabBuilder.cs:59)
+CustomerSpawnRootPrefabBuilder:BuildPrefab () (at Assets/Editor/CustomerSpawnRootPrefabBuilder.cs:15)
+CustomerSpawnRootPrefabBuilder:EnsurePrefab () (at Assets/Editor/CustomerSpawnRootPrefabBuilder.cs:34)
+SceneBuilder:BuildRestaurantScene () (at Assets/Editor/SceneBuilder.cs:32)
+
+(Filename: Assets/Editor/CustomerPrefabBuilder.cs Line: 51)
+
+Asset Pipeline Refresh (id=2a2048bc78dbf4149840d460232059a8): Total: 0.006 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+PizzaPrefabBuilder: Pizza prefab created at Assets/Prefabs/Pizza.prefab
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+PizzaPrefabBuilder:BuildPrefab () (at Assets/Editor/PizzaPrefabBuilder.cs:32)
+PizzaPrefabBuilder:EnsurePrefab () (at Assets/Editor/PizzaPrefabBuilder.cs:39)
+CustomerSpawnRootPrefabBuilder:BuildPrefab () (at Assets/Editor/CustomerSpawnRootPrefabBuilder.cs:16)
+CustomerSpawnRootPrefabBuilder:EnsurePrefab () (at Assets/Editor/CustomerSpawnRootPrefabBuilder.cs:34)
+SceneBuilder:BuildRestaurantScene () (at Assets/Editor/SceneBuilder.cs:32)
+
+(Filename: Assets/Editor/PizzaPrefabBuilder.cs Line: 32)
+
+Start importing Assets/Prefabs/CustomerSpawnRoot.prefab using Guid(928f360441bea7c488b7a1a6f1d8992e) (PrefabImporter) -> (artifact id: '3b812a9bc6384ee5513a1838ca484fa7') in 0.0034529 seconds
+Refreshing native plugins compatible for Editor in 1.97 ms, found 3 plugins.
+Preloading 1 native plugins for Editor in 0.06 ms.
+Asset Pipeline Refresh (id=5ad1cfeab680b6a4884e39a11218261c): Total: 0.026 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+CustomerSpawnRootPrefabBuilder: prefab created at Assets/Prefabs/CustomerSpawnRoot.prefab
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+CustomerSpawnRootPrefabBuilder:BuildPrefab () (at Assets/Editor/CustomerSpawnRootPrefabBuilder.cs:30)
+CustomerSpawnRootPrefabBuilder:EnsurePrefab () (at Assets/Editor/CustomerSpawnRootPrefabBuilder.cs:34)
+SceneBuilder:BuildRestaurantScene () (at Assets/Editor/SceneBuilder.cs:32)
+
+(Filename: Assets/Editor/CustomerSpawnRootPrefabBuilder.cs Line: 30)
+
+Start importing Assets/Scenes/Restaurant.unity using Guid(8a4a9cd4597db874094ac6f297b5c3b7) (DefaultImporter) -> (artifact id: '093d5170ce13582861e09938dbe62b70') in 0.0020793 seconds
+Refreshing native plugins compatible for Editor in 1.61 ms, found 3 plugins.
+Preloading 1 native plugins for Editor in 0.07 ms.
+Asset Pipeline Refresh (id=f06efa8619106344eb93443ed46492d2): Total: 0.023 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+SceneBuilder: Restaurant scene created.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SceneBuilder:BuildRestaurantScene () (at Assets/Editor/SceneBuilder.cs:54)
+
+(Filename: Assets/Editor/SceneBuilder.cs Line: 54)
+
+Batchmode quit successfully invoked - shutting down!
+Curl error 42: Callback aborted
+Killing ADB server in 2.1515036 seconds.
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input System polling thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-user-6000.3.19-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-user-6000.3.19 channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+Shut down.
+Cleanup mono
+abort_threads: Failed aborting id: 000000000000B74C, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 000000000000D834, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 000000000000E358, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 000000000000B74C, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 000000000000D834, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 000000000000E358, mono_thread_manage will ignore it
+
+debugger-agent: Unable to listen on 3492
+[usbmuxd] Stop listen thread
+[usbmuxd] Listen thread exiting
+Exiting batchmode successfully now!
+Exiting without the bug reporter. Application will terminate with return code 0

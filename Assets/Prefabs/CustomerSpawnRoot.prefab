@@ -43,7 +43,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f583e059fe1ec8c43b99d702b3550c1d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::PizzaVR.Customers.CustomerSpawner
   customerPrefab: {fileID: 5588425562652277258, guid: 8a25a318654753e47b736007596a5a9e, type: 3}
   pizzaPrefab: {fileID: 4431888664430731612, guid: 9d51ebe9dd797fc4d9bbf34c4474ef8b, type: 3}
   config: {fileID: 11400000, guid: 3dee040968a6c9345a31df83858dd517, type: 2}

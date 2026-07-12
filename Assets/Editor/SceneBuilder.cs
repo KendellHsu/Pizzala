@@ -8,7 +8,7 @@ using PizzaVR.Core;
 // tweaks happen inside a prefab instead of this shared scene file.
 public static class SceneBuilder
 {
-    const string SimulatorPrefabPath = "Assets/Samples/XR Interaction Toolkit/2.6.4/XR Device Simulator/XR Device Simulator.prefab";
+    const string SimulatorPrefabPath = "Assets/Samples/XR Interaction Toolkit/3.3.2/XR Device Simulator/XR Device Simulator.prefab";
     public const string ScenePath = "Assets/Scenes/Restaurant.unity";
 
     [MenuItem("Tools/Pizza VR/Build Restaurant Scene")]

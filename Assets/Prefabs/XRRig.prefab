@@ -59,6 +59,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -80,9 +85,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &1571975049969725965
 MonoBehaviour:
@@ -95,12 +102,12 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a47655a1b0ec98479ac02cf87ddb863, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::PizzaVR.XR.XRControllerInput
   positionAction: {fileID: -2024308242397127297, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  rotationAction: {fileID: 1361318942962220402, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  gripValueAction: {fileID: -6264840172878880269, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  triggerValueAction: {fileID: -6881049843679667603, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  primaryButtonAction: {fileID: 1780037360757119134, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  rotationAction: {fileID: 8248158260566104461, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  gripValueAction: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  triggerValueAction: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  primaryButtonAction: {fileID: 1579648843433820435, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   velocitySampleWindow: 6
   recentDirectionFrames: 3
   minRecentSpeedForDirection: 0.15
@@ -163,6 +170,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -184,9 +196,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3258569661689802662
 MonoBehaviour:
@@ -199,12 +213,12 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a47655a1b0ec98479ac02cf87ddb863, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  positionAction: {fileID: -8220916845304998143, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  rotationAction: {fileID: -2370338454578381116, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::PizzaVR.XR.XRControllerInput
+  positionAction: {fileID: -3326005586356538449, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  rotationAction: {fileID: 5101698808175986029, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   gripValueAction: {fileID: -1758520528963094988, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  triggerValueAction: {fileID: -4495263257814129172, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  primaryButtonAction: {fileID: -8833506617199914515, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  triggerValueAction: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  primaryButtonAction: {fileID: -103217132278795728, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   velocitySampleWindow: 6
   recentDirectionFrames: 3
   minRecentSpeedForDirection: 0.15
@@ -314,9 +328,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a47655a1b0ec98479ac02cf87ddb863, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  positionAction: {fileID: -939862505250633605, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  rotationAction: {fileID: -5272768276525813815, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::PizzaVR.XR.XRControllerInput
+  positionAction: {fileID: 7862207684358717888, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  rotationAction: {fileID: -530380113134220495, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   gripValueAction: {fileID: 0}
   triggerValueAction: {fileID: 0}
   primaryButtonAction: {fileID: 0}
@@ -355,7 +369,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f4a57cb72d7a8e4eb3eb62fce0ef309, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::PizzaVR.Gameplay.PlayerHitDetector
   config: {fileID: 11400000, guid: 3dee040968a6c9345a31df83858dd517, type: 2}
 --- !u!1 &3830365103031856418
 GameObject:
@@ -402,7 +416,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 183673a6a4ea0444298518b2c185d3ca, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::PizzaVR.XR.XRBootstrap
   rigRoot: {fileID: 8809386394624661099}
   simulatorEyeHeight: 1.6
 --- !u!114 &7029440733886205900
@@ -416,7 +430,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16d07a035e6675b45b2f54c79584641d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::PizzaVR.Gameplay.PizzaThrower
   leftHand: {fileID: 1571975049969725965}
   rightHand: {fileID: 3258569661689802662}
   pizzaPrefab: {fileID: 4431888664430731612, guid: 9d51ebe9dd797fc4d9bbf34c4474ef8b, type: 3}

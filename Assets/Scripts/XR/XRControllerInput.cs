@@ -7,10 +7,10 @@ namespace PizzaVR.XR
     // trigger/grip/button state plus velocity computed from position deltas.
     //
     // Works identically whether the underlying device is a real Meta Quest controller or the
-    // XR Device Simulator (Assets/Samples/XR Interaction Toolkit/2.6.4/XR Device Simulator),
+    // XR Device Simulator (Assets/Samples/XR Interaction Toolkit/<version>/XR Device Simulator),
     // since both expose the same generic <XRController>/<XRHMD> Input System device layout.
     // Bind the action fields to the matching actions in "XRI Default Input Actions.inputactions"
-    // (Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/).
+    // (Assets/Samples/XR Interaction Toolkit/<version>/Starter Assets/).
     public class XRControllerInput : MonoBehaviour
     {
         [Header("Pose (XRI Head / XRI LeftHand / XRI RightHand)")]

@@ -1,0 +1,1428 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.3/staging' branch; Version is '6000.3.19f1 (7689f4515d75) revision 7768564'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-user" at "2026-07-12T10:55:01.8915844Z"
+OS: 'Windows 11  (10.0.26200) Core' Language: 'zh' Physical Memory: 16013 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-07-12T10:55:01Z
+[Licensing::Client] Error: HandshakeResponse reported an error:
+	ResponseCode: 505
+	ResponseStatus: Unsupported protocol version '1.18.1'.
+[Licensing::Module] Error: Failed to handshake to channel: "LicenseClient-user"
+[Licensing::IpcConnector] LicenseClient-user channel disconnected successfully.
+[Licensing::IpcConnector] Channel LicenseClient-user-6000.3.19 doesn't exist
+[Licensing::Module] Successfully launched the LicensingClient (PId: 42268)
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Unity.exe
+-batchmode
+-quit
+-projectPath
+D:\DATA\user\Desktop\openHCI_Claude
+-logFile
+D:\DATA\user\Desktop\openHCI_Claude\unity6_upgrade.log
+Successfully changed project path to: D:\DATA\user\Desktop\openHCI_Claude
+D:/DATA/user/Desktop/openHCI_Claude
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+Player connection [20044]  Target information:
+
+Player connection [20044]  * "[IP] 192.168.0.153 [Port] 55504 [Flags] 2 [Guid] 2093500354 [EditorId] 2093500354 [Version] 1048832 [Id] WindowsEditor(7,LAPTOP-GUIPJ202) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [20044] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [20044] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Package Manager] Connected to IPC stream "Upm-37284" after 0.2 seconds.
+[Licensing::Module] Licensing is not yet initialized.
+Starting IPC server.
+Waiting for clients to connect on \\.\pipe\Unity-LicenseClient-user-6000.3.19, press Ctrl-C to exit.
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-user-6000.3.19" at "2026-07-12T10:55:08.3688491Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 42268, path: "C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              dc551347c5c4492091c91c8b21881b95
+  Correlation Id:          57a1d4de48e16969daaa5269654d3ab6
+  External correlation Id: 3544917306084408131
+  Machine Id:              P2lT7j56JmaOk9o8I7wWDopvViE=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-user-6000.3.19" (connect: 4.37s, validation: 0.36s, handshake: 0.01s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-user-6000.3.19-notifications" at "2026-07-12T10:55:08.7348953Z"
+[Licensing::Module] Connected to LicensingClient (PId: 42268, launch time: 0.06, total connection time: 4.73s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T11:45:17Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T11:45:17Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Module] Licensing Background thread has ended after 7.01s
+[Licensing::Module] Licensing is initialized (took 4.30s).
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T11:45:17Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+Library Redirect Path: Library/
+Cannot upgrade database Library/SourceAssetDB. Will delete the database and recreate content in the new format instead.
+[Upgrade] Starting artifact database upgrade: No script import
+[Upgrade]   Started collecting plugin and monoscript artifacts to remove from cache
+[Upgrade]   Processed 1000 in 0.0453126 seconds
+
+[Upgrade]   Processed 2000 in 0.0666306 seconds
+
+
+[Upgrade]   Collected 1519 assets by searching 2549 artifacts
+[Upgrade]   Processed 2550 in 0.076767 seconds
+
+[Upgrade]   Done collecting plugin and monoscript artifacts to remove from cache
+[Upgrade]   Started removing collected plugins and monoscript artifacts
+[Upgrade]   Processed 1000 in 0.0301543 seconds
+
+[Upgrade]   Removed 1504 assets and 1519 artifacts from import cache
+[Upgrade]   Processed 1505 in 0.035741 seconds
+
+[Upgrade]   Done removing collected plugins and monoscript artifacts
+[Upgrade] Done artifact database upgrade: No script import
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Artifact Garbage Collection - Removed 1684 unused hashed content files
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.3.19f1 (7689f4515d75)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path D:/DATA/user/Desktop/openHCI_Claude/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: Intel(R) Iris(R) Xe Graphics (ID=0xa7a0)
+    Vendor:   Intel
+    VRAM:     8006 MB
+    Driver:   32.0.101.5768
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56284
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T11:55:10Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T11:55:10Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll
+Registered in 1.284082 seconds.
+- Loaded All Assemblies, in 34.032 seconds
+[usbmuxd] Start listen thread
+[usbmuxd] Listen thread started
+Native extension for iOS target not found
+Native extension for Android target not found
+Native extension for WindowsStandalone target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:False
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.500 seconds
+Domain Reload Profiling: 34531ms
+	BeginReloadAssembly (26990ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (13ms)
+	RebuildCommonClasses (1004ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (1360ms)
+	LoadAllAssembliesAndSetupDomain (4667ms)
+		LoadAssemblies (26988ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (4648ms)
+			TypeCache.Refresh (4643ms)
+				TypeCache.ScanAssembly (3889ms)
+			BuildScriptInfoCaches (1ms)
+			ResolveRequiredComponents (2ms)
+	FinalizeReload (501ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (451ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (120ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (73ms)
+			ProcessInitializeOnLoadAttributes (135ms)
+			ProcessInitializeOnLoadMethodAttributes (119ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-D94W-2YU2-WQQW-5EUY-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-07-22T11:55:10Z
+[Licensing::Module] License group:
+  Id: ewogICJzdWJzR3JvdXAiIDogInVuaXR5IGVkaXRvciIsCiAgIm5hbWVzcGFjZSIgOiAidW5pdHlfZWRpdG9yIiwKICAidHlwZSIgOiAiRURJVE9SIiwKICAidGFnIiA6ICJVbml0eVBlcnNvbmFsXXXX
+  Product: Unity Personal Version
+  Type: Assigned
+  Expiration: Unlimited
+Application.AssetDatabase Initial Refresh Start
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were added:
+  com.unity.modules.adaptiveperformance@1.0.0
+  com.unity.modules.vectorgraphics@1.0.0
+  com.unity.modules.accessibility@1.0.0
+  com.unity.multiplayer.center@1.0.1
+The following packages were updated:
+  com.unity.xr.management from version 4.5.1 to 4.5.4
+  com.unity.xr.oculus from version 4.5.1 to 4.5.2
+  com.unity.xr.interaction.toolkit from version 2.6.4 to 3.3.2
+  com.unity.inputsystem from version 1.11.2 to 1.19.0
+[Package Manager] Done resolving packages in 6.93 seconds
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Lock file was modified
+[Package Manager] Registered 45 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.inputsystem@1.19.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.inputsystem@21a28c3a6c83)
+    com.unity.xr.interaction.toolkit@3.3.2 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.interaction.toolkit@8a8cfde33e41)
+    com.unity.xr.management@4.5.4 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.management@e3a3882b360a)
+    com.unity.xr.oculus@4.5.2 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.oculus@44578ba4bd45)
+    com.unity.xr.core-utils@2.6.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.core-utils@a8b900321199)
+    com.unity.xr.legacyinputhelpers@2.1.13 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.legacyinputhelpers@9535ff2c27ac)
+    com.unity.mathematics@1.3.3 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+  Built-in packages:
+    com.unity.multiplayer.center@1.0.1 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.multiplayer.center@f01f4ba8d00a)
+    com.unity.modules.accessibility@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.accessibility)
+    com.unity.modules.adaptiveperformance@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.adaptiveperformance)
+    com.unity.modules.ai@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.androidjni@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.androidjni)
+    com.unity.modules.animation@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.assetbundle@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.assetbundle)
+    com.unity.modules.audio@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.cloth@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.cloth)
+    com.unity.modules.director@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.imageconversion@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.imgui@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.modules.particlesystem@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.modules.physics@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.screencapture@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.terrain@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.terrainphysics@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.terrainphysics)
+    com.unity.modules.tilemap@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.tilemap)
+    com.unity.modules.ui@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.uielements@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.umbra@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.umbra)
+    com.unity.modules.unityanalytics@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unityanalytics)
+    com.unity.modules.unitywebrequest@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unitywebrequestaudio)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unitywebrequesttexture)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.unitywebrequestwww)
+    com.unity.modules.vectorgraphics@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.vectorgraphics)
+    com.unity.modules.vehicles@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.vehicles)
+    com.unity.modules.video@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.video)
+    com.unity.modules.vr@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.vr)
+    com.unity.modules.wind@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.wind)
+    com.unity.modules.xr@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.xr)
+    com.unity.modules.subsystems@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.subsystems)
+    com.unity.modules.hierarchycore@1.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.modules.hierarchycore)
+    com.unity.ugui@2.0.0 (location: D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.ugui@b95364aab964)
+[Subsystems] Looking for new subsystems at path D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.oculus@44578ba4bd45
+[Subsystems] Novel subsystem found at Library/PackageCache/com.unity.xr.oculus@44578ba4bd45/Runtime/UnitySubsystemsManifest.json
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path D:/DATA/user/Desktop/openHCI_Claude/Assets
+[Subsystems] Discovering subsystems at path D:\DATA\user\Desktop\openHCI_Claude\Library\PackageCache\com.unity.xr.oculus@44578ba4bd45
+[Subsystems] No descriptors matched for  examples in Library/PackageCache/com.unity.xr.oculus@44578ba4bd45/Runtime/UnitySubsystemsManifest.json.
+[Subsystems] 1 'inputs' descriptors matched in Library/PackageCache/com.unity.xr.oculus@44578ba4bd45/Runtime/UnitySubsystemsManifest.json
+[Subsystems] 1 'displays' descriptors matched in Library/PackageCache/com.unity.xr.oculus@44578ba4bd45/Runtime/UnitySubsystemsManifest.json
+[Subsystems] No descriptors matched for  meshings in Library/PackageCache/com.unity.xr.oculus@44578ba4bd45/Runtime/UnitySubsystemsManifest.json.
+[Package Manager] Done registering packages in 0.01 seconds
+[ScriptCompilation] Requested script compilation because: Assembly Definition File(s) changed
+[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:80
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\DATA\user\Desktop\openHCI_Claude\
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc - - 200 - application/grpc 123.1610ms
+Clearing Bee directory 'Library/Bee', since bee backend hash ('Library/Bee/bee_backend.info') is different, previous hash was 64225927bf75f194ba7a5ff2ea41ace646942556c12c8b0f00c350c0b56a81c1 (Unity version: 2022.3.62f2), current hash is 3e4be09641243f0542422cecf34ad91af087b2697987f981f7e115d200b38517 (Unity version: 6000.3.19f1).
+Starting: C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: D:/DATA/user/Desktop/openHCI_Claude
+ExitCode: 4 Duration: 0s182ms
+[             ] Require frontend run.  Library/Bee/1900b0aE.dag couldn't be loaded
+DisplayProgressbar: Compiling Scripts
+Starting: C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Data\netcorerun\netcorerun.exe "C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Data\Tools\BuildPipeline\ScriptCompilationBuildProgram.exe" "Library/Bee/1900b0aE.dag.json" "Library/Bee/1900b0aE-inputdata.json" "Library\Bee\buildprogram0.traceevents"
+WorkingDir: D:/DATA/user/Desktop/openHCI_Claude
+ExitCode: 0 Duration: 3s59ms
+Starting: C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --dagfilejson="Library\Bee\1900b0aE.dag.json" --profile="Library/Bee/backend2.traceevents" ScriptAssemblies
+WorkingDir: D:/DATA/user/Desktop/openHCI_Claude
+ExitCode: 3 Duration: 18s
+Finished compiling graph: 442 nodes, 6593 flattened edges (6047 ToBuild, 66 ToUse), maximum node priority 305
+[  1/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestAudioModule.dll_76D28B1F5E8C9A09.mvfrm
+[  2/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityConsentModule.dll_0FB73B47F74AA6B8.mvfrm
+[  3/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VFXModule.dll_AA32729BFA69CED9.mvfrm
+[  4/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityAnalyticsCommonModule.dll_9A14F484F20A6DCF.mvfrm
+[  5/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VideoModule.dll_1EDD48305DB8388C.mvfrm
+[  6/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestModule.dll_FE2C35A862DD97E1.mvfrm
+[  7/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VRModule.dll_7B679B2C0EFE0C1F.mvfrm
+[  8/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.XRModule.dll_AE265E309838597D.mvfrm
+[  9/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VehiclesModule.dll_40BA8999B424C2EA.mvfrm
+[ 10/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestTextureModule.dll_9254DC7AD52BBAFE.mvfrm
+[ 11/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.WindModule.dll_53FE5F41A50F871B.mvfrm
+[ 12/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityConnectModule.dll_3E11A41BEA401068.mvfrm
+[ 13/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityCurlModule.dll_B0162423C3838322.mvfrm
+[ 14/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VirtualTexturingModule.dll_665F0DD6A50608D0.mvfrm
+[ 15/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestAssetBundleModule.dll_6E7894F0573FAEE5.mvfrm
+[ 16/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityAnalyticsModule.dll_BC8A153F21CBDD14.mvfrm
+[ 17/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.dll_2C4AEE646C788243.mvfrm
+[ 18/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestWWWModule.dll_34BC711E29FC9F7A.mvfrm
+[ 19/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VectorGraphicsModule.dll_3431DAAA07AB0161.mvfrm
+[ 20/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.Android.Gradle.dll_E60F5DE4F8A3AAEF.mvfrm
+[ 21/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextCoreFontEngineModule.dll_2211F550AAB929F0.mvfrm
+[ 22/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextCoreTextEngineModule.dll_69FA2BC23A3CE30E.mvfrm
+[ 23/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll_86BD0CFB741A8D93.mvfrm
+[ 24/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SharedInternalsModule.dll_709E6CD3CF16F8B2.mvfrm
+[ 25/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SubstanceModule.dll_0E39848BEE4A4681.mvfrm
+[ 26/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UmbraModule.dll_74A86FDE284CC85A.mvfrm
+[ 27/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TerrainPhysicsModule.dll_9D654D488EE785A5.mvfrm
+[ 28/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SubsystemsModule.dll_5182D44BE89132B7.mvfrm
+[ 29/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TLSModule.dll_2953DA2D23FC656C.mvfrm
+[ 30/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ShaderVariantAnalyticsModule.dll_530EFA2B80F7F679.mvfrm
+[ 31/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SpriteShapeModule.dll_9E2051923312490D.mvfrm
+[ 32/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TerrainModule.dll_22541AC75C64C386.mvfrm
+[ 33/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UIModule.dll_289574A66D4386A7.mvfrm
+[ 34/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.StreamingModule.dll_318E7042A2F74873.mvfrm
+[ 35/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ScreenCaptureModule.dll_27BEF43BB16CEB3B.mvfrm
+[ 36/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TilemapModule.dll_C15082487421A48F.mvfrm
+[ 37/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ShaderRuntimeModule.dll_3D9766A8EDC8C8C4.mvfrm
+[ 38/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UIElementsModule.dll_55C135B3EBBD6EAE.mvfrm
+[ 39/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SpriteMaskModule.dll_E6D56DEA1A494AA4.mvfrm
+[ 40/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextRenderingModule.dll_50FE664668A46B30.mvfrm
+[ 41/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.RenderAs2DModule.dll_6C1BFD1E4B1F639D.mvfrm
+[ 42/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PhysicsModule.dll_080D9F5886A67A98.mvfrm
+[ 43/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.MultiplayerModule.dll_046740C436379E7B.mvfrm
+[ 44/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PropertiesModule.dll_2AE43A986BC51966.mvfrm
+[ 45/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PhysicsBackendPhysXModule.dll_1F41B5E2C8E6C37A.mvfrm
+[ 46/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PerformanceReportingModule.dll_FED63740D821CF71.mvfrm
+[ 47/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.Physics2DModule.dll_C99F72E2F46C88CA.mvfrm
+[ 48/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.MarshallingModule.dll_2D27C2CC61983E55.mvfrm
+[ 49/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.InsightsModule.dll_62BE58AAC47842CE.mvfrm
+[ 50/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.IdentifiersModule.dll_5D48AC2D3FE8DF1B.mvfrm
+[ 51/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.LocalizationModule.dll_0E9B5F7538BBD57C.mvfrm
+[ 52/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ParticleSystemModule.dll_9CEAA47575A48B18.mvfrm
+[ 53/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.JSONSerializeModule.dll_0DD746B69D00BED9.mvfrm
+[ 54/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.InputModule.dll_60498B76115E418B.mvfrm
+[ 55/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.IMGUIModule.dll_3233632C6157B0C8.mvfrm
+[ 56/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ImageConversionModule.dll_EC8D2DFE57E8FD62.mvfrm
+[ 57/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.HotReloadModule.dll_FE4240F82EA2ACB7.mvfrm
+[ 58/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.InputForUIModule.dll_005B557358FA51E6.mvfrm
+[ 59/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.InputLegacyModule.dll_16043F561561C6F4.mvfrm
+[ 60/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.HierarchyCoreModule.dll_24DA5A550C72B745.mvfrm
+[ 61/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GraphicsStateCollectionSerializerModule.dll_19E25A6DBD910B37.mvfrm
+[ 62/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GIModule.dll_C55E1F86ACAB6915.mvfrm
+[ 63/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.DSPGraphModule.dll_CE48F183AC5BC470.mvfrm
+[ 64/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GridModule.dll_BB20A0072C2D9EA9.mvfrm
+[ 65/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.CrashReportingModule.dll_49D85B290792FF8A.mvfrm
+[ 66/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.DirectorModule.dll_C8F7901A39FAF34F.mvfrm
+[ 67/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GameCenterModule.dll_FDA8FB59F8D9B52A.mvfrm
+[ 68/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ContentLoadModule.dll_1DD57D784BF2B8F0.mvfrm
+[ 69/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.CoreModule.dll_DDAF841913D908B2.mvfrm
+[ 70/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ClusterRendererModule.dll_809B304DD5C4456E.mvfrm
+[ 71/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AudioModule.dll_F9D3C3C59B261CE7.mvfrm
+[ 72/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ClothModule.dll_60BC20C07542FBCB.mvfrm
+[ 73/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AnimationModule.dll_7CF982F2536F9135.mvfrm
+[ 74/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.dll_F9A6A78C0E04F55E.mvfrm
+[ 75/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AccessibilityModule.dll_ADBFBD7A9DC55E4F.mvfrm
+[ 76/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ClusterInputModule.dll_D04E9522A13FE283.mvfrm
+[ 77/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AdaptivePerformanceModule.dll_452DCE55E62A80BB.mvfrm
+[ 78/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AssetBundleModule.dll_84BF24377D701103.mvfrm
+[ 79/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AIModule.dll_2D21D67910FC80FB.mvfrm
+[ 80/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.XRModule.dll_6FB7CCA12CBB25B2.mvfrm
+[ 81/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AndroidJNIModule.dll_D35BB13F3298C439.mvfrm
+[ 82/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ARModule.dll_E6949B7C6E19DFC4.mvfrm
+[ 83/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.VectorGraphicsModule.dll_790D790EEBBE6D56.mvfrm
+[ 84/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UmbraModule.dll_AE7BB379F6CF97B5.mvfrm
+[ 85/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UnityConnectModule.dll_50B2200CEFB80FBD.mvfrm
+[ 86/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.VideoModule.dll_58B08BCC2C3B07E7.mvfrm
+[ 87/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UIElementsSamplesModule.dll_8876BC4FBB1BD33A.mvfrm
+[ 88/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.VFXModule.dll_9E10D0488AB9C0D4.mvfrm
+[ 89/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UIToolkitAuthoringModule.dll_D7090E8AB641EEE5.mvfrm
+[ 90/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.TilemapModule.dll_CED5C99E0F12BD4A.mvfrm
+[ 91/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.ShaderFoundryModule.dll_B9FA2226BFFEB340.mvfrm
+[ 92/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.TreeModule.dll_183AA5D4F39932C6.mvfrm
+[ 93/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SpriteShapeModule.dll_985A820320D83888.mvfrm
+[ 94/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UIBuilderModule.dll_02FCB3E5EBCB35C3.mvfrm
+[ 95/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SketchUpModule.dll_B5F5B2EA0161B7DF.mvfrm
+[ 96/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SubstanceModule.dll_585393A308CA949C.mvfrm
+[ 97/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UIElementsModule.dll_5512C86BE9795563.mvfrm
+[ 98/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UIAutomationModule.dll_061901876747F363.mvfrm
+[ 99/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.TextCoreFontEngineModule.dll_A3B279FD97BB6B25.mvfrm
+[100/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.TextRenderingModule.dll_C4BD741EEFABE80B.mvfrm
+[101/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.TerrainModule.dll_2FD9621CF755DC41.mvfrm
+[102/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.TextCoreTextEngineModule.dll_EB9AB06F273F2443.mvfrm
+[103/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.ShaderBuildSettingsModule.dll_8CC480487DE45EF8.mvfrm
+[104/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.Apple.Extensions.Common.dll_524277359AD1B849.mvfrm
+[105/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.ShaderCompilationModule.dll_94451EC79E1FC80A.mvfrm
+[106/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SceneTemplateModule.dll_7B1A51E39D4F36B2.mvfrm
+[107/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SafeModeModule.dll_CDE0CD99B6301BC8.mvfrm
+[108/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SceneViewModule.dll_ED23E9D16E35899D.mvfrm
+[109/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.PresetsUIModule.dll_69DA3FAB7B6B1494.mvfrm
+[110/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.PlayModeModule.dll_13D4BF5354F92B2F.mvfrm
+[111/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.QuickSearchModule.dll_40D5F1461B095C11.mvfrm
+[112/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.PropertiesModule.dll_2A35CD506981001B.mvfrm
+[113/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.QuickInstallModule.dll_345760D60C5A98D6.mvfrm
+[114/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.rsp2
+[115/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.PhysicsModule.dll_1592E6AE21979353.mvfrm
+[116/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.UnityAdditionalFile.txt
+[117/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.GridModule.dll_97FFCCB48428337E.mvfrm
+[118/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.GraphicsStateCollectionSerializerModule.dll_10EE8D7DF091C1D2.mvfrm
+[119/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.HierarchyModule.dll_9BE80DA536F1FB51.mvfrm
+[120/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.MultiplayerModule.dll_FEA1713523FD8DF6.mvfrm
+[121/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.GridAndSnapModule.dll_BF7F56BA45971CA7.mvfrm
+[122/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.Physics2DModule.dll_13B981FA0EECD6E5.mvfrm
+[123/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.MediaModule.dll_FF6720F2E7F574D0.mvfrm
+[124/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.GIModule.dll_86EF8DF7412E354A.mvfrm
+[125/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.GraphViewModule.dll_AE7406C97912BC8F.mvfrm
+[126/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.dll.mvfrm.rsp
+[127/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.rsp
+[128/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.UnityAdditionalFile.txt
+[129/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.rsp2
+[130/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.EmbreeModule.dll_E901368E5C330CB0.mvfrm
+[131/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.DeviceSimulatorModule.dll_7AEE6DDC660937EA.mvfrm
+[132/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.CoreBusinessMetricsModule.dll_04893319D12C5CB0.mvfrm
+[133/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.EditorToolbarModule.dll_577AE1259E628C7A.mvfrm
+[134/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.dll.mvfrm.rsp
+[135/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.rsp
+[136/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.rsp2
+[137/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.UnityAdditionalFile.txt
+[138/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.dll.mvfrm.rsp
+[139/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.SpatialTracking.rsp2
+[140/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.rsp
+[141/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.SpatialTracking.UnityAdditionalFile.txt
+[142/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.SpatialTracking.dll.mvfrm.rsp
+[143/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.SpatialTracking.rsp
+[144/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InternalAPIEngineBridge.004.rsp2
+[145/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InternalAPIEngineBridge.004.UnityAdditionalFile.txt
+[146/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.rsp2
+[147/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.UnityAdditionalFile.txt
+[148/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InternalAPIEngineBridge.004.rsp
+[149/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InternalAPIEngineBridge.004.dll.mvfrm.rsp
+[150/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.rsp2
+[151/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.UnityAdditionalFile.txt
+[152/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.dll.mvfrm.rsp
+[153/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.UnityAdditionalFile.txt
+[154/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.rsp2
+[155/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.UnityAdditionalFile.txt
+[156/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.rsp2
+[157/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.dll.mvfrm.rsp
+[158/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.rsp
+[159/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.XR.LegacyInputHelpers.UnityAdditionalFile.txt
+[160/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.XR.LegacyInputHelpers.rsp2
+[161/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.DiagnosticsModule.dll_B5C67038C2325FB8.mvfrm
+[162/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.rsp
+[163/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.dll.mvfrm.rsp
+[164/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.dll.mvfrm.rsp
+[165/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.ForUI.UnityAdditionalFile.txt
+[166/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.ForUI.rsp2
+[167/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.rsp
+[168/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.rsp
+[169/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.XR.LegacyInputHelpers.dll.mvfrm.rsp
+[170/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.XR.LegacyInputHelpers.rsp
+[171/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.ForUI.dll.mvfrm.rsp
+[172/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.Editor.rsp2
+[173/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.ForUI.rsp
+[174/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.rsp2
+[175/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.UnityAdditionalFile.txt
+[176/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.Editor.UnityAdditionalFile.txt
+[177/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.Editor.dll.mvfrm.rsp
+[178/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.dll.mvfrm.rsp
+[179/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.rsp
+[180/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Editor.UnityAdditionalFile.txt
+[181/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.Editor.rsp
+[182/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.rsp2
+[183/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.UnityAdditionalFile.txt
+[184/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.Editor.rsp2
+[185/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Editor.rsp2
+[186/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.Editor.UnityAdditionalFile.txt
+[187/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Common.UnityAdditionalFile.txt
+[188/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Common.rsp2
+[189/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Editor.rsp2
+[190/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Editor.UnityAdditionalFile.txt
+[191/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.Editor.dll.mvfrm.rsp
+[192/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Editor.dll.mvfrm.rsp
+[193/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.dll.mvfrm.rsp
+[194/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.rsp
+[195/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Editor.rsp
+[196/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Common.dll.mvfrm.rsp
+[197/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Editor.dll.mvfrm.rsp
+[198/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.Editor.rsp
+[199/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Common.rsp
+[200/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Editor.rsp
+[201/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.SpatialTracking.rsp2
+[202/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.SpatialTracking.UnityAdditionalFile.txt
+[203/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.Editor.rsp2
+[204/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.Editor.UnityAdditionalFile.txt
+[205/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.rsp2
+[206/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.Editor.UnityAdditionalFile.txt
+[207/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.Editor.rsp2
+[208/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Editor.UnityAdditionalFile.txt
+[209/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.rsp2
+[210/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.UnityAdditionalFile.txt
+[211/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Editor.rsp2
+[212/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.Editor.UnityAdditionalFile.txt
+[213/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.Editor.rsp2
+[214/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.UnityAdditionalFile.txt
+[215/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.UnityAdditionalFile.txt
+[216/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.UnityAdditionalFile.txt
+[217/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.rsp2
+[218/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.XR.LegacyInputHelpers.rsp2
+[219/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.rsp2
+[220/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.Analytics.UnityAdditionalFile.txt
+[221/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.Analytics.rsp2
+[222/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.XR.LegacyInputHelpers.UnityAdditionalFile.txt
+[223/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.dll.mvfrm.rsp
+[224/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.dll.mvfrm.rsp
+[225/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.dll.mvfrm.rsp
+[226/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.Editor.dll.mvfrm.rsp
+[227/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.Editor.dll.mvfrm.rsp
+[228/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.SpatialTracking.dll.mvfrm.rsp
+[229/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Editor.dll.mvfrm.rsp
+[230/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.Editor.dll.mvfrm.rsp
+[231/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.Analytics.dll.mvfrm.rsp
+[232/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.dll.mvfrm.rsp
+[233/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.XR.LegacyInputHelpers.dll.mvfrm.rsp
+[234/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.SpatialTracking.rsp
+[235/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.rsp
+[236/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.rsp
+[237/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.Editor.rsp
+[238/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Editor.rsp
+[239/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.Analytics.rsp
+[240/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.rsp
+[241/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.Editor.rsp
+[242/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.Editor.rsp
+[243/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.XR.LegacyInputHelpers.rsp
+[244/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.rsp
+[245/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.UnityAdditionalFile.txt
+[246/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.rsp2
+[247/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll.mvfrm.rsp
+[248/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.rsp
+[249/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.UnityAdditionalFile.txt
+[250/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.rsp2
+[251/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll.mvfrm.rsp
+[252/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.DocCodeSamples.dll.mvfrm.rsp
+[253/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.DocCodeSamples.rsp2
+[254/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.CodeSamples.Tests.UnityAdditionalFile.txt
+[255/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.CodeSamples.Tests.rsp2
+[256/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.DocCodeSamples.UnityAdditionalFile.txt
+[257/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.CodeSamples.Tests.dll.mvfrm.rsp
+[258/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.rsp
+[259/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.AssetComplianceModule.dll_B3C97DCAE0C51C17.mvfrm
+[260/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.DocCodeSamples.rsp
+[261/439    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.CodeSamples.Tests.rsp
+[262/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.BuildProfileModule.dll_55781296CAD42AA3.mvfrm
+[263/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.ClothModule.dll_9A8F645C43C5CB26.mvfrm
+[264/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.CoreModule.dll_BA8EB0C66BD39D87.mvfrm
+[265/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.AdaptivePerformanceModule.dll_849E399FAAE52DB6.mvfrm
+[266/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.iOS.Extensions.Xcode.dll_772A589A5AECB720.mvfrm
+[267/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.iOS.Extensions.Common.dll_901BC8B65DFB8CEC.mvfrm
+[268/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.Android.Types.dll_AF79FCB36D4574BD.mvfrm
+[269/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.AccessibilityModule.dll_217ECB5324CCDB2A.mvfrm
+[270/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SpriteMaskModule.dll_E62700A218053159.mvfrm
+[271/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.WindowsStandalone.Extensions.dll_849A2E77E2A47B89.mvfrm
+[272/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.Graphs.dll_DB28F98ADF73E0B9.mvfrm
+[273/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AMDModule.dll_2AC416C7FCCBEA19.mvfrm
+[274/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.iOS.Extensions.dll_6CA60A1D06229EF9.mvfrm
+[275/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.Android.Extensions.dll_BCC8CF0AD0D8028F.mvfrm
+[276/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.HierarchyModule.dll_51CDFE8E1C71AD36.mvfrm
+[277/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.NVIDIAModule.dll_41124E75B9D0275E.mvfrm
+[278/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.dll.mvfrm
+[279/439    2s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[280/439    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.UI.pdb
+[281/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UI.ref.dll_08FEAA520A2EFD60.mvfrm
+[282/439    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.UI.dll
+[283/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.dll.mvfrm
+[284/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[285/439    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.pdb
+[286/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UI.ref.dll_4C98D3F7040CD4F5.mvfrm
+[287/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Common.dll.mvfrm
+[288/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.InternalAPIEngineBridge.004.dll.mvfrm
+[289/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.dll.mvfrm
+[290/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/UnityEngine.SpatialTracking.dll.mvfrm
+[291/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.dll.mvfrm
+[292/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.dll.mvfrm
+[293/439    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.dll
+[294/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.InternalAPIEngineBridge.004.dll (+2 others)
+[295/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Common.dll (+2 others)
+[296/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEngine.SpatialTracking.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.InternalAPIEngineBridge.004.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[297/439    0s] CopyFiles Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.004.pdb
+[298/439    0s] CopyFiles Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.004.dll
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Common.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[299/439    0s] CopyFiles Library/ScriptAssemblies/Unity.Multiplayer.Center.Common.pdb
+[300/439    0s] CopyFiles Library/ScriptAssemblies/Unity.Multiplayer.Center.Common.dll
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEngine.SpatialTracking.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[301/439    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll
+[302/439    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.SpatialTracking.pdb
+[303/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[304/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Management.pdb
+[305/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Management.dll
+[306/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.InternalAPIEngineBridge.004.ref.dll_9F91F1CFF2D20E26.mvfrm
+[307/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.Multiplayer.Center.Common.ref.dll_EE36537354EA42C8.mvfrm
+[308/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SpatialTracking.ref.dll_1552DC8EFC971715.mvfrm
+[309/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Management.ref.dll_404BC0C35449934F.mvfrm
+[310/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.dll.mvfrm
+[311/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/UnityEditor.SpatialTracking.dll.mvfrm
+[312/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/UnityEngine.XR.LegacyInputHelpers.dll.mvfrm
+[313/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Editor.dll.mvfrm
+[314/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.SpatialTracking.dll (+2 others)
+[315/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEngine.XR.LegacyInputHelpers.dll (+2 others)
+[316/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Editor.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.SpatialTracking.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[317/439    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.SpatialTracking.pdb
+[318/439    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEngine.XR.LegacyInputHelpers.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[319/439    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll
+[320/439    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.pdb
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Editor.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[321/439    0s] CopyFiles Library/ScriptAssemblies/Unity.Multiplayer.Center.Editor.pdb
+[322/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SpatialTracking.ref.dll_8911EA67839E93F0.mvfrm
+[323/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.Multiplayer.Center.Editor.ref.dll_EB1F4B6E56116D4A.mvfrm
+[324/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.XR.LegacyInputHelpers.ref.dll_FFA26A0728B3CF82.mvfrm
+[325/439    0s] CopyFiles Library/ScriptAssemblies/Unity.Multiplayer.Center.Editor.dll
+[326/439    1s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[327/439    0s] CopyFiles Library/ScriptAssemblies/Unity.TextMeshPro.pdb
+[328/439    0s] CopyFiles Library/ScriptAssemblies/Unity.TextMeshPro.dll
+[329/439    2s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.dll (+2 others)
+[330/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.TextMeshPro.ref.dll_84A4293DBDD182DB.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[331/439    0s] CopyFiles Library/ScriptAssemblies/Unity.InputSystem.pdb
+[332/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.Editor.dll.mvfrm
+[333/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.Analytics.dll.mvfrm
+[334/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.InputSystem.ref.dll_FD2EC87C14EBE081.mvfrm
+[335/439    0s] CopyFiles Library/ScriptAssemblies/Unity.InputSystem.dll
+[336/439    2s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.dll (+2 others)
+[337/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.Analytics.dll (+2 others)
+[338/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.dll.mvfrm
+[339/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.ForUI.dll.mvfrm
+[340/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.dll.mvfrm
+[341/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/UnityEditor.XR.LegacyInputHelpers.dll.mvfrm
+[342/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.DocCodeSamples.dll.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[343/439    0s] CopyFiles Library/ScriptAssemblies/Unity.Mathematics.pdb
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.Analytics.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[344/439    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.Analytics.pdb
+[345/439    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.Analytics.dll
+[346/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.Mathematics.ref.dll_E8EFDB1B8D5C174E.mvfrm
+[347/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.Editor.dll (+2 others)
+[348/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UI.Analytics.ref.dll_3B64A5A3A726AD5D.mvfrm
+[349/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.DocCodeSamples.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.Editor.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[350/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.XR.LegacyInputHelpers.dll (+2 others)
+[351/439    0s] CopyFiles Library/ScriptAssemblies/Unity.TextMeshPro.Editor.pdb
+[352/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.ForUI.dll (+2 others)
+[353/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.DocCodeSamples.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[354/439    0s] CopyFiles Library/ScriptAssemblies/Unity.InputSystem.DocCodeSamples.dll
+[355/439    0s] CopyFiles Library/ScriptAssemblies/Unity.InputSystem.DocCodeSamples.pdb
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.XR.LegacyInputHelpers.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[356/439    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.pdb
+[357/439    0s] CopyFiles Library/ScriptAssemblies/Unity.Mathematics.dll
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.ForUI.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[358/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.dll (+2 others)
+[359/439    0s] CopyFiles Library/ScriptAssemblies/Unity.InputSystem.ForUI.pdb
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[360/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Oculus.pdb
+[361/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.Editor.dll.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[362/439    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll
+[363/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.CoreUtils.pdb
+[364/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.TextMeshPro.Editor.ref.dll_159E061D77A10B86.mvfrm
+[365/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.XR.LegacyInputHelpers.ref.dll_3F12D550ED6E7C7D.mvfrm
+[366/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.InputSystem.ForUI.ref.dll_0478B67D1094CE70.mvfrm
+[367/439    0s] CopyFiles Library/ScriptAssemblies/Unity.InputSystem.ForUI.dll
+[368/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Oculus.ref.dll_431DEB9238966955.mvfrm
+[369/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.Editor.dll (+2 others)
+[370/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.CoreUtils.ref.dll_3CA2B461938B5BFC.mvfrm
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.Editor.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[371/439    0s] CopyFiles Library/ScriptAssemblies/Unity.Mathematics.Editor.pdb
+[372/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Oculus.dll
+[373/439    0s] CopyFiles Library/ScriptAssemblies/Unity.Mathematics.Editor.dll
+[374/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.CoreUtils.dll
+[375/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.dll.mvfrm
+[376/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.Editor.dll.mvfrm
+[377/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.Mathematics.Editor.ref.dll_9A20CFD48BC11F43.mvfrm
+[378/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.Editor.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.Editor.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[379/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.CoreUtils.Editor.pdb
+[380/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.CoreUtils.Editor.ref.dll_ABFC049C4594FF75.mvfrm
+[381/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.CoreUtils.Editor.dll
+[382/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Editor.dll.mvfrm
+[383/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.Editor.dll.mvfrm
+[384/439    0s] CopyFiles Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
+[385/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Editor.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Editor.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[386/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Analytics.Editor.pdb
+[387/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Analytics.Editor.dll
+[388/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.dll (+2 others)
+[389/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.Editor.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[390/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.pdb
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.Editor.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[391/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Management.Editor.pdb
+[392/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Interaction.Toolkit.Analytics.Editor.ref.dll_D46FAA2B5674A6CD.mvfrm
+[393/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Management.Editor.ref.dll_7BA8CC5454F13E52.mvfrm
+[394/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Interaction.Toolkit.ref.dll_96C656129EF9A05C.mvfrm
+[395/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.Editor.dll.mvfrm
+[396/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.dll
+[397/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Management.Editor.dll
+[398/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.dll.mvfrm
+[399/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Editor.dll.mvfrm
+[400/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.CodeSamples.Tests.dll.mvfrm
+[401/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.dll.mvfrm
+[402/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.Editor.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Oculus.Editor.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[403/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Oculus.Editor.pdb
+[404/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.CodeSamples.Tests.dll (+2 others)
+[405/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.dll (+2 others)
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorHandsUI.cs(138,40): warning CS0618: 'XRDeviceSimulator.SimulatedHandExpression' is obsolete: 'XRDeviceSimulator.SimulatedHandExpression has been deprecated in XRI 3.1.0. Update the XR Device Simulator sample in Package Manager or use the unnested version of SimulatedHandExpression instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(1031,37): warning CS0618: 'XRDeviceSimulator.SimulatedHandExpression' is obsolete: 'XRDeviceSimulator.SimulatedHandExpression has been deprecated in XRI 3.1.0. Update the XR Device Simulator sample in Package Manager or use the unnested version of SimulatedHandExpression instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorHandsUI.cs(90,41): warning CS0618: 'XRDeviceSimulator.simulatedHandExpressions' is obsolete: 'simulatedHandExpressions has been deprecated in XRI 3.1.0. Update the XR Device Simulator sample in Package Manager or use simulatedHandExpressions in the SimulatedHandExpressionManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorHandsUI.cs(92,43): warning CS0618: 'XRDeviceSimulator.simulatedHandExpressions' is obsolete: 'simulatedHandExpressions has been deprecated in XRI 3.1.0. Update the XR Device Simulator sample in Package Manager or use simulatedHandExpressions in the SimulatedHandExpressionManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorHandsUI.cs(141,25): warning CS0618: 'XRDeviceSimulator.simulatedHandExpressions' is obsolete: 'simulatedHandExpressions has been deprecated in XRI 3.1.0. Update the XR Device Simulator sample in Package Manager or use simulatedHandExpressions in the SimulatedHandExpressionManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(565,51): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(565,77): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(566,45): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(566,71): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(568,29): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(568,55): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(572,25): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(572,51): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(622,17): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(622,43): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(624,22): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(624,48): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(630,17): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(630,43): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(632,22): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(632,48): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(638,17): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(638,43): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(640,22): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(640,48): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(762,45): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(762,71): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(763,39): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(763,65): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+[406/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.pdb
+[407/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Oculus.Editor.dll
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.CodeSamples.Tests.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[408/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.CodeSamples.Tests.pdb
+[409/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.CodeSamples.Tests.dll
+[410/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Oculus.Editor.ref.dll_EC6E1675CFAEEAAC.mvfrm
+[411/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.dll
+[412/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.ref.dll_62B10D93E579B8A7.mvfrm
+[413/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Editor.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Editor.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[414/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Editor.pdb
+[415/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Interaction.Toolkit.Editor.ref.dll_13D11C44DBE92115.mvfrm
+[416/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.dll.mvfrm
+[417/439    0s] MovedFromExtractor-Combine Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.dll.mvfrm
+[418/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Editor.dll
+[419/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.dll (+2 others)
+[420/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.pdb
+[421/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.dll
+[422/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.dll (+2 others) [CacheWrite 00000000000000000000000000000005]
+[423/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.pdb
+[424/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.ref.dll_CE8B080C07253616.mvfrm
+[425/439    0s] CopyFiles Library/ScriptAssemblies/Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.dll
+[426/439    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.ref.dll_9F5ADB73A267702B.mvfrm
+[427/439    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.dll (+2 others)
+##### CommandLine
+"C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Data\NetCoreRuntime\dotnet.exe" exec "C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/DotNetSdkRoslyn/csc.dll" /nostdlib /noconfig /shared "@Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.rsp" "@Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.rsp2"
+##### Contents of Library\Bee\artifacts\1900b0aE.dag\Unity.XR.Interaction.Toolkit.Samples.StarterAssets.rsp
+-target:library
+-out:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.dll"
+-refout:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.ref.dll"
+-define:UNITY_6000_3_19
+-define:UNITY_6000_3
+-define:UNITY_6000
+-define:UNITY_5_3_OR_NEWER
+-define:UNITY_5_4_OR_NEWER
+-define:UNITY_5_5_OR_NEWER
+-define:UNITY_5_6_OR_NEWER
+-define:UNITY_2017_1_OR_NEWER
+-define:UNITY_2017_2_OR_NEWER
+-define:UNITY_2017_3_OR_NEWER
+-define:UNITY_2017_4_OR_NEWER
+-define:UNITY_2018_1_OR_NEWER
+-define:UNITY_2018_2_OR_NEWER
+-define:UNITY_2018_3_OR_NEWER
+-define:UNITY_2018_4_OR_NEWER
+-define:UNITY_2019_1_OR_NEWER
+-define:UNITY_2019_2_OR_NEWER
+-define:UNITY_2019_3_OR_NEWER
+-define:UNITY_2019_4_OR_NEWER
+-define:UNITY_2020_1_OR_NEWER
+-define:UNITY_2020_2_OR_NEWER
+-define:UNITY_2020_3_OR_NEWER
+-define:UNITY_2021_1_OR_NEWER
+-define:UNITY_2021_2_OR_NEWER
+-define:UNITY_2021_3_OR_NEWER
+-define:UNITY_2022_1_OR_NEWER
+-define:UNITY_2022_2_OR_NEWER
+-define:UNITY_2022_3_OR_NEWER
+-define:UNITY_2023_1_OR_NEWER
+-define:UNITY_2023_2_OR_NEWER
+-define:UNITY_2023_3_OR_NEWER
+-define:UNITY_6000_0_OR_NEWER
+-define:UNITY_6000_1_OR_NEWER
+-define:UNITY_6000_2_OR_NEWER
+-define:UNITY_6000_3_OR_NEWER
+-define:PLATFORM_ARCH_64
+-define:UNITY_64
+-define:UNITY_INCLUDE_TESTS
+-define:ENABLE_AR
+-define:ENABLE_AUDIO
+-define:ENABLE_AUDIO_SCRIPTABLE_PIPELINE
+-define:ENABLE_CACHING
+-define:ENABLE_CLOTH
+-define:ENABLE_EVENT_QUEUE
+-define:ENABLE_MICROPHONE
+-define:ENABLE_MULTIPLE_DISPLAYS
+-define:ENABLE_PHYSICS
+-define:ENABLE_TEXTURE_STREAMING
+-define:ENABLE_VIRTUALTEXTURING
+-define:ENABLE_LZMA
+-define:ENABLE_UNITYEVENTS
+-define:ENABLE_VR
+-define:ENABLE_WEBCAM
+-define:ENABLE_UNITYWEBREQUEST
+-define:ENABLE_WWW
+-define:ENABLE_CLOUD_SERVICES
+-define:ENABLE_CLOUD_SERVICES_ADS
+-define:ENABLE_CLOUD_SERVICES_USE_WEBREQUEST
+-define:ENABLE_UNITY_CONSENT
+-define:ENABLE_UNITY_CLOUD_IDENTIFIERS
+-define:ENABLE_CLOUD_SERVICES_CRASH_REPORTING
+-define:ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING
+-define:ENABLE_CLOUD_SERVICES_PURCHASING
+-define:ENABLE_CLOUD_SERVICES_ANALYTICS
+-define:ENABLE_CLOUD_SERVICES_BUILD
+-define:ENABLE_EDITOR_GAME_SERVICES
+-define:ENABLE_UNITY_GAME_SERVICES_ANALYTICS_SUPPORT
+-define:ENABLE_CLOUD_LICENSE
+-define:ENABLE_EDITOR_HUB_LICENSE
+-define:ENABLE_WEBSOCKET_CLIENT
+-define:ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API
+-define:ENABLE_DIRECTOR_AUDIO
+-define:ENABLE_DIRECTOR_TEXTURE
+-define:ENABLE_MANAGED_JOBS
+-define:ENABLE_MANAGED_TRANSFORM_JOBS
+-define:ENABLE_MANAGED_ANIMATION_JOBS
+-define:ENABLE_MANAGED_AUDIO_JOBS
+-define:ENABLE_MANAGED_UNITYTLS
+-define:INCLUDE_DYNAMIC_GI
+-define:ENABLE_SCRIPTING_GC_WBARRIERS
+-define:PLATFORM_SUPPORTS_MONO
+-define:RENDER_SOFTWARE_CURSOR
+-define:ENABLE_MARSHALLING_TESTS
+-define:ENABLE_VIDEO
+-define:ENABLE_NAVIGATION_OFFMESHLINK_TO_NAVMESHLINK
+-define:ENABLE_ACCELERATOR_CLIENT_DEBUGGING
+-define:ENABLE_ACCESSIBILITY_SCREEN_READER
+-define:TEXTCORE_1_0_OR_NEWER
+-define:EDITOR_ONLY_NAVMESH_BUILDER_DEPRECATED
+-define:PLATFORM_STANDALONE_WIN
+-define:PLATFORM_STANDALONE
+-define:UNITY_STANDALONE_WIN
+-define:UNITY_STANDALONE
+-define:ENABLE_RUNTIME_GI
+-define:ENABLE_MOVIES
+-define:ENABLE_NETWORK
+-define:ENABLE_NVIDIA
+-define:ENABLE_AMD
+-define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
+-define:ENABLE_CLOUD_SERVICES_ENGINE_DIAGNOSTICS
+-define:ENABLE_OUT_OF_PROCESS_CRASH_HANDLER
+-define:ENABLE_CLUSTER_SYNC
+-define:ENABLE_CLUSTERINPUT
+-define:PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP
+-define:GFXDEVICE_WAITFOREVENT_MESSAGEPUMP
+-define:PLATFORM_USES_EXPLICIT_MEMORY_MANAGER_INITIALIZER
+-define:PLATFORM_SUPPORTS_WAIT_FOR_PRESENTATION
+-define:PLATFORM_SUPPORTS_SPLIT_GRAPHICS_JOBS
+-define:PLATFORM_USES_VULKAN_OLD_SWAPCHAIN
+-define:ENABLE_MONO
+-define:NET_STANDARD_2_0
+-define:NET_STANDARD
+-define:NET_STANDARD_2_1
+-define:NETSTANDARD
+-define:NETSTANDARD2_1
+-define:ENABLE_PROFILER
+-define:ENABLE_PROFILER_ASSISTANT_INTEGRATION
+-define:DEBUG
+-define:TRACE
+-define:UNITY_ASSERTIONS
+-define:UNITY_EDITOR
+-define:UNITY_EDITOR_64
+-define:UNITY_EDITOR_WIN
+-define:ENABLE_UNITY_COLLECTIONS_CHECKS
+-define:ENABLE_BURST_AOT
+-define:UNITY_TEAM_LICENSE
+-define:ENABLE_CUSTOM_RENDER_TEXTURE
+-define:ENABLE_DIRECTOR
+-define:ENABLE_LOCALIZATION
+-define:ENABLE_SPRITES
+-define:ENABLE_TERRAIN
+-define:ENABLE_TILEMAP
+-define:ENABLE_TIMELINE
+-define:ENABLE_INPUT_SYSTEM
+-define:ENABLE_LEGACY_INPUT_MANAGER
+-define:TEXTCORE_FONT_ENGINE_1_5_OR_NEWER
+-define:TEXTCORE_TEXT_ENGINE_1_5_OR_NEWER
+-define:TEXTCORE_FONT_ENGINE_1_6_OR_NEWER
+-define:CSHARP_7_OR_LATER
+-define:CSHARP_7_3_OR_NEWER
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEditor.Graphs.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.AccessibilityModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.AdaptivePerformanceModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.AssetComplianceModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.BuildProfileModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.ClothModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreBusinessMetricsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.DeviceSimulatorModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.DiagnosticsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.EditorToolbarModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.EmbreeModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.GIModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.GraphViewModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.GraphicsStateCollectionSerializerModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.GridAndSnapModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.GridModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.HierarchyModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.MediaModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.MultiplayerModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.Physics2DModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.PhysicsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.PlayModeModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.PresetsUIModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.PropertiesModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.QuickInstallModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.QuickSearchModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.SafeModeModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.SceneTemplateModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.SceneViewModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.ShaderBuildSettingsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.ShaderCompilationModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.ShaderFoundryModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.SketchUpModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.SpriteMaskModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.SpriteShapeModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.SubstanceModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.TerrainModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.TextCoreFontEngineModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.TextCoreTextEngineModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.TextRenderingModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.TilemapModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.TreeModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.UIAutomationModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.UIBuilderModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.UIElementsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.UIElementsSamplesModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.UIToolkitAuthoringModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.UmbraModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.UnityConnectModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.VFXModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.VectorGraphicsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.VideoModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.XRModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.ARModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.AccessibilityModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.AdaptivePerformanceModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.AndroidJNIModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.AnimationModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.AssetBundleModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.AudioModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClothModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClusterInputModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.ClusterRendererModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.ContentLoadModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.CrashReportingModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.DSPGraphModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.DirectorModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.GIModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.GameCenterModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.GraphicsStateCollectionSerializerModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.GridModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.HierarchyCoreModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.HotReloadModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.IMGUIModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.IdentifiersModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.ImageConversionModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.InputForUIModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.InputLegacyModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.InputModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.InsightsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.JSONSerializeModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.LocalizationModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.MarshallingModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.MultiplayerModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.ParticleSystemModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.PerformanceReportingModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.Physics2DModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.PhysicsBackendPhysXModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.PhysicsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.PropertiesModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.RenderAs2DModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.ScreenCaptureModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.ShaderRuntimeModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.ShaderVariantAnalyticsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.SharedInternalsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.SpriteMaskModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.SpriteShapeModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.StreamingModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.SubstanceModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.SubsystemsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.TLSModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.TerrainModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.TerrainPhysicsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.TextCoreFontEngineModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.TextCoreTextEngineModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.TextRenderingModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.TilemapModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UIElementsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UIModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UmbraModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UnityAnalyticsCommonModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UnityAnalyticsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UnityConnectModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UnityConsentModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UnityCurlModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UnityWebRequestAssetBundleModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UnityWebRequestAudioModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UnityWebRequestModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UnityWebRequestTextureModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.UnityWebRequestWWWModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.VFXModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.VRModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.VectorGraphicsModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.VehiclesModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.VideoModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.VirtualTexturingModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.WindModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/Extensions/2.0.0/System.Runtime.InteropServices.WindowsRuntime.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.ComponentModel.Composition.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Core.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Data.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Drawing.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.IO.Compression.FileSystem.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Net.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Numerics.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Runtime.Serialization.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.ServiceModel.Web.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Transactions.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Web.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Windows.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Xml.Linq.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Xml.Serialization.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.Xml.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/System.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/mscorlib.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/Microsoft.Win32.Primitives.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.AppContext.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Buffers.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Collections.Concurrent.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Collections.NonGeneric.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Collections.Specialized.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Collections.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.ComponentModel.EventBasedAsync.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.ComponentModel.Primitives.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.ComponentModel.TypeConverter.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.ComponentModel.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Console.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Data.Common.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.Contracts.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.Debug.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.FileVersionInfo.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.Process.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.StackTrace.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.TextWriterTraceListener.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.Tools.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.TraceSource.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Diagnostics.Tracing.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Drawing.Primitives.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Dynamic.Runtime.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Globalization.Calendars.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Globalization.Extensions.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Globalization.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.IO.Compression.ZipFile.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.IO.Compression.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.IO.FileSystem.DriveInfo.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.IO.FileSystem.Primitives.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.IO.FileSystem.Watcher.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.IO.FileSystem.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.IO.IsolatedStorage.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.IO.MemoryMappedFiles.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.IO.Pipes.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.IO.UnmanagedMemoryStream.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.IO.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Linq.Expressions.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Linq.Parallel.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Linq.Queryable.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Linq.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Memory.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Http.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Net.NameResolution.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Net.NetworkInformation.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Ping.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Primitives.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Requests.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Security.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Net.Sockets.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Net.WebHeaderCollection.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Net.WebSockets.Client.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Net.WebSockets.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Numerics.Vectors.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.ObjectModel.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.DispatchProxy.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.Emit.ILGeneration.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.Emit.Lightweight.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.Emit.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.Extensions.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.Primitives.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Reflection.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Resources.Reader.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Resources.ResourceManager.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Resources.Writer.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.CompilerServices.VisualC.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Extensions.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Handles.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.InteropServices.RuntimeInformation.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.InteropServices.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Numerics.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Serialization.Formatters.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Serialization.Json.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Serialization.Primitives.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.Serialization.Xml.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Runtime.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Claims.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Cryptography.Algorithms.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Cryptography.Csp.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Cryptography.Encoding.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Cryptography.Primitives.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Cryptography.X509Certificates.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Security.Principal.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Security.SecureString.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Text.Encoding.Extensions.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Text.Encoding.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Text.RegularExpressions.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Overlapped.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Tasks.Extensions.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Tasks.Parallel.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Tasks.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Thread.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.ThreadPool.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.Timer.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Threading.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.ValueTuple.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.ReaderWriter.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.XDocument.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.XPath.XDocument.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.XPath.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.XmlDocument.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.XmlSerializer.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/NetStandard/ref/2.1.0/netstandard.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/AndroidPlayer/Unity.Android.Gradle.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/AndroidPlayer/Unity.Android.Types.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.Apple.Extensions.Common.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Mathematics.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.CoreUtils.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
+-analyzer:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Tools/BuildPipeline/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
+-analyzer:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Tools/BuildPipeline/Unity.SourceGenerators/Unity.SourceGenerators.dll"
+-analyzer:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Tools/BuildPipeline/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
+"Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/DemoSceneAssets/Scripts/IncrementUIText.cs"
+"Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/DemoSceneAssets/Scripts/MultiAnchorTeleportReticle.cs"
+"Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/DemoSceneAssets/Scripts/TeleportVolumeAnchorAffordanceStateLink.cs"
+"Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/Scripts/ActionBasedControllerManager.cs"
+"Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/Scripts/ClimbTeleportDestinationIndicator.cs"
+"Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/Scripts/DestroySelf.cs"
+"Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/Scripts/DynamicMoveProvider.cs"
+"Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/Scripts/GazeInputManager.cs"
+"Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/Scripts/ObjectSpawner.cs"
+"Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/Scripts/RotationAxisLockGrabTransformer.cs"
+"Assets/Samples/XR Interaction Toolkit/2.6.4/Starter Assets/Scripts/XRPokeFollowAffordance.cs"
+-langversion:9.0
+/deterministic
+/optimize+
+/debug:portable
+/nologo
+/RuntimeMetadataVersion:v4.0.30319
+/nowarn:0169
+/nowarn:0649
+/nowarn:0282
+/nowarn:1701
+/nowarn:1702
+/utf8output
+/preferreduilang:en-US
+/additionalfile:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.UnityAdditionalFile.txt"
+##### Custom Environment Variables
+DOTNET_MULTILEVEL_LOOKUP=0
+##### ExitCode
+1
+##### Output
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\DynamicMoveProvider.cs(11,40): warning CS0618: 'ActionBasedContinuousMoveProvider' is obsolete: 'ActionBasedContinuousMoveProvider has been deprecated in version 3.0.0. Use ContinuousMoveProvider instead.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\MultiAnchorTeleportReticle.cs(10,62): error CS0246: The type or namespace name 'IXRInteractableCustomReticle' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\TeleportVolumeAnchorAffordanceStateLink.cs(11,30): warning CS0618: 'XRInteractableAffordanceStateProvider' is obsolete: 'The Affordance System namespace and all associated classes have been deprecated. The existing affordance system will be moved, replaced and updated with a new interaction feedback system in a future version of XRI.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\TeleportVolumeAnchorAffordanceStateLink.cs(28,9): warning CS0618: 'XRInteractableAffordanceStateProvider' is obsolete: 'The Affordance System namespace and all associated classes have been deprecated. The existing affordance system will be moved, replaced and updated with a new interaction feedback system in a future version of XRI.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\RotationAxisLockGrabTransformer.cs(21,37): error CS0246: The type or namespace name 'XRGrabInteractable' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\MultiAnchorTeleportReticle.cs(68,39): error CS0246: The type or namespace name 'XRBaseInteractable' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\MultiAnchorTeleportReticle.cs(68,72): error CS0246: The type or namespace name 'IXRCustomReticleProvider' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\TeleportVolumeAnchorAffordanceStateLink.cs(29,9): error CS0246: The type or namespace name 'IXRInteractable' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\RotationAxisLockGrabTransformer.cs(28,38): error CS0246: The type or namespace name 'XRGrabInteractable' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\RotationAxisLockGrabTransformer.cs(9,18): error CS0534: 'RotationAxisLockGrabTransformer' does not implement inherited abstract member 'XRBaseGrabTransformer.Process(XRGrabInteractable, XRInteractionUpdateOrder.UpdatePhase, ref Pose, ref Vector3)'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\XRPokeFollowAffordance.cs(112,18): warning CS0618: 'Vector3TweenableVariable' is obsolete: 'The Affordance System namespace and all associated classes have been deprecated. The existing affordance system will be moved, replaced and updated with a new interaction feedback system in a future version of XRI.'
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(31,9): error CS0246: The type or namespace name 'XRInteractionGroup' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(35,9): error CS0246: The type or namespace name 'XRDirectInteractor' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(39,9): error CS0246: The type or namespace name 'XRRayInteractor' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(43,9): error CS0246: The type or namespace name 'XRRayInteractor' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(94,20): error CS0246: The type or namespace name 'IXRRayProvider' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(138,30): error CS0246: The type or namespace name 'IXRGroupMember' could not be found (are you missing a using directive or an assembly reference?)
+*** Tundra build failed (18.71 seconds), 427 items updated, 439 evaluated
+[ApiUpdater] Total time: 2537ms, Parse response file: 68ms, Collect updater configs: 1257ms, Update: 1208ms, Save: 4ms Files: 4 modified / 4 visited / 11 total (Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.dll).
+[API Updater] Updated Files:
+Skipping ScriptUpdater consent dialog. Consent declined based on command line parameters.
+Finished running ScriptUpdaters
+## Script Compilation Error for: Csc Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.dll (+2 others)
+## CmdLine: "C:\Program Files\Unity\Hub\Editor\6000.3.19f1\Editor\Data\NetCoreRuntime\dotnet.exe" exec "C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/DotNetSdkRoslyn/csc.dll" /nostdlib /noconfig /shared "@Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.rsp" "@Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.rsp2"
+## Output:
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\DynamicMoveProvider.cs(11,40): warning CS0618: 'ActionBasedContinuousMoveProvider' is obsolete: 'ActionBasedContinuousMoveProvider has been deprecated in version 3.0.0. Use ContinuousMoveProvider instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\MultiAnchorTeleportReticle.cs(10,62): error CS0246: The type or namespace name 'IXRInteractableCustomReticle' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\TeleportVolumeAnchorAffordanceStateLink.cs(11,30): warning CS0618: 'XRInteractableAffordanceStateProvider' is obsolete: 'The Affordance System namespace and all associated classes have been deprecated. The existing affordance system will be moved, replaced and updated with a new interaction feedback system in a future version of XRI.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\TeleportVolumeAnchorAffordanceStateLink.cs(28,9): warning CS0618: 'XRInteractableAffordanceStateProvider' is obsolete: 'The Affordance System namespace and all associated classes have been deprecated. The existing affordance system will be moved, replaced and updated with a new interaction feedback system in a future version of XRI.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\RotationAxisLockGrabTransformer.cs(21,37): error CS0246: The type or namespace name 'XRGrabInteractable' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\MultiAnchorTeleportReticle.cs(68,39): error CS0246: The type or namespace name 'XRBaseInteractable' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\MultiAnchorTeleportReticle.cs(68,72): error CS0246: The type or namespace name 'IXRCustomReticleProvider' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\TeleportVolumeAnchorAffordanceStateLink.cs(29,9): error CS0246: The type or namespace name 'IXRInteractable' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\RotationAxisLockGrabTransformer.cs(28,38): error CS0246: The type or namespace name 'XRGrabInteractable' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\RotationAxisLockGrabTransformer.cs(9,18): error CS0534: 'RotationAxisLockGrabTransformer' does not implement inherited abstract member 'XRBaseGrabTransformer.Process(XRGrabInteractable, XRInteractionUpdateOrder.UpdatePhase, ref Pose, ref Vector3)'
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\XRPokeFollowAffordance.cs(112,18): warning CS0618: 'Vector3TweenableVariable' is obsolete: 'The Affordance System namespace and all associated classes have been deprecated. The existing affordance system will be moved, replaced and updated with a new interaction feedback system in a future version of XRI.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(31,9): error CS0246: The type or namespace name 'XRInteractionGroup' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(35,9): error CS0246: The type or namespace name 'XRDirectInteractor' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(39,9): error CS0246: The type or namespace name 'XRRayInteractor' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(43,9): error CS0246: The type or namespace name 'XRRayInteractor' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(94,20): error CS0246: The type or namespace name 'IXRRayProvider' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(138,30): error CS0246: The type or namespace name 'IXRGroupMember' could not be found (are you missing a using directive or an assembly reference?)
+
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\DynamicMoveProvider.cs(11,40): warning CS0618: 'ActionBasedContinuousMoveProvider' is obsolete: 'ActionBasedContinuousMoveProvider has been deprecated in version 3.0.0. Use ContinuousMoveProvider instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\MultiAnchorTeleportReticle.cs(10,62): error CS0246: The type or namespace name 'IXRInteractableCustomReticle' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\TeleportVolumeAnchorAffordanceStateLink.cs(11,30): warning CS0618: 'XRInteractableAffordanceStateProvider' is obsolete: 'The Affordance System namespace and all associated classes have been deprecated. The existing affordance system will be moved, replaced and updated with a new interaction feedback system in a future version of XRI.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\TeleportVolumeAnchorAffordanceStateLink.cs(28,9): warning CS0618: 'XRInteractableAffordanceStateProvider' is obsolete: 'The Affordance System namespace and all associated classes have been deprecated. The existing affordance system will be moved, replaced and updated with a new interaction feedback system in a future version of XRI.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\RotationAxisLockGrabTransformer.cs(21,37): error CS0246: The type or namespace name 'XRGrabInteractable' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\MultiAnchorTeleportReticle.cs(68,39): error CS0246: The type or namespace name 'XRBaseInteractable' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\MultiAnchorTeleportReticle.cs(68,72): error CS0246: The type or namespace name 'IXRCustomReticleProvider' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\DemoSceneAssets\Scripts\TeleportVolumeAnchorAffordanceStateLink.cs(29,9): error CS0246: The type or namespace name 'IXRInteractable' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\RotationAxisLockGrabTransformer.cs(28,38): error CS0246: The type or namespace name 'XRGrabInteractable' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\RotationAxisLockGrabTransformer.cs(9,18): error CS0534: 'RotationAxisLockGrabTransformer' does not implement inherited abstract member 'XRBaseGrabTransformer.Process(XRGrabInteractable, XRInteractionUpdateOrder.UpdatePhase, ref Pose, ref Vector3)'
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\XRPokeFollowAffordance.cs(112,18): warning CS0618: 'Vector3TweenableVariable' is obsolete: 'The Affordance System namespace and all associated classes have been deprecated. The existing affordance system will be moved, replaced and updated with a new interaction feedback system in a future version of XRI.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(31,9): error CS0246: The type or namespace name 'XRInteractionGroup' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(35,9): error CS0246: The type or namespace name 'XRDirectInteractor' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(39,9): error CS0246: The type or namespace name 'XRRayInteractor' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(43,9): error CS0246: The type or namespace name 'XRRayInteractor' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(94,20): error CS0246: The type or namespace name 'IXRRayProvider' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\Starter Assets\Scripts\ActionBasedControllerManager.cs(138,30): error CS0246: The type or namespace name 'IXRGroupMember' could not be found (are you missing a using directive or an assembly reference?)
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorHandsUI.cs(138,40): warning CS0618: 'XRDeviceSimulator.SimulatedHandExpression' is obsolete: 'XRDeviceSimulator.SimulatedHandExpression has been deprecated in XRI 3.1.0. Update the XR Device Simulator sample in Package Manager or use the unnested version of SimulatedHandExpression instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(1031,37): warning CS0618: 'XRDeviceSimulator.SimulatedHandExpression' is obsolete: 'XRDeviceSimulator.SimulatedHandExpression has been deprecated in XRI 3.1.0. Update the XR Device Simulator sample in Package Manager or use the unnested version of SimulatedHandExpression instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorHandsUI.cs(90,41): warning CS0618: 'XRDeviceSimulator.simulatedHandExpressions' is obsolete: 'simulatedHandExpressions has been deprecated in XRI 3.1.0. Update the XR Device Simulator sample in Package Manager or use simulatedHandExpressions in the SimulatedHandExpressionManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorHandsUI.cs(92,43): warning CS0618: 'XRDeviceSimulator.simulatedHandExpressions' is obsolete: 'simulatedHandExpressions has been deprecated in XRI 3.1.0. Update the XR Device Simulator sample in Package Manager or use simulatedHandExpressions in the SimulatedHandExpressionManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorHandsUI.cs(141,25): warning CS0618: 'XRDeviceSimulator.simulatedHandExpressions' is obsolete: 'simulatedHandExpressions has been deprecated in XRI 3.1.0. Update the XR Device Simulator sample in Package Manager or use simulatedHandExpressions in the SimulatedHandExpressionManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(565,51): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(565,77): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(566,45): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(566,71): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(568,29): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(568,55): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(572,25): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(572,51): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(622,17): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(622,43): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(624,22): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(624,48): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(630,17): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(630,43): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(632,22): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(632,48): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(638,17): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(638,43): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(640,22): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(640,48): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(762,45): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(762,71): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(763,39): warning CS0618: 'XRDeviceSimulator.deviceMode' is obsolete: 'deviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use deviceMode in the SimulatedDeviceLifecycleManager instead.'
+Assets\Samples\XR Interaction Toolkit\2.6.4\XR Device Simulator\Scripts\XRDeviceSimulatorUI.cs(763,65): warning CS0618: 'XRDeviceSimulator.DeviceMode' is obsolete: 'DeviceMode has been deprecated in XRI 3.1.0 due to being moved out XR Device Simulator. Use DeviceMode in the SimulatedDeviceLifecycleManager instead.'
+AssetDatabase: script compilation time: 26.449002s
+Scripts have compiler errors.
+Exiting without the bug reporter. Application will terminate with return code 1Shut down.
