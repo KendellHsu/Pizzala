@@ -37,7 +37,7 @@ Project 視窗 `Assets/Prefabs/`,逐一雙擊 `PZ_Pizza_Margherita`、`PZ_Pizza_
 - [ ] Pizza Projectile 的 Flavor 欄位:Margherita / Pepperoni / **Cosmic Pink Marshmallow** 各自正確
 - [ ] 三個外觀肉眼可區分
 
-> 注意:隊友做的是三個獨立 Prefab,不是 PREFABS.md 說的「基底 + Variant」結構。之後調物理手感要**三個都改**,先記著就好。
+> 結構說明:三個口味各是**自己模型(pizza1/2/3.fbx)的 Prefab Variant**——口味用不同 3D 模型呈現,而非 PREFABS.md 原規劃的「共用 PZ_Pizza_Base 只換貼圖」。模型不同就無法共用基底,此結構合理;代價是之後調物理手感(Mass、Throw Velocity Scale 等)要**三個都改**。
 
 ## 第 3 步:丟回披薩 Prefab ×3
 
