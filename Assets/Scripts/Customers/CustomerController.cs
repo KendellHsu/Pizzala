@@ -8,7 +8,7 @@
 //   faceNormal/Happy/Angry/Dirty — 四張表情貼圖(美術組產出)
 //   flavorIcon    — 頭上口味圖示的 SpriteRenderer
 //   flavorSprites — 口味圖示陣列,順序對應 PizzaFlavor 列舉
-//                   (0=Margherita 1=Pepperoni 2=Hawaiian)
+//                   (0=Margherita 1=Pepperoni 2=CosmicPinkMarshmallow)
 //   faceAnchor    — 臉部位置的空物件(截圖相機對準用)
 //   throwOrigin   — 丟回披薩的出發點(手或胸前的空物件)
 //   requiredThrowType — 進階玩法:要求特定投擲方式,Unknown=不限

@@ -43,7 +43,7 @@ PZ_Pizza_Base
 | XR Grab Interactable | Movement Type = **Velocity Tracking**、勾 **Throw On Detach**、Throw Velocity Scale 先設 1.5 |
 | PizzaProjectile | `flavor` 基底隨便設,口味 Variant 各自覆寫(Spawner 也會覆寫) |
 
-**三個 Variant**:`PZ_Pizza_Margherita` / `PZ_Pizza_Pepperoni` / `PZ_Pizza_Hawaiian`——只改 Model 的材質貼圖和 `flavor` 欄位。
+**三個 Variant**:`PZ_Pizza_Margherita` / `PZ_Pizza_Pepperoni` / `PZ_Pizza_CosmicPinkMarshmallow`——只改 Model 的材質貼圖和 `flavor` 欄位。
 
 **驗收目標**
 - [ ] 拖進場景按 Play(Quest Link),手可以抓起、放開會飛出去,方向大致跟揮動方向一致
@@ -120,7 +120,7 @@ PZ_Customer
 | `faceRenderer` | 拖入 Model/Face 的 Renderer |
 | `faceNormal / faceHappy / faceAngry / faceDirty` | 美術的四張表情貼圖 |
 | `flavorIcon` | 拖入 FlavorIcon |
-| `flavorSprites` | 三張口味圖示,**順序必須是 0=Margherita、1=Pepperoni、2=Hawaiian** |
+| `flavorSprites` | 三張口味圖示,**順序必須是 0=Margherita、1=Pepperoni、2=CosmicPinkMarshmallow** |
 | `faceAnchor` / `throwOrigin` | 拖入對應空物件 |
 | `requiredThrowType` | 保持 Unknown(= 不限投擲方式) |
 
