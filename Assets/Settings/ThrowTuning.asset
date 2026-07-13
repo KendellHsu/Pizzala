@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8f300069aa3f6f4fa3606312b749fa8, type: 3}
+  m_Name: ThrowTuning
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Throwing.ThrowTuning
+  overheadHeightOffset: 0.05
+  underhandHeightOffset: 0.45
+  underhandMinElevationDeg: 15
+  overheadVerticalRatio: 0.45
+  crossBodyThreshold: 0.05
+  swingSpeedFraction: 0.3
+  swingWindowSeconds: 0.6
+  customerPatience: 15
+  telegraphSeconds: 0.8
+  throwbackSpeed: 5
+  roundDurationSeconds: 180
+  orderIntervalSeconds: 6
