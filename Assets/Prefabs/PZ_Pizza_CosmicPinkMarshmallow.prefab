@@ -256,4 +256,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b01a0d9c48dd4d946b57240375acdddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Throwing.PizzaProjectile
-  flavor: 1
+  flavor: 2
