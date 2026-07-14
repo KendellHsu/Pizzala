@@ -6,14 +6,14 @@ using Pizzala.Throwing;
 
 namespace Pizzala.EditorTools
 {
-    // Builds PZ_Pizza_Base (Docs/PREFABS.md section 1) from the art team's pizza1.fbx,
-    // then three flavor Prefab Variants on top of it. Re-run after the art team delivers
-    // separate flavor textures to replace the placeholder tint-per-variant approach.
+    // Builds PZ_Pizza_Base (Docs/PREFABS.md section 1) as a flattened cube placeholder,
+    // then three flavor Prefab Variants on top of it. Swap BuildBase's "Model" child for the
+    // art team's Assets/Art/Pizza/pizza1.fbx once its scale/pivot is fixed to work with grabbing.
     public static class PizzaPrefabBuilder
     {
-        const string ModelPath = "Assets/Art/Pizza/pizza1/pizza1.fbx";
         const string PrefabFolder = "Assets/Prefabs";
         const string BasePrefabPath = PrefabFolder + "/PZ_Pizza_Base.prefab";
+        static readonly Vector3 PizzaSize = new Vector3(0.18f, 0.03f, 0.18f);
 
         [MenuItem("Tools/Pizzala/Build Pizza Prefabs")]
         public static void BuildAll()
@@ -31,29 +31,22 @@ namespace Pizzala.EditorTools
 
         static GameObject BuildBase()
         {
-            var modelAsset = AssetDatabase.LoadAssetAtPath<GameObject>(ModelPath);
-            if (modelAsset == null)
-            {
-                Debug.LogError($"PizzaPrefabBuilder: model not found at {ModelPath}");
-                return null;
-            }
-
             var root = new GameObject("PZ_Pizza_Base");
-            var model = (GameObject)PrefabUtility.InstantiatePrefab(modelAsset, root.transform);
+
+            var model = GameObject.CreatePrimitive(PrimitiveType.Cube);
             model.name = "Model";
+            model.transform.SetParent(root.transform);
             model.transform.localPosition = Vector3.zero;
             model.transform.localRotation = Quaternion.identity;
+            model.transform.localScale = PizzaSize;
+            Object.DestroyImmediate(model.GetComponent<BoxCollider>()); // root has its own collider below
 
             var rb = root.AddComponent<Rigidbody>();
             rb.mass = 0.3f;
             rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
-            var bounds = ComputeLocalBounds(model, root.transform);
             var box = root.AddComponent<BoxCollider>();
-            box.center = bounds.center;
-            // Squash to a flat disc regardless of the raw model bounds - PREFABS.md just wants
-            // "壓扁的 Box", not a collider that matches the pizza's actual (thin) mesh height.
-            box.size = new Vector3(bounds.size.x, Mathf.Min(bounds.size.y, 0.04f), bounds.size.z);
+            box.size = PizzaSize;
 
             var grab = root.AddComponent<XRGrabInteractable>();
             grab.movementType = XRBaseInteractable.MovementType.VelocityTracking;
@@ -89,20 +82,6 @@ namespace Pizzala.EditorTools
             var path = $"{PrefabFolder}/{variantName}.prefab";
             PrefabUtility.SaveAsPrefabAsset(instance, path);
             Object.DestroyImmediate(instance);
-        }
-
-        static Bounds ComputeLocalBounds(GameObject model, Transform relativeTo)
-        {
-            var renderers = model.GetComponentsInChildren<Renderer>();
-            if (renderers.Length == 0)
-                return new Bounds(Vector3.zero, new Vector3(0.3f, 0.04f, 0.3f));
-
-            var worldBounds = renderers[0].bounds;
-            for (int i = 1; i < renderers.Length; i++)
-                worldBounds.Encapsulate(renderers[i].bounds);
-
-            var center = relativeTo.InverseTransformPoint(worldBounds.center);
-            return new Bounds(center, worldBounds.size);
         }
     }
 }
