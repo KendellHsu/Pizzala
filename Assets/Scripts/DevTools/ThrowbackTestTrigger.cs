@@ -3,6 +3,7 @@
 // it at targetHead's position *at that instant* (ThrowbackProjectile doesn't track afterwards,
 // so stepping aside or ducking after the throw is what makes it miss).
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Pizzala.Customers;
 
 namespace Pizzala.DevTools
@@ -12,11 +13,12 @@ namespace Pizzala.DevTools
         public GameObject throwbackPrefab;
         public Transform targetHead;
         public float speed = 6f;
-        public KeyCode triggerKey = KeyCode.F;
 
         void Update()
         {
-            if (Input.GetKeyDown(triggerKey))
+            // Project uses the Input System package exclusively (UnityEngine.Input is disabled
+            // in Player Settings), so read the key through Keyboard.current instead.
+            if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
                 Throw();
         }
 
