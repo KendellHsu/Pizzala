@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.70673
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.60708
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.73499
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -30,11 +30,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       propertyPath: m_Name
-      value: PZ_ThrowbackPizza_Pepperoni 1
+      value: PZ_ThrowbackPizza_Pepperoni
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
