@@ -40,7 +40,7 @@ namespace PizzaVR.Gameplay
         {
             transform.SetParent(null);
             Rb.isKinematic = false;
-            Rb.velocity = velocity;
+            Rb.linearVelocity = velocity;
             Rb.angularVelocity = angularVelocity;
             Thrown = true;
             Destroy(gameObject, 15f); // cleanup if it never gets scored / settles somewhere
@@ -60,7 +60,7 @@ namespace PizzaVR.Gameplay
                 config.frisbeeSpinStabilization, Time.fixedDeltaTime);
 
             var lift = ComputeLiftForce(
-                Rb.velocity, Rb.angularVelocity, discNormal,
+                Rb.linearVelocity, Rb.angularVelocity, discNormal,
                 config.frisbeeLiftCoefficient, config.frisbeeMinStableSpin);
             Rb.AddForce(lift, ForceMode.Acceleration);
         }

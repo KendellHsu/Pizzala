@@ -74,7 +74,7 @@ public static class SpawnLogicSmokeTest
         var throwAngular = new Vector3(0f, 5f, 0f);
         projectile.Throw(throwVelocity, throwAngular);
 
-        Debug.Log($"PIZZA_TEST after flavor={projectile.Flavor} isKinematic={rb.isKinematic} hasParent={pizzaGO.transform.parent != null} thrown={projectile.Thrown} velocity={rb.velocity} angularVelocity={rb.angularVelocity}");
+        Debug.Log($"PIZZA_TEST after flavor={projectile.Flavor} isKinematic={rb.isKinematic} hasParent={pizzaGO.transform.parent != null} thrown={projectile.Thrown} velocity={rb.linearVelocity} angularVelocity={rb.angularVelocity}");
 
         Object.DestroyImmediate(parent);
         Object.DestroyImmediate(pizzaGO);
