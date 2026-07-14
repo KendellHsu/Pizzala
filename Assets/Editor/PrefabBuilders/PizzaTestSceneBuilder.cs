@@ -45,6 +45,16 @@ namespace Pizzala.EditorTools
             wall.transform.localScale = new Vector3(6f, 3f, 0.2f);
             wall.isStatic = false;
 
+            // ThrowbackTestSpawner throws from +Z toward the player at the origin - a dodge
+            // sends the pizza continuing into -Z, past the player, so the "hits the wall behind
+            // you" acceptance point (PREFABS.md item 2) needs a wall back there too, not just
+            // the one in front that the player's own throws are aimed at.
+            var backWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            backWall.name = "BackWall";
+            backWall.transform.position = new Vector3(0f, 1.5f, -3f);
+            backWall.transform.localScale = new Vector3(6f, 3f, 0.2f);
+            backWall.isStatic = false;
+
             var table = GameObject.CreatePrimitive(PrimitiveType.Cube);
             table.name = "TestTable";
             table.transform.position = new Vector3(0f, 0.45f, 0.5f);
