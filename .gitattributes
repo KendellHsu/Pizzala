@@ -1,51 +1,7 @@
-# ============================================
-# Git LFS 設定 — 二進位大檔走 LFS，避免 repo 爆掉
-# 注意 GitHub 免費額度：10GB 儲存 + 10GB/月 頻寬
-# 原則：真正給引擎用的成品才進 LFS；原始工作檔（大 PSD、高模）放雲端硬碟
-# ============================================
-
-# ---- 貼圖 / 圖片 ----
-*.png filter=lfs diff=lfs merge=lfs -text
-*.jpg filter=lfs diff=lfs merge=lfs -text
-*.jpeg filter=lfs diff=lfs merge=lfs -text
-*.tga filter=lfs diff=lfs merge=lfs -text
-*.tif filter=lfs diff=lfs merge=lfs -text
-*.tiff filter=lfs diff=lfs merge=lfs -text
-*.exr filter=lfs diff=lfs merge=lfs -text
-*.hdr filter=lfs diff=lfs merge=lfs -text
-# 注意：.psd 建議放雲端，不進 LFS。若一定要進版控再取消下一行註解
-# *.psd filter=lfs diff=lfs merge=lfs -text
-
-# ---- 3D 模型 / 動畫 ----
 *.fbx filter=lfs diff=lfs merge=lfs -text
-*.obj filter=lfs diff=lfs merge=lfs -text
-*.blend filter=lfs diff=lfs merge=lfs -text
-*.gltf filter=lfs diff=lfs merge=lfs -text
-*.glb filter=lfs diff=lfs merge=lfs -text
-
-# ---- 音訊 ----
+*.tiff filter=lfs diff=lfs merge=lfs -text
+*.tif filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.exr filter=lfs diff=lfs merge=lfs -text
 *.wav filter=lfs diff=lfs merge=lfs -text
-*.mp3 filter=lfs diff=lfs merge=lfs -text
-*.ogg filter=lfs diff=lfs merge=lfs -text
-*.aif filter=lfs diff=lfs merge=lfs -text
-*.aiff filter=lfs diff=lfs merge=lfs -text
-
-# ---- 影片 ----
 *.mp4 filter=lfs diff=lfs merge=lfs -text
-*.mov filter=lfs diff=lfs merge=lfs -text
-*.webm filter=lfs diff=lfs merge=lfs -text
-
-# ---- 字型 ----
-*.ttf filter=lfs diff=lfs merge=lfs -text
-*.otf filter=lfs diff=lfs merge=lfs -text
-
-# ============================================
-# 場景與 Prefab：強制當文字檔處理，讓 Git 能顯示差異、減少無謂衝突
-# （前提：Project Settings > Editor > Asset Serialization = Force Text）
-# ============================================
-*.unity merge=binary -text
-*.prefab merge=binary -text
-*.asset merge=binary -text
-*.mat merge=binary -text
-*.anim merge=binary -text
-*.controller merge=binary -text
