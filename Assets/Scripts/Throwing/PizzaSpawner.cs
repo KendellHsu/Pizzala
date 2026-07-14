@@ -21,6 +21,7 @@ namespace Pizzala.Throwing
         public float leaveDistance = 0.5f;
 
         PizzaProjectile current;
+        PizzaProjectile departed; // 已離開生成點、補貨倒數中的披薩(放回來可取消補貨)
         float respawnTimer = -1f;
 
         void Start() => Spawn();
@@ -29,23 +30,36 @@ namespace Pizzala.Throwing
         {
             if (current != null)
             {
-                bool left = current.WasThrown
-                            || Vector3.Distance(current.transform.position, transform.position) > leaveDistance;
-                if (left)
+                // 只看距離,不看有沒有放手:拿起來又放回原位不算拿走
+                if (Vector3.Distance(current.transform.position, transform.position) > leaveDistance)
                 {
-                    current = null; // 舊披薩留在世界裡當髒污,不回收
+                    departed = current; // 舊披薩留在世界裡當髒污,不回收
+                    current = null;
                     respawnTimer = respawnDelay;
                 }
+                return;
             }
-            else if (respawnTimer > 0f)
+
+            // current 被銷毀(客人收走)→ 直接進補貨倒數
+            if (respawnTimer < 0f) { respawnTimer = respawnDelay; departed = null; }
+
+            // 倒數期間披薩被放回原位 → 取消補貨,重新採用它
+            if (departed != null
+                && Vector3.Distance(departed.transform.position, transform.position) <= leaveDistance)
             {
-                respawnTimer -= Time.deltaTime;
-                if (respawnTimer <= 0f) Spawn();
+                current = departed;
+                departed = null;
+                respawnTimer = -1f;
+                return;
             }
+
+            respawnTimer -= Time.deltaTime;
+            if (respawnTimer <= 0f) { departed = null; Spawn(); }
         }
 
         void Spawn()
         {
+            respawnTimer = -1f;
             if (pizzaPrefab == null) return;
             var go = Instantiate(pizzaPrefab, transform.position, transform.rotation);
             current = go.GetComponent<PizzaProjectile>();

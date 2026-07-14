@@ -209,7 +209,7 @@ Project 視窗 `Assets/` 右鍵 → **Create → Folder**,命名 `Prefabs`。之
    - Element 1 = Pepperoni 用的濺灑圖
    - Element 2 = CosmicPinkMarshmallow 用的濺灑圖
    - 某個 Element 留空,該口味被砸中時畫面會沿用 Splat Image 目前設定的預設圖,不會報錯
-   - 被丟回砸中時,`GameManager` 會依客人**最後點的訂單口味**([GameManager.cs:244](../Assets/Scripts/Core/GameManager.cs#L244) `customer.CurrentOrder`)自動換圖,不用額外接線
+   - 被丟回砸中時,`GameManager` 會依**丟回披薩的口味**自動換圖(超時=該筆訂單的口味;丟錯口味=你丟的那顆的口味),不用額外接線
 
 ✋ **驗收點 11**:Play 時畫面上看不到紅色(Start 會把 alpha 歸零)。故意讓某口味訂單超時觸發丟回被砸中,螢幕應該糊上對應口味的濺灑圖(若 Flavor Splats 有填的話)。
 
