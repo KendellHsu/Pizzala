@@ -244,10 +244,10 @@ namespace Pizzala.Core
         void TryThrowback(CustomerController customer)
         {
             if (!enableThrowback || !RoundActive || throwbackPrefab == null || head == null) return;
-            StartCoroutine(ThrowbackRoutine(customer));
+            StartCoroutine(ThrowbackRoutine(customer, customer.CurrentOrder));
         }
 
-        IEnumerator ThrowbackRoutine(CustomerController customer)
+        IEnumerator ThrowbackRoutine(CustomerController customer, PizzaFlavor flavor)
         {
             float telegraphStart = Time.time;
             Vector3 headStart = head.position;
@@ -280,7 +280,7 @@ namespace Pizzala.Core
             if (hitPlayer)
             {
                 playerFaceHitCount++;
-                if (faceSplatOverlay != null) faceSplatOverlay.Show();
+                if (faceSplatOverlay != null) faceSplatOverlay.Show(flavor);
             }
         }
 

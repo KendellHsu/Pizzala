@@ -204,8 +204,14 @@ Project 視窗 `Assets/` 右鍵 → **Create → Folder**,命名 `Prefabs`。之
    - 顏色調半透明暗紅(醬汁貼圖之後換)
    - **Raycast Target 取消勾選**
 3. Canvas 根物件 Add Component → `FaceSplatOverlay`,Splat Image 拖入 SplatImage;Hold = 1.2、Fade = 2 保持預設
+4. (可選,已有多口味 splat 素材時做)`Flavor Splats` 陣列 Size 設 3,依 PizzaFlavor 列舉順序拖入對應貼圖(需先把 png 的 **Texture Type 改成 Sprite (2D and UI)** 才能拖進 Sprite 欄位):
+   - Element 0 = Margherita 用的濺灑圖
+   - Element 1 = Pepperoni 用的濺灑圖
+   - Element 2 = CosmicPinkMarshmallow 用的濺灑圖
+   - 某個 Element 留空,該口味被砸中時畫面會沿用 Splat Image 目前設定的預設圖,不會報錯
+   - 被丟回砸中時,`GameManager` 會依客人**最後點的訂單口味**([GameManager.cs:244](../Assets/Scripts/Core/GameManager.cs#L244) `customer.CurrentOrder`)自動換圖,不用額外接線
 
-✋ **驗收點 11**:Play 時畫面上看不到紅色(Start 會把 alpha 歸零)。
+✋ **驗收點 11**:Play 時畫面上看不到紅色(Start 會把 alpha 歸零)。故意讓某口味訂單超時觸發丟回被砸中,螢幕應該糊上對應口味的濺灑圖(若 Flavor Splats 有填的話)。
 
 ---
 
