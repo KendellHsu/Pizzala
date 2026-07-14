@@ -1,6 +1,8 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using Pizzala.Core;
+using Pizzala.DevTools;
 
 namespace Pizzala.EditorTools
 {
@@ -47,17 +49,63 @@ namespace Pizzala.EditorTools
             table.transform.localScale = new Vector3(1.2f, 0.9f, 0.6f);
             table.isStatic = false;
 
-            InstantiatePrefab(XROriginPath, Vector3.zero);
+            var xrOrigin = InstantiatePrefab(XROriginPath, Vector3.zero);
             InstantiatePrefab(SimulatorPath, Vector3.zero);
 
             foreach (var (prefabPath, pos) in Pizzas)
                 InstantiatePrefab(prefabPath, pos);
+
+            var headTransform = BuildHeadHitbox(xrOrigin);
+            BuildThrowbackTrigger(headTransform);
 
             if (!AssetDatabase.IsValidFolder("Assets/Scenes"))
                 AssetDatabase.CreateFolder("Assets", "Scenes");
 
             EditorSceneManager.SaveScene(scene, ScenePath);
             Debug.Log($"PizzaTestSceneBuilder: test scene saved at {ScenePath}");
+        }
+
+        // Per SETUP.md 2-2 / BUILD_STEPS.md §2: ThrowbackProjectile only recognizes a hit on the
+        // player by finding PlayerHeadHitbox on the collider it touched.
+        static Transform BuildHeadHitbox(GameObject xrOrigin)
+        {
+            if (xrOrigin == null)
+                return null;
+
+            var camera = xrOrigin.GetComponentInChildren<Camera>();
+            if (camera == null)
+            {
+                Debug.LogError("PizzaTestSceneBuilder: no Camera found under XR Origin, can't build HeadHitbox.");
+                return null;
+            }
+
+            var headHitbox = new GameObject("HeadHitbox");
+            headHitbox.transform.SetParent(camera.transform, false);
+            headHitbox.AddComponent<PlayerHeadHitbox>();
+
+            var sphere = headHitbox.AddComponent<SphereCollider>();
+            sphere.isTrigger = true;
+            sphere.radius = 0.22f;
+
+            var rb = headHitbox.AddComponent<Rigidbody>();
+            rb.isKinematic = true;
+            rb.useGravity = false;
+
+            return camera.transform;
+        }
+
+        // Stands in for a Customer until PZ_Customer/GameManager exist to launch throwbacks for
+        // real - press F in Play Mode to fire a PZ_ThrowbackPizza_Margherita at wherever the
+        // head currently is (locked in at that instant, so moving afterwards is what dodges it).
+        static void BuildThrowbackTrigger(Transform headTransform)
+        {
+            var spawner = new GameObject("ThrowbackTestSpawner");
+            spawner.transform.position = new Vector3(0f, 1.3f, 2.6f);
+
+            var trigger = spawner.AddComponent<ThrowbackTestTrigger>();
+            trigger.throwbackPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/PZ_ThrowbackPizza_Margherita.prefab");
+            trigger.targetHead = headTransform;
+            trigger.speed = 6f;
         }
 
         static GameObject InstantiatePrefab(string path, Vector3 position)
