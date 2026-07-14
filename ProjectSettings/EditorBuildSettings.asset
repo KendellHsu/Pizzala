@@ -9,4 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Restaurant.unity
     guid: 8a4a9cd4597db874094ac6f297b5c3b7
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 2c1b417fc7b08204ca064cdd23a51c75, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 11b5b0747f045fa479a1b5b278b7744e, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 29df1e1f88be6204e95b9add2617adc0, type: 2}
+  m_UseUCBPForAssetBundles: 0
