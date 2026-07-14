@@ -5,25 +5,23 @@ using Pizzala.Customers;
 
 namespace Pizzala.EditorTools
 {
-    // Placeholder flavor icons for PZ_Customer's FlavorIcon (PREFABS.md section 4) - the art
-    // team hasn't delivered dedicated 256x256 icon sprites yet. Reusing each pizza's own UV
-    // diffuse texture looked like a jumbled square (it's a 3D-model wrap, not a top-down photo),
-    // so instead this draws a plain colored disc per flavor - round, transparent background,
-    // matches the spec's silhouette even without real art. Re-run after real icons arrive to
-    // just re-point Icons at the new files, or delete Assets/Art/Icons and unassign manually.
+    // Flavor icons for PZ_Customer's FlavorIcon (PREFABS.md section 4). The art team delivered
+    // real top-down 2D pizza icons in Assets/Art/Pizza/2D/ - resize them to the spec's 256x256
+    // and wire into PZ_Customer.flavorSprites. Re-run after the art changes to re-pull from the
+    // same source files.
     public static class FlavorIconBuilder
     {
         const string IconFolder = "Assets/Art/Icons";
         const int IconSize = 256;
 
-        static readonly (string flavorName, Color color, string iconName)[] Icons =
+        static readonly (string flavorName, string sourcePath, string iconName)[] Icons =
         {
-            ("Margherita", new Color(0.95f, 0.85f, 0.55f), "FlavorIcon_Margherita.png"),
-            ("Pepperoni", new Color(0.85f, 0.25f, 0.2f), "FlavorIcon_Pepperoni.png"),
-            ("CosmicPinkMarshmallow", new Color(0.95f, 0.45f, 0.75f), "FlavorIcon_CosmicPinkMarshmallow.png"),
+            ("Margherita", "Assets/Art/Pizza/2D/pizza_Margherita_2D.png", "FlavorIcon_Margherita.png"),
+            ("Pepperoni", "Assets/Art/Pizza/2D/pizza_Pepperoni_2D.png", "FlavorIcon_Pepperoni.png"),
+            ("CosmicPinkMarshmallow", "Assets/Art/Pizza/2D/pizza_pinkMM_2D.png", "FlavorIcon_CosmicPinkMarshmallow.png"),
         };
 
-        [MenuItem("Tools/Pizzala/Build Flavor Icons (Placeholder Discs)")]
+        [MenuItem("Tools/Pizzala/Build Flavor Icons From 2D Pizza Art")]
         public static void Build()
         {
             if (!AssetDatabase.IsValidFolder("Assets/Art"))
@@ -37,19 +35,49 @@ namespace Pizzala.EditorTools
             var sprites = new Sprite[Icons.Length];
             for (int i = 0; i < Icons.Length; i++)
             {
-                var (flavorName, color, iconName) = Icons[i];
+                var (flavorName, sourcePath, iconName) = Icons[i];
                 var destPath = $"{IconFolder}/{iconName}";
 
-                File.WriteAllBytes(destPath, DrawDisc(color).EncodeToPNG());
+                if (!File.Exists(sourcePath))
+                {
+                    Debug.LogError($"FlavorIconBuilder: source art not found for {flavorName} at {sourcePath}");
+                    continue;
+                }
+
+                // Source art is 1067x1067 (700KB+) - more than a small hovering icon needs, so
+                // resize down to the PREFABS.md spec's 256x256 before committing it. CPU-side
+                // GetPixelBilinear/SetPixels rather than RenderTexture/Graphics.Blit, which
+                // silently no-ops under -nographics batchmode (see FlavorIconBuilder history).
+                var srcBytes = File.ReadAllBytes(sourcePath);
+                var srcTex = new Texture2D(2, 2);
+                srcTex.LoadImage(srcBytes);
+
+                var resizedTex = new Texture2D(IconSize, IconSize, TextureFormat.RGBA32, false);
+                var pixels = new Color[IconSize * IconSize];
+                for (int y = 0; y < IconSize; y++)
+                {
+                    float v = y / (float)(IconSize - 1);
+                    for (int x = 0; x < IconSize; x++)
+                    {
+                        float u = x / (float)(IconSize - 1);
+                        pixels[y * IconSize + x] = srcTex.GetPixelBilinear(u, v);
+                    }
+                }
+                resizedTex.SetPixels(pixels);
+                resizedTex.Apply();
+
+                File.WriteAllBytes(destPath, resizedTex.EncodeToPNG());
+                Object.DestroyImmediate(srcTex);
+                Object.DestroyImmediate(resizedTex);
+
                 AssetDatabase.ImportAsset(destPath, ImportAssetOptions.ForceSynchronousImport);
 
                 var importer = (TextureImporter)AssetImporter.GetAtPath(destPath);
                 importer.textureType = TextureImporterType.Sprite;
                 importer.spriteImportMode = SpriteImportMode.Single;
                 importer.alphaIsTransparency = true;
-                // Default 100 PPU made a 256px icon render as a 2.56m sphere at scale 1 - way
-                // bigger than the customer it floats above. ~700 PPU keeps it a plausible
-                // "hovering icon" size (~0.37m) without needing to touch FlavorIcon's transform.
+                // 256px at 700 PPU renders as a ~0.37m icon - a plausible "hovering above the
+                // customer's head" size (default 100 PPU would make it a 2.56m sphere).
                 importer.spritePixelsPerUnit = 700;
                 importer.SaveAndReimport();
 
@@ -81,35 +109,7 @@ namespace Pizzala.EditorTools
             PrefabUtility.SaveAsPrefabAsset(root, "Assets/Prefabs/PZ_Customer.prefab");
             PrefabUtility.UnloadPrefabContents(root);
 
-            Debug.Log("FlavorIconBuilder: PZ_Customer.flavorSprites wired with 3 round placeholder disc icons.");
-        }
-
-        // Plain filled circle, color inside / transparent outside, with a couple pixels of
-        // antialiasing on the edge. Pure CPU pixel work - no RenderTexture/Blit/Camera needed,
-        // so this runs fine under -nographics batchmode.
-        static Texture2D DrawDisc(Color color)
-        {
-            var tex = new Texture2D(IconSize, IconSize, TextureFormat.RGBA32, false);
-            var pixels = new Color[IconSize * IconSize];
-            float center = (IconSize - 1) / 2f;
-            float radius = IconSize * 0.47f;
-            const float featherWidth = 2f;
-
-            for (int y = 0; y < IconSize; y++)
-            {
-                for (int x = 0; x < IconSize; x++)
-                {
-                    float dist = Vector2.Distance(new Vector2(x, y), new Vector2(center, center));
-                    float alpha = Mathf.Clamp01((radius - dist) / featherWidth + 0.5f);
-                    var c = color;
-                    c.a = alpha;
-                    pixels[y * IconSize + x] = c;
-                }
-            }
-
-            tex.SetPixels(pixels);
-            tex.Apply();
-            return tex;
+            Debug.Log("FlavorIconBuilder: PZ_Customer.flavorSprites wired with the real 2D pizza icons.");
         }
     }
 }
