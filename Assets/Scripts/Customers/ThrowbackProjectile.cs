@@ -8,12 +8,14 @@
 // ─────────────────────────────────────────────────────────────
 using UnityEngine;
 using Pizzala.Core;
+using Pizzala.Data;
 
 namespace Pizzala.Customers
 {
     [RequireComponent(typeof(Rigidbody))]
     public class ThrowbackProjectile : MonoBehaviour
     {
+        public PizzaFlavor flavor; // 生成時由 GameManager 覆寫,落空髒污用
         public System.Action<bool> onResolved; // true = 砸中玩家臉
         bool resolved;
         float launchTime;
@@ -48,7 +50,7 @@ namespace Pizzala.Customers
             resolved = true;
 
             if (!hitPlayer && Pizzala.Dirt.DirtManager.Instance != null)
-                Pizzala.Dirt.DirtManager.Instance.SpawnSplat(point, normal); // 閃過→牆上多一塊髒污
+                Pizzala.Dirt.DirtManager.Instance.SpawnSplat(point, normal, flavor); // 閃過→牆上多一塊髒污
 
             onResolved?.Invoke(hitPlayer);
             Destroy(gameObject, hitPlayer ? 0f : 1.5f);

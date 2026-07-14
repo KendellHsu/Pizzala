@@ -53,7 +53,12 @@ namespace Pizzala.Core
         public FaceSplatOverlay faceSplatOverlay;
         public ResultsScreenController resultsScreen;
         public ActivityTracker activityTracker;
+
+        [Tooltip("後備丟回披薩(下面陣列沒填到的口味用這個)")]
         public GameObject throwbackPrefab;
+
+        [Tooltip("依 PizzaFlavor 列舉順序:0=Margherita 1=Pepperoni 2=CosmicPinkMarshmallow")]
+        public GameObject[] throwbackPrefabsByFlavor;
 
         [Header("玩家髒臉素材(美術提供,依中彈次數選圖,貼圖需勾 Read/Write)")]
         public Texture2D[] playerDirtyFaceTextures;
@@ -175,20 +180,21 @@ namespace Pizzala.Core
                             record.photoPath = snapshotCamera.CaptureAt(zone.customer.faceAnchor);
                             SessionLogger.Instance.AddCustomerFacePhoto(record.photoPath);
                         }
-                        TryThrowback(zone.customer);
+                        TryThrowback(zone.customer, pizza.flavor); // 砸到臉的那顆被丟回來
                         break;
 
                     case HitZoneType.Body:
                         record.outcome = ThrowOutcome.MissBody;
                         zone.customer.GetDirty();
-                        if (DirtManager.Instance != null) DirtManager.Instance.SpawnSplat(point, normal);
+                        if (DirtManager.Instance != null)
+                            DirtManager.Instance.SpawnSplat(point, normal, pizza.flavor, zone.customer.transform);
                         break;
                 }
             }
             else
             {
                 record.outcome = ThrowOutcome.MissEnvironment;
-                if (DirtManager.Instance != null) DirtManager.Instance.SpawnSplat(point, normal);
+                if (DirtManager.Instance != null) DirtManager.Instance.SpawnSplat(point, normal, pizza.flavor);
             }
 
             SessionLogger.Instance.Record(record);
@@ -217,14 +223,16 @@ namespace Pizzala.Core
             {
                 record.outcome = ThrowOutcome.WrongFlavor;
                 customer.ResolveOrder(false);
-                TryThrowback(customer);
+                Destroy(pizza.gameObject, 0.5f);        // 客人接住那顆錯的
+                TryThrowback(customer, pizza.flavor);   // 再原樣丟回來
             }
         }
 
         void HandleOrderTimeout(CustomerController customer)
         {
             missedOrders++;
-            TryThrowback(customer);
+            Debug.Log($"[GameManager] 客人 {customer.customerId} 訂單超時 → 準備丟回");
+            TryThrowback(customer, customer.CurrentOrder);
         }
 
         CustomerController FindNearestActiveOrderCustomer(Vector3 point)
@@ -241,13 +249,22 @@ namespace Pizzala.Core
         }
 
         // ══ 丟回 & 閃避 ══
-        void TryThrowback(CustomerController customer)
+        void TryThrowback(CustomerController customer, PizzaFlavor flavor)
         {
-            if (!enableThrowback || !RoundActive || throwbackPrefab == null || head == null) return;
-            StartCoroutine(ThrowbackRoutine(customer));
+            var prefab = PickThrowbackPrefab(flavor);
+            if (!enableThrowback || !RoundActive || prefab == null || head == null) return;
+            StartCoroutine(ThrowbackRoutine(customer, flavor, prefab));
         }
 
-        IEnumerator ThrowbackRoutine(CustomerController customer)
+        GameObject PickThrowbackPrefab(PizzaFlavor flavor)
+        {
+            if (throwbackPrefabsByFlavor != null && (int)flavor < throwbackPrefabsByFlavor.Length
+                && throwbackPrefabsByFlavor[(int)flavor] != null)
+                return throwbackPrefabsByFlavor[(int)flavor];
+            return throwbackPrefab;
+        }
+
+        IEnumerator ThrowbackRoutine(CustomerController customer, PizzaFlavor flavor, GameObject prefab)
         {
             float telegraphStart = Time.time;
             Vector3 headStart = head.position;
@@ -258,9 +275,17 @@ namespace Pizzala.Core
                              ? customer.throwOrigin.position
                              : customer.transform.position + Vector3.up * 1.4f;
 
-            var go = Instantiate(throwbackPrefab, origin, Quaternion.identity);
+            var go = Instantiate(prefab, origin, Quaternion.identity);
             var proj = go.GetComponent<ThrowbackProjectile>();
             if (proj == null) { Destroy(go); yield break; }
+            proj.flavor = flavor;
+
+            // 出生點在客人胸前、BodyZone 膠囊「內部」,不忽略碰撞會被客人自己擋下來
+            foreach (var customerCol in customer.GetComponentsInChildren<Collider>())
+                foreach (var pizzaCol in go.GetComponentsInChildren<Collider>())
+                    Physics.IgnoreCollision(pizzaCol, customerCol, true);
+
+            Debug.Log($"[GameManager] 客人 {customer.customerId} 丟回披薩發射(口味 {flavor})");
 
             bool resolved = false, hitPlayer = false;
             proj.onResolved = h => { resolved = true; hitPlayer = h; };
@@ -280,7 +305,7 @@ namespace Pizzala.Core
             if (hitPlayer)
             {
                 playerFaceHitCount++;
-                if (faceSplatOverlay != null) faceSplatOverlay.Show();
+                if (faceSplatOverlay != null) faceSplatOverlay.Show(flavor);
             }
         }
 
