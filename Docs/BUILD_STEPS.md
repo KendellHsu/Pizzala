@@ -279,7 +279,7 @@ Project 視窗 `Assets/` 右鍵 → **Create → Folder**,命名 `Prefabs`。之
 1. 客人頭上……口味圖示還沒有,所以看 Console/行為:客人會開始等餐
 2. 丟披薩到客人手前 → 披薩被收走(口味對)或觸發丟回(口味錯)
 3. 亂丟地板/牆 → 出現紅色髒污
-4. 故意等訂單超時 → 客人閃紅 0.8 秒 → 披薩飛過來 → 站著不動會滿臉紅、側跳能躲掉
+4. 丟**錯口味**給客人 → 客人閃紅 0.8 秒 → 那顆披薩飛回來 → 站著不動會滿臉紅、側跳能躲掉(訂單超時只會生氣+記 missedOrder,不丟回;要恢復超時丟回勾 GameManager 的 `throwbackOnTimeout`)
 5. 3 分鐘回合結束 → 結算畫面出現(Control = 數據面板)
 6. `%USERPROFILE%\AppData\LocalLow\<公司名>\Pizzala\sessions\` 出現 JSON
 

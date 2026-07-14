@@ -59,7 +59,7 @@ PZ_Pizza_Base
 **做法**:複製 `PZ_Pizza_Base` → 改名 → **移除** XR Grab Interactable 和 PizzaProjectile → **掛上** `ThrowbackProjectile` → Collider 的 Is Trigger 保持**不勾**。
 
 **驗收目標**
-- [x] GameManager 的 `throwbackPrefab` 拖入後,故意讓客人超時:客人先閃紅約 0.8 秒,然後披薩朝玩家飛來
+- [x] 丟**錯口味**到客人手上:客人接住後閃紅約 0.8 秒,再把那顆披薩丟回來(超時**不**丟回——沒拿到披薩的客人沒東西可丟;實驗若需要更多閃避事件,勾 GameManager 的 `throwbackOnTimeout` 恢復超時丟回)
 - [x] 站著不動會被砸中 → 螢幕糊醬汁(需 #8 完成)
 - [x] 預警瞬間側跨一步或下蹲,披薩**會落空**,砸在身後牆上並留下髒污
 - [x] 落空的披薩 1.5 秒後消失,5 秒後保底自毀,場上不會堆積
@@ -213,10 +213,10 @@ PZ_FaceSplatCanvas(Canvas:Screen Space - Camera,Camera = Main Camera,Plane Dista
 掛 `FaceSplatOverlay`,`splatImage` 拖入 SplatImage。
 
 **驗收目標**
-- [ ] Play 開始時看不到醬汁(alpha = 0)
-- [ ] 被丟回披薩砸中:醬汁瞬間糊滿視野 → 停留 1.2 秒 → 2 秒淡出
-- [ ] 醬汁跟著頭轉(像糊在臉上),而不是釘在世界某處
-- [ ] 連續被砸兩次,效果重新播放、不疊加出錯
+- [x] Play 開始時看不到醬汁(alpha = 0)
+- [x] 被丟回披薩砸中:醬汁瞬間糊滿視野 → 停留 1.2 秒 → 2 秒淡出
+- [x] 醬汁跟著頭轉(像糊在臉上),而不是釘在世界某處
+- [x] 連續被砸兩次,效果重新播放、不疊加出錯
 - [ ] 遮擋程度戴頭盔實測**不引起不適**(太滿就把貼圖中央挖空一點)
 
 ---

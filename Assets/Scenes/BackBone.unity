@@ -154,6 +154,7 @@ MonoBehaviour:
   condition: 0
   participantId: P00
   enableThrowback: 1
+  throwbackOnTimeout: 0
   enforceFlavor: 1
   enforceThrowType: 0
   autoStart: 1
@@ -170,7 +171,10 @@ MonoBehaviour:
   resultsScreen: {fileID: 1186990724}
   activityTracker: {fileID: 34325300}
   throwbackPrefab: {fileID: 2722252330292994515, guid: 822b80b1b7a7e744baf91859aa67ce7a, type: 3}
-  throwbackPrefabsByFlavor: []
+  throwbackPrefabsByFlavor:
+  - {fileID: 2722252330292994515, guid: 822b80b1b7a7e744baf91859aa67ce7a, type: 3}
+  - {fileID: 2175576954044425211, guid: 8f6407cb2cd632d40a1fea4893ffb8f8, type: 3}
+  - {fileID: 2545735174419685507, guid: a1740ee18540efb4fa7c6a98cd15812e, type: 3}
   playerDirtyFaceTextures: []
 --- !u!114 &34325300
 MonoBehaviour:
@@ -199,7 +203,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 456d4c31e3f45f84aa937700b320a6dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Dirt.DirtManager
-  flavorSplats: []
+  flavorSplats:
+  - prefabs:
+    - {fileID: 8004019436173921859, guid: 8e7bbf5fddb6a2946a0c412d13db762e, type: 3}
+    - {fileID: 8004019436173921859, guid: e1f90c0d68118dd48973bf4b17dbfedc, type: 3}
+    - {fileID: 8004019436173921859, guid: 89721c75c1e43b84384a06f2ed713a2c, type: 3}
+    - {fileID: 8004019436173921859, guid: 1fd75568c7320a74dbcac222a26cbe49, type: 3}
+    - {fileID: 8004019436173921859, guid: 542ab0a4e89860f45a472a8847184bc2, type: 3}
+  - prefabs:
+    - {fileID: 8004019436173921859, guid: ec6dd7de3fae47143af1902ae4b83aac, type: 3}
+    - {fileID: 8004019436173921859, guid: b45aada30c5abb84185d461d1c6a1f02, type: 3}
+    - {fileID: 8004019436173921859, guid: e93e551825bb98d4596c891cbe7f2bf1, type: 3}
+    - {fileID: 8004019436173921859, guid: 285575c19537a2c40aaafab5b19aeb59, type: 3}
+    - {fileID: 8004019436173921859, guid: ac66c169d161df844988525517d706e5, type: 3}
+  - prefabs:
+    - {fileID: 8004019436173921859, guid: f4099c229128c024ca00f74962cb04fe, type: 3}
+    - {fileID: 8004019436173921859, guid: 1e1390fd39765914aa8031c817cbb49c, type: 3}
+    - {fileID: 8004019436173921859, guid: c6cb13c24a0159643b59b73058d172c8, type: 3}
+    - {fileID: 8004019436173921859, guid: 537c598d40044ce47b46160757e6a748, type: 3}
+    - {fileID: 8004019436173921859, guid: 7da5dbf6a5dd03241965474909abfb8d, type: 3}
+    - {fileID: 8004019436173921859, guid: bc9c427f4849cf8409bd9ce36cfa2d6d, type: 3}
+    - {fileID: 8004019436173921859, guid: be810b16e12655447bf4f36e0a698078, type: 3}
   splatPrefabs:
   - {fileID: 8004019436173921859, guid: 8e7bbf5fddb6a2946a0c412d13db762e, type: 3}
   - {fileID: 8004019436173921859, guid: e1f90c0d68118dd48973bf4b17dbfedc, type: 3}

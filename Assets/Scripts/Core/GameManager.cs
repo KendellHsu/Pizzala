@@ -35,6 +35,10 @@ namespace Pizzala.Core
 
         [Header("玩法開關(保險絲)")]
         public bool enableThrowback = true;
+
+        [Tooltip("訂單超時也丟回?關=只有實際拿到披薩的客人(丟錯口味、被砸臉)才丟回")]
+        public bool throwbackOnTimeout = false;
+
         public bool enforceFlavor = true;
         public bool enforceThrowType = false;
 
@@ -231,6 +235,11 @@ namespace Pizzala.Core
         void HandleOrderTimeout(CustomerController customer)
         {
             missedOrders++;
+            if (!throwbackOnTimeout)
+            {
+                Debug.Log($"[GameManager] 客人 {customer.customerId} 訂單超時(沒拿到披薩,不丟回)");
+                return;
+            }
             Debug.Log($"[GameManager] 客人 {customer.customerId} 訂單超時 → 準備丟回");
             TryThrowback(customer, customer.CurrentOrder);
         }
