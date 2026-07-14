@@ -1,18 +1,19 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using Pizzala.Customers;
 using Pizzala.DevTools;
 
 namespace Pizzala.EditorTools
 {
-    // Persistent test scene covering PREFABS.md items 1 (PZ_Pizza_*) and 2 (PZ_ThrowbackPizza_*),
-    // kept separate from BackBone.unity's Global Volume / renderer setup (which was showing an
-    // unrelated visual artifact). No Global Volume added here on purpose. Don't delete or
-    // overwrite this for a different item - future PREFABS.md items get their own
-    // _Test_NN_Name.unity scene instead.
-    public static class PizzaTestSceneBuilder
+    // Persistent test scene for PREFABS.md item 4 (PZ_Customer) - verifying the flavor icon and
+    // waiting/timeout behavior, plus keeping items 1-2's grab/throw and throwback testing
+    // available alongside it. Full hand-catch/wrong-flavor resolution still needs GameManager
+    // (not built yet), so that part isn't wired here - see CustomerOrderTestTrigger's header.
+    public static class CustomerTestSceneBuilder
     {
-        const string ScenePath = "Assets/Scenes/_Test_01_02_Pizza_Throwback.unity";
+        const string ScenePath = "Assets/Scenes/_Test_04_Customer.unity";
+        const string CustomerPath = "Assets/Prefabs/PZ_Customer.prefab";
 
         static readonly (string prefab, Vector3 pos)[] Pizzas =
         {
@@ -21,7 +22,7 @@ namespace Pizzala.EditorTools
             ("Assets/Prefabs/Pizza/PZ_Pizza_CosmicPinkMarshmallow.prefab", new Vector3(0.3f, 0.9f, 0.5f)),
         };
 
-        [MenuItem("Tools/Pizzala/Build Pizza Grab Test Scene")]
+        [MenuItem("Tools/Pizzala/Build Customer Test Scene")]
         public static void Build()
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
@@ -36,16 +37,6 @@ namespace Pizzala.EditorTools
             floor.transform.localScale = new Vector3(2f, 1f, 2f);
             floor.isStatic = false;
 
-            var wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            wall.name = "Wall";
-            wall.transform.position = new Vector3(0f, 1.5f, 3f);
-            wall.transform.localScale = new Vector3(6f, 3f, 0.2f);
-            wall.isStatic = false;
-
-            // ThrowbackTestSpawner throws from +Z toward the player at the origin - a dodge
-            // sends the pizza continuing into -Z, past the player, so the "hits the wall behind
-            // you" acceptance point (PREFABS.md item 2) needs a wall back there too, not just
-            // the one in front that the player's own throws are aimed at.
             var backWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
             backWall.name = "BackWall";
             backWall.transform.position = new Vector3(0f, 1.5f, -3f);
@@ -64,27 +55,51 @@ namespace Pizzala.EditorTools
             foreach (var (prefabPath, pos) in Pizzas)
                 TestSceneHelpers.InstantiatePrefab(prefabPath, pos);
 
+            var customer = TestSceneHelpers.InstantiatePrefab(CustomerPath, new Vector3(0f, 0f, 2.2f));
+            if (customer != null)
+                customer.transform.rotation = Quaternion.Euler(0f, 180f, 0f); // face the player
+
             var headTransform = TestSceneHelpers.BuildHeadHitbox(xrOrigin);
             BuildThrowbackTrigger(headTransform);
+            BuildOrderTrigger(customer);
             TestSceneHelpers.BuildDirtManager();
 
             TestSceneHelpers.EnsureScenesFolder();
             EditorSceneManager.SaveScene(scene, ScenePath);
-            Debug.Log($"PizzaTestSceneBuilder: test scene saved at {ScenePath}");
+            Debug.Log($"CustomerTestSceneBuilder: test scene saved at {ScenePath}");
         }
 
-        // Stands in for a Customer until PZ_Customer/GameManager exist to launch throwbacks for
-        // real - press F in Play Mode to fire a PZ_ThrowbackPizza_Margherita at wherever the
-        // head currently is (locked in at that instant, so moving afterwards is what dodges it).
+        // Press F: same throwback test as the Pizza/Throwback scene, aimed from roughly where
+        // the customer stands.
         static void BuildThrowbackTrigger(Transform headTransform)
         {
             var spawner = new GameObject("ThrowbackTestSpawner");
-            spawner.transform.position = new Vector3(0f, 1.3f, 2.6f);
+            spawner.transform.position = new Vector3(0f, 1.3f, 2f);
 
             var trigger = spawner.AddComponent<ThrowbackTestTrigger>();
             trigger.throwbackPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Pizza/PZ_ThrowbackPizza_Margherita.prefab");
             trigger.targetHead = headTransform;
             trigger.speed = 6f;
+        }
+
+        // Press O: give the customer a random flavor order so its head icon can be checked
+        // against CustomerController.flavorSprites.
+        static void BuildOrderTrigger(GameObject customer)
+        {
+            if (customer == null)
+                return;
+
+            var controller = customer.GetComponent<CustomerController>();
+            if (controller == null)
+            {
+                Debug.LogError("CustomerTestSceneBuilder: PZ_Customer instance has no CustomerController.");
+                return;
+            }
+
+            var triggerGO = new GameObject("CustomerOrderTestTrigger");
+            var trigger = triggerGO.AddComponent<CustomerOrderTestTrigger>();
+            trigger.customer = controller;
+            trigger.patienceSeconds = 8f;
         }
     }
 }
