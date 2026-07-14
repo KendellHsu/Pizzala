@@ -6,12 +6,14 @@ using Pizzala.DevTools;
 
 namespace Pizzala.EditorTools
 {
-    // Minimal, disposable scene for verifying the three flavor pizza prefabs' grab/throw in
-    // isolation, away from BackBone.unity's Global Volume / renderer setup (which was showing
-    // an unrelated visual artifact). No Global Volume added here on purpose.
+    // Persistent test scene covering PREFABS.md items 1 (PZ_Pizza_*) and 2 (PZ_ThrowbackPizza_*),
+    // kept separate from BackBone.unity's Global Volume / renderer setup (which was showing an
+    // unrelated visual artifact). No Global Volume added here on purpose. Don't delete or
+    // overwrite this for a different item - future PREFABS.md items get their own
+    // _Test_NN_Name.unity scene instead.
     public static class PizzaTestSceneBuilder
     {
-        const string ScenePath = "Assets/Scenes/_PizzaGrabTest.unity";
+        const string ScenePath = "Assets/Scenes/_Test_01_02_Pizza_Throwback.unity";
         const string XROriginPath = "Assets/Samples/XR Interaction Toolkit/3.3.2/Starter Assets/Prefabs/XR Origin (XR Rig).prefab";
         const string SimulatorPath = "Assets/Samples/XR Interaction Toolkit/3.3.2/XR Device Simulator/XR Device Simulator.prefab";
 
@@ -57,6 +59,7 @@ namespace Pizzala.EditorTools
 
             var headTransform = BuildHeadHitbox(xrOrigin);
             BuildThrowbackTrigger(headTransform);
+            BuildDirtManager();
 
             if (!AssetDatabase.IsValidFolder("Assets/Scenes"))
                 AssetDatabase.CreateFolder("Assets", "Scenes");
@@ -106,6 +109,23 @@ namespace Pizzala.EditorTools
             trigger.throwbackPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/PZ_ThrowbackPizza_Margherita.prefab");
             trigger.targetHead = headTransform;
             trigger.speed = 6f;
+        }
+
+        // So a missed throwback actually leaves a splat (PREFABS.md item 2's 3rd acceptance
+        // point) - without this, ThrowbackProjectile.Resolve() just no-ops since DirtManager
+        // .Instance is null.
+        static void BuildDirtManager()
+        {
+            var systems = new GameObject("Systems");
+            var dirtManager = systems.AddComponent<Pizzala.Dirt.DirtManager>();
+
+            var splatGuids = AssetDatabase.FindAssets("PZ_SauceSplat_ t:Prefab", new[] { "Assets/Prefabs" });
+            var splats = new GameObject[splatGuids.Length];
+            for (int i = 0; i < splatGuids.Length; i++)
+                splats[i] = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(splatGuids[i]));
+            dirtManager.splatPrefabs = splats;
+
+            Debug.Log($"PizzaTestSceneBuilder: DirtManager wired with {splats.Length} sauce splat prefabs.");
         }
 
         static GameObject InstantiatePrefab(string path, Vector3 position)
