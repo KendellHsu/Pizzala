@@ -441,7 +441,10 @@ MonoBehaviour:
   faceAngry: {fileID: 0}
   faceDirty: {fileID: 0}
   flavorIcon: {fileID: 3406721875374332309}
-  flavorSprites: []
+  flavorSprites:
+  - {fileID: 21300000, guid: 9c5217b8a37cac74f9a9972fcaea08a9, type: 3}
+  - {fileID: 21300000, guid: b44e6077aa6afdc4a99eab5c89fb8a75, type: 3}
+  - {fileID: 21300000, guid: ad00eee396189f643b25596db67b59d9, type: 3}
   faceAnchor: {fileID: 4782943003522385463}
   throwOrigin: {fileID: 5388289517157428821}
   requiredThrowType: 0
