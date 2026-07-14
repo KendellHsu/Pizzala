@@ -91,7 +91,7 @@ Project 視窗 `Assets/` 右鍵 → **Create → Folder**,命名 `Prefabs`。之
 1. Project 視窗右鍵 `PZ_Pizza_Base` → **Create → Prefab Variant**,做三個:
    - `PZ_Pizza_Margherita`(PizzaProjectile.Flavor = Margherita)
    - `PZ_Pizza_Pepperoni`(Flavor = Pepperoni)
-   - `PZ_Pizza_Hawaiian`(Flavor = Hawaiian)
+   - `PZ_Pizza_CosmicPinkMarshmallow`(Flavor = CosmicPinkMarshmallow)
 2. 口味貼圖還沒有 → 先用材質底色區分:每個 Variant 裡 Model 的材質換成不同顏色的簡單材質(白/紅/黃),之後美術貼圖來了再換
 
 ✋ **驗收點 5**:戴頭盔 Play,手可以抓場景裡的披薩、丟出去會飛、砸牆不穿牆(對照 PREFABS.md §1 驗收)。
@@ -150,7 +150,7 @@ Project 視窗 `Assets/` 右鍵 → **Create → Folder**,命名 `Prefabs`。之
    | Face Renderer | 拖 Model/Face 的 Quad |
    | Face Normal/Happy/Angry/Dirty | **留空**(等美術) |
    | Flavor Icon | 下一步做 |
-   | Flavor Sprites | **留空**(等美術;順序必須 0=Margherita 1=Pepperoni 2=Hawaiian) |
+   | Flavor Sprites | **留空**(等美術;順序必須 0=Margherita 1=Pepperoni 2=CosmicPinkMarshmallow) |
    | Face Anchor / Throw Origin | 拖對應子物件 |
    | Required Throw Type | Unknown |
 6. FlavorIcon:根物件底下右鍵 → **2D Object → Sprite**(或 Create Empty + Add Component → Sprite Renderer),改名 `FlavorIcon`,位置在頭頂上方約 0.4m,拖進 CustomerController 的 Flavor Icon 欄位
@@ -174,7 +174,7 @@ Project 視窗 `Assets/` 右鍵 → **Create → Folder**,命名 `Prefabs`。之
    |---------|-------------|--------|
    | 左 | PZ_Pizza_Margherita | Margherita |
    | 中 | PZ_Pizza_Pepperoni | Pepperoni |
-   | 右 | PZ_Pizza_Hawaiian | Hawaiian |
+   | 右 | PZ_Pizza_CosmicPinkMarshmallow | CosmicPinkMarshmallow |
 
    Respawn Delay = 1.5,Leave Distance = 0.5
 

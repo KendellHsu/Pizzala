@@ -11,7 +11,7 @@ namespace Pizzala.Data
 {
     public enum ExperimentCondition { Control, Experimental } // 對照組 / 實驗組
 
-    public enum PizzaFlavor { Margherita, Pepperoni, Hawaiian }
+    public enum PizzaFlavor { Margherita, Pepperoni, CosmicPinkMarshmallow }
 
     // Unknown 同時作為「不限投擲方式」(Any) 使用
     public enum ThrowType { Unknown, Backhand, Forehand, Overhead, Underhand }
