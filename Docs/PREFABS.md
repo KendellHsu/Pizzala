@@ -1,7 +1,9 @@
 # Pizzala — Prefab 建置手冊與驗收清單
 
 > 搭配 [SETUP.md](../SETUP.md) 使用:SETUP.md 管「專案與場景層級」的設定,這份文件管「每一個 Prefab 怎麼做、做到什麼程度算完成」。
-> 所有 Prefab 統一放在 `Assets/Prefabs/`,命名以 `PZ_` 開頭。
+> 所有 Prefab 統一放在 `Assets/Prefabs/`,命名以 `PZ_` 開頭。2026-07-15 起依類型分子資料夾:
+> 披薩/丟回披薩 → `Assets/Prefabs/Pizza/`、醬汁髒污 → `Assets/Prefabs/SauceSplat/`、UI 元件(PhotoEntry、ResultsCanvas 等)→ `Assets/Prefabs/UI/`;
+> 沒有明確分類的獨立系統物件(如 `PZ_Customer`、`PZ_SpawnerStation`)先放在 `Assets/Prefabs/` 根目錄。
 > 每節的驗收目標全部打勾,該 Prefab 才算交付。驗收用 **Quest Link 連 PC 按 Play** 測試(不用每次 Build APK)。
 
 ---

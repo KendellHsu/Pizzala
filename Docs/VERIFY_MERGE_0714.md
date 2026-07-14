@@ -1,5 +1,8 @@
 # 合併驗收清單 — 2026-07-14 yenchia 美術資產
 
+> 2026-07-15 更新:下表列的路徑是合併當下的位置,現在已依類型分子資料夾(見 [PREFABS.md](PREFABS.md))——
+> 披薩/丟回披薩 → `Assets/Prefabs/Pizza/`、醬汁 → `Assets/Prefabs/SauceSplat/`。GUID 沒變,場景引用不受影響。
+
 > 用法:在 Unity 裡照順序逐項打勾,全過後回報 Claude 執行 push。
 > 遇到不符的項目**先不要修**,截圖/記下來回報,確認原因再動手。
 > 一般性的合併流程見 [MERGE_GUIDE.md](MERGE_GUIDE.md),這份是本次合併的具體驗收。
