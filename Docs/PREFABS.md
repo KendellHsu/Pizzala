@@ -46,11 +46,11 @@ PZ_Pizza_Base
 **三個 Variant**:`PZ_Pizza_Margherita` / `PZ_Pizza_Pepperoni` / `PZ_Pizza_CosmicPinkMarshmallow`——只改 Model 的材質貼圖和 `flavor` 欄位。
 
 **驗收目標**
-- [ ] 拖進場景按 Play(Quest Link),手可以抓起、放開會飛出去,方向大致跟揮動方向一致
-- [ ] 用力丟牆壁,披薩**不會穿牆**(Continuous Dynamic 沒設對就會穿)
+- [x] 拖進場景按 Play(Quest Link),手可以抓起、放開會飛出去,方向大致跟揮動方向一致
+- [x] 用力丟牆壁,披薩**不會穿牆**(Continuous Dynamic 沒設對就會穿)
 - [ ] 丟到地板,Console 出現落地判定(或髒污生成),**沒有紅字錯誤**
-- [ ] 放著不動 10 秒,披薩不會自己抖動或滑走
-- [ ] 三個口味 Variant 外觀可肉眼區分,`flavor` 欄位與貼圖相符
+- [x] 放著不動 10 秒,披薩不會自己抖動或滑走
+- [x] 三個口味 Variant 外觀可肉眼區分,`flavor` 欄位與貼圖相符
 
 ---
 
