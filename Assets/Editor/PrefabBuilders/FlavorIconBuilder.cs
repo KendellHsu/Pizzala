@@ -47,6 +47,10 @@ namespace Pizzala.EditorTools
                 importer.textureType = TextureImporterType.Sprite;
                 importer.spriteImportMode = SpriteImportMode.Single;
                 importer.alphaIsTransparency = true;
+                // Default 100 PPU made a 256px icon render as a 2.56m sphere at scale 1 - way
+                // bigger than the customer it floats above. ~700 PPU keeps it a plausible
+                // "hovering icon" size (~0.37m) without needing to touch FlavorIcon's transform.
+                importer.spritePixelsPerUnit = 700;
                 importer.SaveAndReimport();
 
                 sprites[i] = AssetDatabase.LoadAssetAtPath<Sprite>(destPath);
