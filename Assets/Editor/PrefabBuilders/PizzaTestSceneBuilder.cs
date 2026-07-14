@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Pizzala.EditorTools
 {
-    // Minimal, disposable scene for verifying PZ_Pizza_Base grab/throw in isolation, away from
-    // BackBone.unity's Global Volume / renderer setup (which was showing an unrelated visual
-    // artifact). No Global Volume added here on purpose - just a floor, a wall and the rig.
+    // Minimal, disposable scene for verifying the three flavor pizza prefabs' grab/throw in
+    // isolation, away from BackBone.unity's Global Volume / renderer setup (which was showing
+    // an unrelated visual artifact). No Global Volume added here on purpose.
     public static class PizzaTestSceneBuilder
     {
         const string ScenePath = "Assets/Scenes/_PizzaGrabTest.unity";
@@ -15,10 +15,9 @@ namespace Pizzala.EditorTools
 
         static readonly (string prefab, Vector3 pos)[] Pizzas =
         {
-            ("Assets/Prefabs/PZ_Pizza_Base.prefab", new Vector3(-0.45f, 0.9f, 0.5f)),
-            ("Assets/Prefabs/PZ_Pizza_Margherita.prefab", new Vector3(-0.15f, 0.9f, 0.5f)),
-            ("Assets/Prefabs/PZ_Pizza_Pepperoni.prefab", new Vector3(0.15f, 0.9f, 0.5f)),
-            ("Assets/Prefabs/PZ_Pizza_Hawaiian.prefab", new Vector3(0.45f, 0.9f, 0.5f)),
+            ("Assets/Prefabs/PZ_Pizza_Margherita.prefab", new Vector3(-0.3f, 0.9f, 0.5f)),
+            ("Assets/Prefabs/PZ_Pizza_Pepperoni.prefab", new Vector3(0f, 0.9f, 0.5f)),
+            ("Assets/Prefabs/PZ_Pizza_CosmicPinkMarshmallow.prefab", new Vector3(0.3f, 0.9f, 0.5f)),
         };
 
         [MenuItem("Tools/Pizzala/Build Pizza Grab Test Scene")]
