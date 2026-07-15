@@ -50,6 +50,7 @@ namespace Pizzala.Core
         public ThrowTuning tuning;
 
         [Header("場景參照")]
+        [Tooltip("場景預擺的客人;CustomerSpawner 生成的會在跑動時自動加入")]
         public CustomerController[] customers;
         public Transform head;
         public SnapshotCamera snapshotCamera;
@@ -69,6 +70,14 @@ namespace Pizzala.Core
 
         public bool RoundActive { get; private set; }
 
+        // 目前在場的所有客人(預擺 + 動態生成),訂單都從這份名單發
+        readonly List<CustomerController> activeCustomers = new List<CustomerController>();
+
+        // 供 CustomerSpawner 做人口密度(間距)檢查
+        public IReadOnlyList<CustomerController> ActiveCustomers => activeCustomers;
+
+        int nextCustomerId;
+
         int missedOrders;
         int playerFaceHitCount;
 
@@ -82,8 +91,34 @@ namespace Pizzala.Core
         {
             if (head == null && Camera.main != null) head = Camera.main.transform;
             foreach (var c in customers)
-                if (c != null) c.OnOrderTimeout += HandleOrderTimeout;
+            {
+                if (c == null) continue;
+                nextCustomerId = Mathf.Max(nextCustomerId, c.customerId + 1);
+                AttachCustomer(c);
+            }
             if (autoStart) StartCoroutine(AutoStartRoutine());
+        }
+
+        // ══ 客人註冊(CustomerSpawner 生成的客人由此進訂單池)══
+        public void RegisterCustomer(CustomerController c)
+        {
+            if (c == null || activeCustomers.Contains(c)) return;
+            c.customerId = nextCustomerId++;
+            AttachCustomer(c);
+        }
+
+        public void UnregisterCustomer(CustomerController c)
+        {
+            if (c == null) return;
+            c.OnOrderTimeout -= HandleOrderTimeout;
+            activeCustomers.Remove(c);
+        }
+
+        void AttachCustomer(CustomerController c)
+        {
+            activeCustomers.Add(c);
+            c.OnOrderTimeout += HandleOrderTimeout;
+            c.ApplyTuning(tuning, head); // 情緒加速門檻/速度 + 面向目標
         }
 
         IEnumerator AutoStartRoutine()
@@ -118,8 +153,8 @@ namespace Pizzala.Core
         void GiveOrderToRandomIdleCustomer()
         {
             var idle = new List<CustomerController>();
-            foreach (var c in customers)
-                if (c != null && !c.HasActiveOrder) idle.Add(c);
+            foreach (var c in activeCustomers)
+                if (c != null && !c.HasActiveOrder && !c.IsLeaving) idle.Add(c);
             if (idle.Count == 0) return;
 
             var pick = idle[Random.Range(0, idle.Count)];
@@ -167,6 +202,8 @@ namespace Pizzala.Core
                                           - attributed.OrderStartTime;
                 }
             }
+
+            Debug.Log($"[GameManager] 披薩落地:zone={(zone != null ? zone.zone.ToString() : "null(沒中任何 HitZone)")}, customer={(zone != null && zone.customer != null ? zone.customer.name : "無")}");
 
             if (zone != null && zone.customer != null)
             {
@@ -248,7 +285,7 @@ namespace Pizzala.Core
         {
             CustomerController best = null;
             float bestDist = float.MaxValue;
-            foreach (var c in customers)
+            foreach (var c in activeCustomers)
             {
                 if (c == null || !c.HasActiveOrder) continue;
                 float d = Vector3.Distance(c.transform.position, point);
@@ -278,7 +315,10 @@ namespace Pizzala.Core
             float telegraphStart = Time.time;
             Vector3 headStart = head.position;
 
+            customer.IsThrowingBack = true; // 丟回期間定住,不遊走(會自動轉身面向玩家)
             yield return customer.Telegraph(tuning.telegraphSeconds, null);
+
+            if (customer == null) yield break; // 預警期間客人剛好離場(動態生成的會despawn)
 
             Vector3 origin = customer.throwOrigin != null
                              ? customer.throwOrigin.position
@@ -286,7 +326,7 @@ namespace Pizzala.Core
 
             var go = Instantiate(prefab, origin, Quaternion.identity);
             var proj = go.GetComponent<ThrowbackProjectile>();
-            if (proj == null) { Destroy(go); yield break; }
+            if (proj == null) { Destroy(go); customer.IsThrowingBack = false; yield break; }
             proj.flavor = flavor;
 
             // 出生點在客人胸前、BodyZone 膠囊「內部」,不忽略碰撞會被客人自己擋下來
@@ -299,6 +339,8 @@ namespace Pizzala.Core
             bool resolved = false, hitPlayer = false;
             proj.onResolved = h => { resolved = true; hitPlayer = h; };
             proj.Launch(head.position, tuning.throwbackSpeed); // 鎖定發射瞬間的頭部位置,不追蹤
+
+            customer.IsThrowingBack = false; // 出手完成,恢復走動
 
             float reactionTime = -1f;
             float timeout = Time.time + 4f;
