@@ -9,7 +9,9 @@ using UnityEngine;
 
 namespace Pizzala.Data
 {
-    public enum ExperimentCondition { Control, Experimental } // 對照組 / 實驗組
+    // Middle appended at the end (not inserted between the other two) so existing
+    // saved sessions' numeric condition values (0/1) don't get reinterpreted.
+    public enum ExperimentCondition { Control, Experimental, Middle } // 對照組 / 實驗組 / 中間組(無 LLM 回饋)
 
     public enum PizzaFlavor { Margherita, Pepperoni, CosmicPinkMarshmallow }
 
