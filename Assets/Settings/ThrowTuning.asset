@@ -20,7 +20,42 @@ MonoBehaviour:
   swingSpeedFraction: 0.3
   swingWindowSeconds: 0.6
   customerPatience: 15
+  customerImpatientAt: 5
+  customerUrgentAt: 10
+  customerImpatientMoveSpeed: 0.4
+  customerUrgentMoveSpeed: 0.9
+  customerWanderRadius: 0.7
+  customerWanderPauseChance: 1
+  customerWanderPauseMinSeconds: 1
+  customerWanderPauseMaxSeconds: 2.5
+  initialSpawnCount: 2
+  minSpawnInterval: 8
+  maxSpawnInterval: 15
+  customerLifetime: 40
+  customerLeaveDelay: 2.5
   telegraphSeconds: 0.8
   throwbackSpeed: 5
   roundDurationSeconds: 180
   orderIntervalSeconds: 6
+  frisbeeSpinToFly: 6
+  frisbeeSpinRatioThreshold: 0.5
+  frisbeeMaxAngularVelocity: 100
+  frisbeeAeroScale: 3
+  frisbeeArea: 0.0568
+  frisbeeCL0: 0.1
+  frisbeeCLA: 1.4
+  frisbeeCD0: 0.08
+  frisbeeCDA: 2.72
+  frisbeeAlpha0Deg: -4
+  frisbeeDiameter: 0.21
+  frisbeeCM0: -0.08
+  frisbeeCMA: 0.43
+  frisbeeCMq: -0.005
+  frisbeeCRR: 0.014
+  frisbeeCRP: -0.0055
+  frisbeeCNR: -0.0000071
+  frisbeeWobbleDamping: 3
+  frisbeeDiscRadius: 0
+  frisbeeGripHeight: 0
+  frisbeeAlignToController: 1
+  frisbeeGripRotationEuler: {x: 0, y: 0, z: 0}
