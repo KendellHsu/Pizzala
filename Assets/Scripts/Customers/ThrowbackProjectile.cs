@@ -36,6 +36,11 @@ namespace Pizzala.Customers
             rb.linearVelocity = velocity;
             rb.angularVelocity = new Vector3(0f, 10f, 0f); // 轉一下比較像飛盤
 
+            // 飛行中沿路甩醬(垂直滴落 + 盤緣切線甩出)
+            var spray = GetComponent<Pizzala.Dirt.SauceSpray>();
+            if (spray == null) spray = gameObject.AddComponent<Pizzala.Dirt.SauceSpray>();
+            spray.Activate(flavor);
+
             Destroy(gameObject, Lifetime);
         }
 
@@ -49,8 +54,14 @@ namespace Pizzala.Customers
             bool hitPlayer = col.GetComponentInParent<PlayerHeadHitbox>() != null;
             resolved = true;
 
+            var spray = GetComponent<Pizzala.Dirt.SauceSpray>();
+            if (spray != null) spray.Deactivate(); // 落地後換滑行痕跡接手
+
             if (!hitPlayer && Pizzala.Dirt.DirtManager.Instance != null)
+            {
                 Pizzala.Dirt.DirtManager.Instance.SpawnSplat(point, normal, flavor); // 閃過→牆上多一塊髒污
+                gameObject.AddComponent<Pizzala.Dirt.SauceTrail>().Activate(flavor); // 銷毀前的彈跳也留痕
+            }
 
             onResolved?.Invoke(hitPlayer);
             Destroy(gameObject, hitPlayer ? 0f : 1.5f);

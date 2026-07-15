@@ -51,6 +51,9 @@ namespace Pizzala.Throwing
             // 從抓取者(控制器)身上找運動取樣器
             currentSampler = args.interactorObject.transform.GetComponentInParent<HandMotionSampler>();
             inFlight = false;
+
+            var spray = GetComponent<Pizzala.Dirt.SauceSpray>();
+            if (spray != null) spray.Deactivate(); // 空中被接回手上就停止甩醬
         }
 
         void OnReleased(SelectExitEventArgs args)
@@ -61,6 +64,11 @@ namespace Pizzala.Throwing
 
             if (GameManager.Instance != null)
                 record = GameManager.Instance.OnPizzaReleased(this, currentSampler);
+
+            // 飛行中沿路甩醬(垂直滴落 + 盤緣切線甩出)
+            var spray = GetComponent<Pizzala.Dirt.SauceSpray>();
+            if (spray == null) spray = gameObject.AddComponent<Pizzala.Dirt.SauceSpray>();
+            spray.Activate(flavor);
         }
 
         void OnCollisionEnter(Collision c)
@@ -71,8 +79,18 @@ namespace Pizzala.Throwing
 
         void OnTriggerEnter(Collider other)
         {
-            // 客人手掌/臉是 trigger,走這條路
-            Resolve(other, transform.position, Vector3.up);
+            // 客人手掌/臉/身體是 trigger,沒有接觸點資訊:
+            // 用 collider 上離披薩最近的點當命中點,法線取外指方向,
+            // 髒污(Decal)才會貼著身體投影,不會平躺懸在半空。
+            Vector3 point = other.ClosestPoint(transform.position);
+            Vector3 normal = transform.position - point;
+            if (normal.sqrMagnitude < 1e-6f) // 披薩中心已進到 collider 內,退而用水平外指方向
+            {
+                var center = other.bounds.center;
+                center.y = transform.position.y;
+                normal = transform.position - center;
+            }
+            Resolve(other, point, normal.sqrMagnitude > 1e-6f ? normal.normalized : Vector3.up);
         }
 
         void Resolve(Collider col, Vector3 point, Vector3 normal)
@@ -89,6 +107,14 @@ namespace Pizzala.Throwing
                 GameManager.Instance.OnPizzaLanded(this, record, zone, point, normal, Time.time - releaseTime);
 
             record = null;
+
+            var spray = GetComponent<Pizzala.Dirt.SauceSpray>();
+            if (spray != null) spray.Deactivate(); // 落地後換滑行痕跡接手
+
+            // 落地後開始留醬汁痕跡:之後的彈跳/滑行沿路留下一排髒污
+            var trail = GetComponent<Pizzala.Dirt.SauceTrail>();
+            if (trail == null) trail = gameObject.AddComponent<Pizzala.Dirt.SauceTrail>();
+            trail.Activate(flavor);
         }
     }
 }
