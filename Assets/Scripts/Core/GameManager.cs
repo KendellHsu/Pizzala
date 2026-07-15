@@ -22,6 +22,7 @@ using Pizzala.Customers;
 using Pizzala.Dirt;
 using Pizzala.Photo;
 using Pizzala.UI;
+using Pizzala.LLM;
 
 namespace Pizzala.Core
 {
@@ -57,6 +58,7 @@ namespace Pizzala.Core
         public FaceSplatOverlay faceSplatOverlay;
         public ResultsScreenController resultsScreen;
         public ActivityTracker activityTracker;
+        public BossCommentService bossCommentService; // experimental group only; leave empty to skip
 
         [Tooltip("後備丟回披薩(下面陣列沒填到的口味用這個)")]
         public GameObject throwbackPrefab;
@@ -357,8 +359,24 @@ namespace Pizzala.Core
                 act != null ? act.SquatCount : 0,
                 act != null ? act.TurnDegreesTotal : 0f);
 
-            SessionLogger.Instance.SaveToDisk();
-            if (resultsScreen != null) resultsScreen.Show(SessionLogger.Instance.Session);
+            var session = SessionLogger.Instance.Session;
+            if (resultsScreen != null) resultsScreen.Show(session); // shows a "writing..." placeholder for the boss note
+
+            if (bossCommentService != null && session.condition == ExperimentCondition.Experimental)
+            {
+                // Async - don't block EndRound() on the network call. Save happens once the
+                // comment (or its fallback) is in hand, so the logged JSON always has it.
+                bossCommentService.GetComment(session.summary, comment =>
+                {
+                    session.bossComment = comment;
+                    if (resultsScreen != null) resultsScreen.SetBossComment(comment);
+                    SessionLogger.Instance.SaveToDisk();
+                });
+            }
+            else
+            {
+                SessionLogger.Instance.SaveToDisk();
+            }
         }
 
         // 依中彈次數挑一張「玩家髒臉」合成圖存檔(美術產出 2~3 個髒度層次)

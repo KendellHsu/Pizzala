@@ -136,5 +136,6 @@ namespace Pizzala.Data
         public List<PhotoRecord> playerFacePhotos = new List<PhotoRecord>();
 
         public SessionSummary summary = new SessionSummary();
+        public string bossComment = ""; // LLM-generated note shown to the experimental group, logged for analysis
     }
 }

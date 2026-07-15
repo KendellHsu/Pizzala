@@ -52,6 +52,13 @@ namespace Pizzala.UI
                 ShowExperimental(session);
         }
 
+        // Called by GameManager once BossCommentService's async request resolves
+        // (success or fallback) - Show() already put a "writing..." placeholder up.
+        public void SetBossComment(string text)
+        {
+            if (bossCommentText != null) bossCommentText.text = text;
+        }
+
         // ── Control: plain performance stats, laid out as two aligned columns ──
         // (labels never change; values are what got measured - keeping them in
         // separate text blocks built row-by-row is what keeps the columns aligned)
@@ -93,6 +100,10 @@ namespace Pizzala.UI
         {
             if (experimentalPanel != null) experimentalPanel.SetActive(true);
             var s = session.summary;
+
+            // Placeholder until GameManager's async BossCommentService call resolves and
+            // calls SetBossComment() - the panel shouldn't sit on stale/blank text meanwhile.
+            if (bossCommentText != null) bossCommentText.text = "The boss is writing a note...";
 
             if (captionText != null)
                 captionText.text = $"<size=130%><b>Tonight's Damage Report</b></size>\n" +
