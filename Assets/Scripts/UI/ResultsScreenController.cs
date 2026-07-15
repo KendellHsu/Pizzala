@@ -1,13 +1,15 @@
 // ─────────────────────────────────────────────────────────────
-// ResultsScreenController.cs — 結算畫面(實驗操弄的核心!)
-// 掛載:一個 World Space Canvas(擺在玩家面前 2m,約 1.6m 高),
-//   底下做兩個 Panel:
-//   controlPanel      — 對照組:一面數據文字(拖一個 TMP_Text 進 statsText)
-//   experimentalPanel — 實驗組:照片牆
-//     photoGrid       — 掛 Grid Layout Group 的容器
-//     photoEntryPrefab— 一張 RawImage 的 Prefab(可加拍立得相框)
-//     captionText     — 標題文字(TMP_Text)
-// GameManager 會在回合結束自動呼叫 Show()。
+// ResultsScreenController.cs — Results screen (the core of the experiment manipulation!)
+// Attach to: one World Space Canvas (placed 2m in front of the player, ~1.6m up),
+//   with two panels underneath:
+//   controlPanel      — Control: a plain stats text block (drag a TMP_Text into statsText)
+//   experimentalPanel — Experimental: photo wall + boss note
+//     photoGrid        — container with a Grid Layout Group
+//     photoEntryPrefab — a RawImage prefab (can add a polaroid frame)
+//     captionText      — heading text (TMP_Text)
+//     bossNotePanel    — torn-paper note container
+//     bossCommentText  — the LLM-generated boss comment
+// GameManager calls Show() automatically when the round ends.
 // ─────────────────────────────────────────────────────────────
 using System.Collections.Generic;
 using System.IO;
@@ -21,19 +23,19 @@ namespace Pizzala.UI
 {
     public class ResultsScreenController : MonoBehaviour
     {
-        [Header("對照組:純數據")]
+        [Header("Control: Stats Only")]
         public GameObject controlPanel;
         public TMP_Text statsText;
 
-        [Header("實驗組:照片牆")]
+        [Header("Experimental: Photo Wall")]
         public GameObject experimentalPanel;
         public Transform photoGrid;
-        public GameObject photoEntryPrefab; // 含 RawImage
+        public GameObject photoEntryPrefab; // contains a RawImage
         public TMP_Text captionText;
 
-        [Header("實驗組:老闆留言(便條紙)")]
-        public GameObject bossNotePanel;    // 撕紙便條的容器,先用色塊佔位即可
-        public TMP_Text bossCommentText;    // 之後由 BossCommentService 填入生成的評語
+        [Header("Experimental: Boss Note")]
+        public GameObject bossNotePanel;    // torn-paper note container, placeholder color block for now
+        public TMP_Text bossCommentText;    // filled in later by BossCommentService
 
         void Start()
         {
@@ -49,7 +51,7 @@ namespace Pizzala.UI
                 ShowExperimental(session);
         }
 
-        // ── 對照組:單純的表現數據 ──
+        // ── Control: plain performance stats ──
         void ShowControl(SessionData session)
         {
             if (controlPanel != null) controlPanel.SetActive(true);
@@ -74,7 +76,7 @@ namespace Pizzala.UI
             if (statsText != null) statsText.text = sb.ToString();
         }
 
-        // ── 實驗組:髒亂照片牆 ──
+        // ── Experimental: the messy photo wall ──
         void ShowExperimental(SessionData session)
         {
             if (experimentalPanel != null) experimentalPanel.SetActive(true);
