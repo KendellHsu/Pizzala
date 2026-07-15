@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 34325301}
   - component: {fileID: 34325300}
   - component: {fileID: 34325299}
+  - component: {fileID: 34325304}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -170,6 +171,7 @@ MonoBehaviour:
   faceSplatOverlay: {fileID: 1926003475}
   resultsScreen: {fileID: 1186990724}
   activityTracker: {fileID: 34325300}
+  bossCommentService: {fileID: 34325304}
   throwbackPrefab: {fileID: 2722252330292994515, guid: 822b80b1b7a7e744baf91859aa67ce7a, type: 3}
   throwbackPrefabsByFlavor:
   - {fileID: 2722252330292994515, guid: 822b80b1b7a7e744baf91859aa67ce7a, type: 3}
@@ -270,6 +272,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &34325304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34325298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26d6b8b63999ba148901fb0267b76ca9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.LLM.BossCommentService
 --- !u!1 &79086001 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5012061655601249863, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
@@ -1706,10 +1720,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.UI.ResultsScreenController
   controlPanel: {fileID: 1243769573}
   statsText: {fileID: 1784005776}
+  statsValuesText: {fileID: 0}
   experimentalPanel: {fileID: 556874730}
   photoGrid: {fileID: 732559693}
   photoEntryPrefab: {fileID: 3647143307840857493, guid: a5ea83b02cb0f884b96711aa4dd1e49b, type: 3}
   captionText: {fileID: 183845957}
+  bossNotePanel: {fileID: 0}
+  bossCommentText: {fileID: 0}
 --- !u!1 &1243769573
 GameObject:
   m_ObjectHideFlags: 0
