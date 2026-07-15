@@ -436,10 +436,10 @@ MonoBehaviour:
   customerId: 0
   sector: 1
   faceRenderer: {fileID: 4105560859820189113}
-  faceNormal: {fileID: 2800000, guid: edbf4e80f3ecd5644b49cc560aebe47b, type: 3}
-  faceHappy: {fileID: 0}
-  faceAngry: {fileID: 0}
-  faceDirty: {fileID: 0}
+  faceNormal: {fileID: 2800000, guid: b4821159a894bf44488c585e57878a55, type: 3}
+  faceHappy: {fileID: 2800000, guid: 0771dd4ae1d0c6b4db7f773e7e3db0d9, type: 3}
+  faceAngry: {fileID: 2800000, guid: aedafb3627831314dba64ec974292502, type: 3}
+  faceDirty: {fileID: 2800000, guid: 287570a82b94eb742b326c95138f20e3, type: 3}
   flavorIcon: {fileID: 3406721875374332309}
   flavorSprites: []
   faceAnchor: {fileID: 4782943003522385463}

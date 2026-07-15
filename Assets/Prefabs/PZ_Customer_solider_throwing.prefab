@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 2127617448662970272, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: b609bf14525a6094b8aa0f81ae83e4ce, type: 2}
+      objectReference: {fileID: 9100000, guid: 873a86e1e72e45145ab55d13ba31f6a2, type: 2}
     - target: {fileID: 5012061655601249863, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
       propertyPath: m_Name
       value: Soldier_throwing
