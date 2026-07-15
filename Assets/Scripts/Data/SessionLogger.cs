@@ -74,9 +74,23 @@ namespace Pizzala.Data
             Session.sensorTimeline.Add(new SensorSample { gameTime = GameTime, hr = hr, gsr = gsr });
         }
 
-        public void AddCustomerFacePhoto(string path) { if (SessionActive && !string.IsNullOrEmpty(path)) Session.customerFacePhotos.Add(path); }
-        public void AddEnvironmentPhoto(string path) { if (SessionActive && !string.IsNullOrEmpty(path)) Session.environmentPhotos.Add(path); }
-        public void AddPlayerFacePhoto(string path)  { if (SessionActive && !string.IsNullOrEmpty(path)) Session.playerFacePhotos.Add(path); }
+        public void AddCustomerFacePhoto(string path, string caption = "")
+        {
+            if (SessionActive && !string.IsNullOrEmpty(path))
+                Session.customerFacePhotos.Add(new PhotoRecord { path = path, gameTime = GameTime, caption = caption });
+        }
+
+        public void AddEnvironmentPhoto(string path, string caption = "")
+        {
+            if (SessionActive && !string.IsNullOrEmpty(path))
+                Session.environmentPhotos.Add(new PhotoRecord { path = path, gameTime = GameTime, caption = caption });
+        }
+
+        public void AddPlayerFacePhoto(string path, string caption = "")
+        {
+            if (SessionActive && !string.IsNullOrEmpty(path))
+                Session.playerFacePhotos.Add(new PhotoRecord { path = path, gameTime = GameTime, caption = caption });
+        }
 
         // 回合結束時呼叫:計算所有統計數據
         public void BuildSummary(int dirtCount, int missedOrders,

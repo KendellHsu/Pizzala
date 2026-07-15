@@ -182,7 +182,7 @@ namespace Pizzala.Core
                         if (snapshotCamera != null)
                         {
                             record.photoPath = snapshotCamera.CaptureAt(zone.customer.faceAnchor);
-                            SessionLogger.Instance.AddCustomerFacePhoto(record.photoPath);
+                            SessionLogger.Instance.AddCustomerFacePhoto(record.photoPath, "Hit in the face");
                         }
                         TryThrowback(zone.customer, pizza.flavor); // 砸到臉的那顆被丟回來
                         break;
@@ -345,7 +345,7 @@ namespace Pizzala.Core
 
             // 環境髒亂總覽照(實驗組素材)
             if (snapshotCamera != null && overviewCameraPoint != null)
-                SessionLogger.Instance.AddEnvironmentPhoto(snapshotCamera.CaptureFrom(overviewCameraPoint));
+                SessionLogger.Instance.AddEnvironmentPhoto(snapshotCamera.CaptureFrom(overviewCameraPoint), "Store overview");
 
             SavePlayerFacePhoto();
 
@@ -377,7 +377,7 @@ namespace Pizzala.Core
                 System.IO.Directory.CreateDirectory(dir);
                 string path = System.IO.Path.Combine(dir, $"player_{System.DateTime.Now:HHmmss}.png");
                 System.IO.File.WriteAllBytes(path, png);
-                SessionLogger.Instance.AddPlayerFacePhoto(path);
+                SessionLogger.Instance.AddPlayerFacePhoto(path, $"Got hit {playerFaceHitCount}x");
             }
             catch (System.Exception e)
             {

@@ -109,6 +109,16 @@ namespace Pizzala.Data
         public int avgHeartRate = -1, maxHeartRate = -1;
     }
 
+    // A captured photo plus when it was taken and what it shows - lets the results
+    // screen display a timestamp/caption under each polaroid without guessing.
+    [Serializable]
+    public class PhotoRecord
+    {
+        public string path;
+        public float gameTime;
+        public string caption = "";
+    }
+
     [Serializable]
     public class SessionData
     {
@@ -121,9 +131,9 @@ namespace Pizzala.Data
         public List<DodgeRecord> dodges = new List<DodgeRecord>();
         public List<SensorSample> sensorTimeline = new List<SensorSample>();
 
-        public List<string> customerFacePhotos = new List<string>();
-        public List<string> environmentPhotos = new List<string>();
-        public List<string> playerFacePhotos = new List<string>();
+        public List<PhotoRecord> customerFacePhotos = new List<PhotoRecord>();
+        public List<PhotoRecord> environmentPhotos = new List<PhotoRecord>();
+        public List<PhotoRecord> playerFacePhotos = new List<PhotoRecord>();
 
         public SessionSummary summary = new SessionSummary();
     }

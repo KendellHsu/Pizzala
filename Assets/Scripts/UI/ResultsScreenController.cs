@@ -25,7 +25,8 @@ namespace Pizzala.UI
     {
         [Header("Control: Stats Only")]
         public GameObject controlPanel;
-        public TMP_Text statsText;
+        public TMP_Text statsText;       // fixed labels column
+        public TMP_Text statsValuesText; // measured values column, aligned row-for-row with statsText
 
         [Header("Experimental: Photo Wall")]
         public GameObject experimentalPanel;
@@ -51,29 +52,40 @@ namespace Pizzala.UI
                 ShowExperimental(session);
         }
 
-        // ── Control: plain performance stats ──
+        // ── Control: plain performance stats, laid out as two aligned columns ──
+        // (labels never change; values are what got measured - keeping them in
+        // separate text blocks built row-by-row is what keeps the columns aligned)
         void ShowControl(SessionData session)
         {
             if (controlPanel != null) controlPanel.SetActive(true);
             var s = session.summary;
-            var sb = new StringBuilder();
+            var labels = new StringBuilder();
+            var values = new StringBuilder();
 
-            sb.AppendLine("<size=140%><b>本局表現</b></size>\n");
-            sb.AppendLine($"準度:{s.accuracyPercent:F0}%({s.hits}/{s.totalThrows})");
-            sb.AppendLine($"最快出手:{s.maxReleaseSpeed:F1} m/s");
-            sb.AppendLine($"最快甩腕:{s.maxWristSnapDegPerSec:F0} °/s");
-            sb.AppendLine($"出手方式:反手 ×{s.backhandCount} 正手 ×{s.forehandCount} 過頭 ×{s.overheadCount} 低手 ×{s.underhandCount}");
-            sb.AppendLine($"各方位命中:左 {s.leftHits}/{s.leftThrows} 中 {s.centerHits}/{s.centerThrows} 右 {s.rightHits}/{s.rightThrows}");
-            if (s.avgReactionTime > 0f)
-                sb.AppendLine($"平均反應:{s.avgReactionTime:F2} 秒");
-            if (s.dodgeTotal > 0)
-                sb.AppendLine($"閃避:{s.dodgeSuccess}/{s.dodgeTotal}");
-            sb.AppendLine($"\n身體活動:移動 {s.totalHeadDistance:F0} m/下蹲 {s.squatCount} 次/轉身 {s.turnDegreesTotal:F0}°");
-            if (s.avgHeartRate > 0)
-                sb.AppendLine($"心率:平均 {s.avgHeartRate}/最高 {s.maxHeartRate} bpm");
-            sb.AppendLine($"估計消耗:{s.estimatedCalories:F0} kcal");
+            void Row(string label, string value)
+            {
+                labels.AppendLine(label);
+                values.AppendLine(value);
+            }
 
-            if (statsText != null) statsText.text = sb.ToString();
+            // "Today's Score" is a separate, static heading in the prefab (ScoreHeading) -
+            // it doesn't have a matching value row, so it must never be a line in these
+            // two builders or every row below it drifts out of alignment.
+            Row("Accuracy", $"{s.accuracyPercent:F0}% ({s.hits}/{s.totalThrows})");
+            Row("Top Speed", $"{s.maxReleaseSpeed:F1} m/s");
+            Row("Max Wrist Snap", $"{s.maxWristSnapDegPerSec:F0} deg/s");
+            Row("Throw Style", $"BH x{s.backhandCount}  FH x{s.forehandCount}  OH x{s.overheadCount}  UH x{s.underhandCount}");
+            Row("Sector Hits", $"L {s.leftHits}/{s.leftThrows}  C {s.centerHits}/{s.centerThrows}  R {s.rightHits}/{s.rightThrows}");
+            if (s.avgReactionTime > 0f) Row("Avg Reaction", $"{s.avgReactionTime:F2}s");
+            if (s.dodgeTotal > 0) Row("Dodges", $"{s.dodgeSuccess}/{s.dodgeTotal}");
+            Row("Movement", $"{s.totalHeadDistance:F0} m");
+            Row("Squats", $"{s.squatCount}");
+            Row("Turns", $"{s.turnDegreesTotal:F0} deg");
+            if (s.avgHeartRate > 0) Row("Heart Rate", $"avg {s.avgHeartRate} / max {s.maxHeartRate} bpm");
+            // Calories deliberately omitted - we can't actually measure it, only guess.
+
+            if (statsText != null) statsText.text = labels.ToString();
+            if (statsValuesText != null) statsValuesText.text = values.ToString();
         }
 
         // ── Experimental: the messy photo wall ──
@@ -83,23 +95,31 @@ namespace Pizzala.UI
             var s = session.summary;
 
             if (captionText != null)
-                captionText.text = $"<size=130%><b>今晚的災情紀錄</b></size>\n" +
-                                   $"你把店弄髒了 <b>{s.dirtCount}</b> 處、" +
-                                   $"砸中 <b>{session.customerFacePhotos.Count}</b> 張客人的臉" +
-                                   (s.playerFaceHits > 0 ? $",自己也中了 <b>{s.playerFaceHits}</b> 發" : "") + "!";
+                captionText.text = $"<size=130%><b>Tonight's Damage Report</b></size>\n" +
+                                   $"You made a mess in <b>{s.dirtCount}</b> spots, " +
+                                   $"hit <b>{session.customerFacePhotos.Count}</b> customers in the face" +
+                                   (s.playerFaceHits > 0 ? $", and took <b>{s.playerFaceHits}</b> hits yourself" : "") + "!";
 
-            var all = new List<string>();
+            var all = new List<PhotoRecord>();
             all.AddRange(session.customerFacePhotos);
             all.AddRange(session.playerFacePhotos);
             all.AddRange(session.environmentPhotos);
 
-            foreach (var path in all)
+            foreach (var rec in all)
             {
-                var tex = LoadPhoto(path);
+                var tex = LoadPhoto(rec.path);
                 if (tex == null) continue;
                 var entry = Instantiate(photoEntryPrefab, photoGrid);
                 var raw = entry.GetComponentInChildren<RawImage>();
                 if (raw != null) raw.texture = tex;
+                var caption = entry.GetComponentInChildren<TMP_Text>();
+                if (caption != null)
+                {
+                    var ts = System.TimeSpan.FromSeconds(Mathf.Max(0f, rec.gameTime));
+                    caption.text = string.IsNullOrEmpty(rec.caption)
+                        ? $"{ts.Minutes}:{ts.Seconds:00}"
+                        : $"{ts.Minutes}:{ts.Seconds:00} - {rec.caption}";
+                }
                 entry.transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(-6f, 6f)); // 拍立得歪斜感
             }
         }
