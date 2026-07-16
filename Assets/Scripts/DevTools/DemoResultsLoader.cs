@@ -1,8 +1,8 @@
 // DEMO ONLY - not part of the real game flow. GameManager.EndRound() is the real path
 // that builds SessionData live and calls resultsScreen.Show(); this bypasses all of that
 // to preview the results screen with a real captured session instead of waiting on a
-// live headset playtest. Reads from <repo root>/Data/ (outside Assets, Editor-only -
-// this will not work in a build, which is fine, it's not meant to).
+// live headset playtest. Reads from <repo root>/Data/sessions/ + Data/photos/ (outside
+// Assets, Editor-only - this will not work in a build, which is fine, it's not meant to).
 //
 // The referenced JSON predates the PhotoRecord upgrade, so its three photo fields are
 // still bare path strings - LegacySessionData parses that shape and RemapPhoto() converts
@@ -11,6 +11,9 @@
 //
 // Press 1 = Control, 2 = Middle, 3 = Experimental - same underlying data, only
 // SessionData.condition changes, so you can compare all three against one real session.
+// Press Space to advance to the next page within a condition (Middle/Experimental are
+// now multi-page: P1 player photo+data -> P2 photo wall -> P3 boss note for Experimental).
+// This key is a placeholder for whatever the real "next page" trigger ends up being.
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,8 +30,8 @@ namespace Pizzala.DevTools
         public ResultsScreenController resultsScreen;
         public BossCommentService bossCommentService; // optional - Experimental preview calls Gemini for real if set
 
-        [Tooltip("Filename only - looked up under <repo root>/Data/session_20260715_013824_Control/")]
-        public string sessionFileName = "session_20260715_092220_Control.json";
+        [Tooltip("Filename only - looked up under <repo root>/Data/sessions/")]
+        public string sessionFileName = "session_20260716_105321_Control.json";
 
         SessionData cached;
 
@@ -38,6 +41,7 @@ namespace Pizzala.DevTools
             if (Keyboard.current.digit1Key.wasPressedThisFrame) ShowAs(ExperimentCondition.Control);
             if (Keyboard.current.digit2Key.wasPressedThisFrame) ShowAs(ExperimentCondition.Middle);
             if (Keyboard.current.digit3Key.wasPressedThisFrame) ShowAs(ExperimentCondition.Experimental);
+            if (Keyboard.current.spaceKey.wasPressedThisFrame) resultsScreen?.NextPage();
         }
 
         void ShowAs(ExperimentCondition condition)
@@ -72,7 +76,7 @@ namespace Pizzala.DevTools
         SessionData Load()
         {
             string dataRoot = Path.Combine(Path.GetFullPath(Path.Combine(Application.dataPath, "..")), "Data");
-            string jsonPath = Path.Combine(dataRoot, "session_20260715_013824_Control", sessionFileName);
+            string jsonPath = Path.Combine(dataRoot, "sessions", sessionFileName);
             string photosDir = Path.Combine(dataRoot, "photos");
 
             if (!File.Exists(jsonPath))

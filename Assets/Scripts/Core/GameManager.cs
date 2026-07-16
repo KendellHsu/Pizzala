@@ -360,7 +360,7 @@ namespace Pizzala.Core
                 act != null ? act.TurnDegreesTotal : 0f);
 
             var session = SessionLogger.Instance.Session;
-            if (resultsScreen != null) resultsScreen.Show(session); // shows a "writing..." placeholder for the boss note
+            if (resultsScreen != null) resultsScreen.Show(session); // starts on page 1; NextPage() reaches the boss note page
 
             if (bossCommentService != null && session.condition == ExperimentCondition.Experimental)
             {

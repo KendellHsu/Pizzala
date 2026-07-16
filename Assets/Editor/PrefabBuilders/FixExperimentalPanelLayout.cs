@@ -1,12 +1,14 @@
 // ─────────────────────────────────────────────────────────────
-// FixExperimentalPanelLayout.cs — repairs the Experimental photo-wall screen:
-//  1. deletes the leftover purple/green/yellow placeholder blocks under PhotoGrid
+// FixExperimentalPanelLayout.cs — HISTORICAL, superseded by Build Photo Wall Slots
+// (the photo wall no longer uses PhotoGrid/GridLayoutGroup - it's pre-placed slots
+// now, see ResultsScreenController's customerPhotoSlots/environmentPhotoSlots). Kept
+// for reference on the CaptionText setup. Originally repaired the Experimental
+// photo-wall screen:
+//  1. deleted the leftover purple/green/yellow placeholder blocks under PhotoGrid
 //     (they were stand-ins from before PZ_PhotoEntry existed - they're why the wall
 //     showed colored squares instead of polaroids)
-//  2. wires ResultsScreenController.photoEntryPrefab to the PZ_PhotoEntry prefab asset
-//     (it was null, so no polaroid ever got instantiated)
-//  3. creates the CaptionText heading and wires it (also null - why no text appeared)
-//  4. lays out PhotoGrid (upper area, room for 4x2 polaroids) and BossNotePanel
+//  2. creates the CaptionText heading and wires it (also null - why no text appeared)
+//  3. lays out PhotoGrid (upper area, room for 4x2 polaroids) and BossNotePanel
 //     (lower area) so they don't overlap in the 1000x800 canvas
 // Run from Unity: Tools > Pizzala > Fix Experimental Panel Layout. Safe to re-run.
 // Positions are a first guess - nudge in the Inspector if anything looks off.
@@ -114,17 +116,16 @@ namespace Pizzala.EditorTools
             var controller = root.GetComponent<ResultsScreenController>();
             if (controller != null)
             {
-                controller.photoEntryPrefab = photoEntryPrefab;
                 controller.captionText = captionTmp;
             }
             else
             {
-                Debug.LogWarning("FixExperimentalPanelLayout: ResultsScreenController missing on prefab root - wire photoEntryPrefab/captionText manually.");
+                Debug.LogWarning("FixExperimentalPanelLayout: ResultsScreenController missing on prefab root - wire captionText manually.");
             }
 
             PrefabUtility.SaveAsPrefabAsset(root, CanvasPrefabPath);
             PrefabUtility.UnloadPrefabContents(root);
-            Debug.Log("FixExperimentalPanelLayout: cleared placeholder blocks, wired photoEntryPrefab + captionText, laid out photo wall and boss note.");
+            Debug.Log("FixExperimentalPanelLayout: cleared placeholder blocks, wired captionText, laid out photo wall and boss note.");
         }
     }
 }

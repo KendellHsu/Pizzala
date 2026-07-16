@@ -65,11 +65,21 @@ namespace Pizzala.EditorTools
             }
 
             Log("controlPanel", controller.controlPanel);
-            Log("middlePanel", controller.middlePanel);
-            Log("experimentalPanel", controller.experimentalPanel);
-            sb.AppendLine($"photoGrid: {(controller.photoGrid == null ? "NULL" : controller.photoGrid.name)}" +
-                          (controller.photoGrid != null ? $" active(hierarchy)={controller.photoGrid.gameObject.activeInHierarchy} childCount={controller.photoGrid.childCount} pos={((RectTransform)controller.photoGrid).anchoredPosition} size={((RectTransform)controller.photoGrid).sizeDelta}" : ""));
-            sb.AppendLine($"photoEntryPrefab: {(controller.photoEntryPrefab == null ? "NULL" : controller.photoEntryPrefab.name)}");
+            Log("dataPortraitPanel", controller.dataPortraitPanel);
+            Log("photoWallPanel", controller.photoWallPanel);
+            void LogSlots(string label, GameObject[] slots)
+            {
+                if (slots == null) { sb.AppendLine($"{label}: NULL"); return; }
+                sb.AppendLine($"{label}: {slots.Length} slot(s)");
+                for (int i = 0; i < slots.Length; i++)
+                {
+                    var g = slots[i];
+                    sb.AppendLine(g == null
+                        ? $"  [{i}]: NULL"
+                        : $"  [{i}] '{g.name}' active(self)={g.activeSelf} active(hierarchy)={g.activeInHierarchy}");
+                }
+            }
+            LogSlots("photoWallSlots", controller.photoWallSlots);
             Log("bossNotePanel", controller.bossNotePanel);
             sb.AppendLine($"backgroundPanel: {(controller.backgroundPanel == null ? "NULL (field not wired!)" : controller.backgroundPanel.name)}");
             sb.AppendLine($"captionText: {(controller.captionText == null ? "NULL" : "OK")}");

@@ -1,9 +1,9 @@
 // ─────────────────────────────────────────────────────────────
-// BuildMiddlePanel.cs — builds the Middle group's screen by duplicating ControlPanel's
-// stats layout and adding a boss/chef portrait beside it (no art yet - solid color
-// placeholder block; swap BossPortraitImage's sprite once real art exists). Wires the
-// result into ResultsScreenController's middlePanel/middleLabelsText/middleValuesText/
-// bossPortraitImage fields.
+// BuildMiddlePanel.cs — builds the panel that duplicates ControlPanel's stats layout
+// with a portrait box beside it. HISTORICAL: superseded by RestructurePagedResultsScreen.cs,
+// which renames this panel to DataPortraitPanel (shared P1 for Middle & Experimental) and
+// swaps the portrait placeholder for a real player-face-photo RawImage - run that tool
+// after this one, not instead of it, if starting from scratch.
 // Run from Unity: Tools > Pizzala > Build Middle Panel. Safe to re-run - replaces any
 // existing MiddlePanel first.
 // The exact pixel positions below are a starting guess (no live Unity preview while
@@ -71,22 +71,14 @@ namespace Pizzala.EditorTools
             var portraitImage = portraitGO.GetComponent<Image>();
             portraitImage.color = new Color(0.6f, 0.6f, 0.6f, 1f); // placeholder gray block
 
-            var controller = root.GetComponent<ResultsScreenController>();
-            if (controller != null)
-            {
-                controller.middlePanel = middlePanel;
-                controller.middleLabelsText = labels != null ? labels.GetComponent<TMP_Text>() : null;
-                controller.middleValuesText = values != null ? values.GetComponent<TMP_Text>() : null;
-                controller.bossPortraitImage = portraitImage;
-            }
-            else
-            {
-                Debug.LogWarning("BuildMiddlePanel: ResultsScreenController not found on the prefab root - wire the new fields manually.");
-            }
+            // Field wiring is handled by RestructurePagedResultsScreen.cs (under the
+            // renamed dataPortraitPanel/playerPortraitImage/portraitLabelsText/
+            // portraitValuesText fields) - run that tool next.
 
             PrefabUtility.SaveAsPrefabAsset(root, PrefabPath);
             PrefabUtility.UnloadPrefabContents(root);
-            Debug.Log("BuildMiddlePanel: created MiddlePanel (boss portrait placeholder + stats columns) and wired it to ResultsScreenController.");
+            Debug.Log("BuildMiddlePanel: created MiddlePanel (portrait placeholder + stats columns). " +
+                      "Run Restructure Paged Results Screen next to rename/wire it.");
         }
     }
 }

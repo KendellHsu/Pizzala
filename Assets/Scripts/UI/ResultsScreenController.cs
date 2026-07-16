@@ -1,20 +1,28 @@
 // ─────────────────────────────────────────────────────────────
 // ResultsScreenController.cs — Results screen (the core of the experiment manipulation!)
-// Attach to: one World Space Canvas (placed 2m in front of the player, ~1.6m up),
-//   with three panels underneath:
-//   controlPanel      — Control: a plain stats text block (drag a TMP_Text into statsText)
-//   middlePanel       — Middle: boss/chef portrait (art TBD, placeholder block for now)
-//                        beside the same two-column stats as Control - no photo wall, no LLM
-//   experimentalPanel — Experimental only: photo wall + LLM boss note
-//     photoGrid        — container with a Grid Layout Group
-//     photoEntryPrefab — a RawImage prefab (can add a polaroid frame)
-//     captionText      — heading text (TMP_Text)
-//     bossNotePanel    — torn-paper note container (no background frame behind it - the
-//                        note graphic itself is the whole visual, nothing else needed)
-//     bossCommentText  — the LLM-generated boss comment
-// Three conditions: Control (stats only) / Middle (stats + boss portrait, no photos/LLM) /
-// Experimental (photo wall + LLM boss note) - GameManager only calls BossCommentService
-// for Experimental. GameManager calls Show() automatically when the round ends.
+// Attach to: one World Space Canvas (placed 2m in front of the player, ~1.6m up).
+// Three conditions, shown as sequential PAGES within a condition (Show() jumps to page 0,
+// NextPage() advances - hook NextPage() to whatever the real "next page" input ends up
+// being; the Demo loader currently drives it with Space for testing):
+//   Control (1 page):
+//     P1 controlPanel      — plain stats (statsText/statsValuesText, two aligned columns)
+//   Middle (2 pages):
+//     P1 dataPortraitPanel — real captured player-face photo (playerPortraitImage) beside
+//                            the same two-column stats (portraitLabelsText/ValuesText)
+//     P2 photoWallPanel    — photoWallSlots: up to 8 pre-placed polaroid slots (hand-
+//                            positioned/rotated in the prefab for a "messy pile" look, NOT
+//                            auto-laid-out). Actual photo count varies a lot round to round
+//                            (2-8ish), so only the first N slots activate - N's baseline
+//                            positions get pulled in toward center and scaled up as N drops,
+//                            so a handful of photos still reads as "centered and full" rather
+//                            than a few small cards adrift in empty space (still never grows
+//                            past the hand-set 8-photo layout, so it can't reach the title).
+//                            (player-face photos live on P1 instead, not in this wall)
+//   Experimental (3 pages): same P1 + P2 as Middle, plus:
+//     P3 bossNotePanel     — LLM-generated boss comment (bossCommentText) - GameManager
+//                            only calls BossCommentService for this condition
+// backgroundPanel (white rounded backdrop) is shown for Control/P1, hidden for the photo
+// wall and boss note pages (sketch: 不用背景框).
 // ─────────────────────────────────────────────────────────────
 using System.Collections.Generic;
 using System.IO;
@@ -28,72 +36,118 @@ namespace Pizzala.UI
 {
     public class ResultsScreenController : MonoBehaviour
     {
-        // Photo wall aims for this many representative shots (sketch called for "5-7") -
-        // picked evenly across the round's timeline rather than just the first N taken.
-        const int MaxPhotoWallEntries = 6;
-
         [Header("Shared")]
-        public GameObject backgroundPanel; // white rounded backdrop - hidden for Experimental (sketch: 不用背景框)
+        public GameObject backgroundPanel; // white rounded backdrop - hidden on the photo wall/boss note pages
 
-        [Header("Control: Stats Only")]
+        [Header("Control: Stats Only (1 page)")]
         public GameObject controlPanel;
         public TMP_Text statsText;       // fixed labels column
         public TMP_Text statsValuesText; // measured values column, aligned row-for-row with statsText
 
-        [Header("Middle: Boss Portrait + Simple Data")]
-        public GameObject middlePanel;
-        public Image bossPortraitImage;  // no art yet - solid color placeholder, swap the sprite later
-        public TMP_Text middleLabelsText;
-        public TMP_Text middleValuesText;
+        [Header("P1: Player Photo + Data (Middle & Experimental)")]
+        public GameObject dataPortraitPanel;
+        public RawImage playerPortraitImage; // real captured player-face-hit photo, not static art
+        public TMP_Text portraitLabelsText;
+        public TMP_Text portraitValuesText;
 
-        [Header("Experimental: Photo Wall")]
-        public GameObject experimentalPanel;
-        public Transform photoGrid;
-        public GameObject photoEntryPrefab; // contains a RawImage
+        [Header("P2: Photo Wall (Middle & Experimental)")]
+        public GameObject photoWallPanel;
         public TMP_Text captionText;
+        // Pre-placed PZ_PhotoEntry instances, hand-positioned/rotated in the prefab for a
+        // scattered "messy pile" look (max layout, i.e. what it looks like with all 8 full) -
+        // not auto-laid-out. Combined customer+environment photos (sketch: min 2, max 8,
+        // however many actually got captured) fill the first N slots in time order.
+        public GameObject[] photoWallSlots;
 
-        [Header("Experimental: Boss Note")]
-        public GameObject bossNotePanel;    // torn-paper note container, placeholder color block for now
+        [Header("Photo Wall Scaling (fewer photos = bigger, more clustered)")]
+        [Tooltip("Below this many photos, sizing/spread stops changing further.")]
+        public int minPhotoCount = 2;
+        [Tooltip("At or above this many photos, slots use their exact hand-set position/scale.")]
+        public int maxPhotoCount = 8;
+        [Tooltip("Uniform scale multiplier applied at minPhotoCount (1 = unchanged).")]
+        public float sizeScaleAtMin = 1.3f;
+        [Tooltip("How far slot positions pull in toward center at minPhotoCount (1 = unchanged, 0 = all at center).")]
+        public float spreadScaleAtMin = 0.7f;
+
+        // Cached the first time the photo wall is shown - the design (hand-set) local
+        // position/scale of each slot, so repeated Show() calls always scale from the same
+        // baseline instead of compounding shrink/grow on top of the previous call's result.
+        Vector2[] slotBaselinePositions;
+        Vector3[] slotBaselineScales;
+
+        [Header("P3: Boss Note (Experimental only)")]
+        public GameObject bossNotePanel;    // torn-paper note container
         public TMP_Text bossCommentText;    // filled in later by BossCommentService
+
+        SessionData currentSession;
+        int currentPage;
+        int pageCount;
+
+        public bool HasNextPage => currentSession != null && currentPage + 1 < pageCount;
 
         void Start()
         {
-            HideAll();
+            HideAllPanels();
         }
 
-        // Also called at the top of Show() - the demo loader can switch conditions
-        // repeatedly in one session, so each Show() must start from a blank slate
-        // (otherwise panels stack on top of each other and old polaroids pile up).
-        void HideAll()
+        // Also called at the top of each page change - the demo loader can switch pages/
+        // conditions repeatedly in one session, so every transition must start from a
+        // blank slate (otherwise panels stack on top of each other and old polaroids pile up).
+        void HideAllPanels()
         {
             if (controlPanel != null) controlPanel.SetActive(false);
-            if (middlePanel != null) middlePanel.SetActive(false);
-            if (experimentalPanel != null) experimentalPanel.SetActive(false);
-            if (backgroundPanel != null) backgroundPanel.SetActive(true); // default on; Experimental turns it off
-            if (photoGrid != null)
-                for (int i = photoGrid.childCount - 1; i >= 0; i--)
-                    Destroy(photoGrid.GetChild(i).gameObject);
+            if (dataPortraitPanel != null) dataPortraitPanel.SetActive(false);
+            if (photoWallPanel != null) photoWallPanel.SetActive(false);
+            if (bossNotePanel != null) bossNotePanel.SetActive(false);
+            if (backgroundPanel != null) backgroundPanel.SetActive(true); // default on; photo wall/boss note pages turn it off
+            // Slots are permanent (hand-positioned in the prefab), not destroyed/recreated -
+            // ShowPhotoWall() re-fills and shows/hides each one every time it runs.
         }
 
         public void Show(SessionData session)
         {
-            HideAll();
-            switch (session.condition)
+            currentSession = session;
+            pageCount = session.condition switch
             {
-                case ExperimentCondition.Control:
-                    ShowControl(session);
-                    break;
-                case ExperimentCondition.Middle:
-                    ShowMiddle(session);
-                    break;
-                default: // Experimental
-                    ShowExperimental(session);
-                    break;
+                ExperimentCondition.Control => 1,
+                ExperimentCondition.Middle => 2,
+                _ => 3, // Experimental
+            };
+            ShowPage(0);
+        }
+
+        // Provisional advance - hook this to the real "next page" input (VR button, timed
+        // auto-advance, whatever gets decided) once that's settled; for now the Demo
+        // loader drives it with a key press so pages can be previewed at all.
+        public void NextPage()
+        {
+            if (!HasNextPage) return;
+            ShowPage(currentPage + 1);
+        }
+
+        void ShowPage(int page)
+        {
+            currentPage = page;
+            HideAllPanels();
+
+            if (currentSession.condition == ExperimentCondition.Control)
+            {
+                ShowControl(currentSession);
+                return;
+            }
+
+            // Middle and Experimental share P1 (portrait+data) and P2 (photo wall);
+            // only Experimental reaches P3 (boss note) - pageCount already caps this.
+            switch (page)
+            {
+                case 0: ShowDataPortrait(currentSession); break;
+                case 1: ShowPhotoWall(currentSession); break;
+                case 2: ShowBossNote(currentSession); break;
             }
         }
 
         // Called by GameManager once BossCommentService's async request resolves
-        // (success or fallback) - Show() already put a "writing..." placeholder up.
+        // (success or fallback) - the boss note page already put a "writing..." placeholder up.
         public void SetBossComment(string text)
         {
             if (bossCommentText != null) bossCommentText.text = text;
@@ -108,15 +162,21 @@ namespace Pizzala.UI
             if (statsValuesText != null) statsValuesText.text = values;
         }
 
-        // ── Middle: same stats as Control, plus a boss/chef portrait - no photos, no LLM ──
-        void ShowMiddle(SessionData session)
+        // ── P1: the same stats as Control, plus whatever player-face photo got captured ──
+        void ShowDataPortrait(SessionData session)
         {
-            if (middlePanel != null) middlePanel.SetActive(true);
+            if (dataPortraitPanel != null) dataPortraitPanel.SetActive(true);
             BuildStatColumns(session.summary, out string labels, out string values);
-            if (middleLabelsText != null) middleLabelsText.text = labels;
-            if (middleValuesText != null) middleValuesText.text = values;
-            // bossPortraitImage is a static placeholder set on the prefab - nothing to
-            // update here until real boss/chef art exists.
+            if (portraitLabelsText != null) portraitLabelsText.text = labels;
+            if (portraitValuesText != null) portraitValuesText.text = values;
+
+            if (playerPortraitImage != null)
+            {
+                var photo = session.playerFacePhotos.Count > 0 ? session.playerFacePhotos[0] : null;
+                var tex = photo != null ? LoadPhoto(photo.path) : null;
+                playerPortraitImage.texture = tex;
+                playerPortraitImage.gameObject.SetActive(tex != null); // no player-face capture this round -> hide, don't show a blank frame
+            }
         }
 
         // Shared by Control and Middle - keeping the row-building logic in one place is
@@ -154,68 +214,125 @@ namespace Pizzala.UI
             values = valuesSb.ToString();
         }
 
-        // ── Experimental only: the messy photo wall + boss note ──
-        void ShowExperimental(SessionData session)
+        // ── P2: photo wall - combined customer+environment photos fill the first N of up to
+        // 8 pre-placed slots; fewer photos -> each slot scales up and pulls toward center.
+        // Player-face photos live on P1 instead, so they're deliberately excluded here. ──
+        void ShowPhotoWall(SessionData session)
         {
-            if (experimentalPanel != null) experimentalPanel.SetActive(true);
-            // Sketch note "不用背景框": the experimental screen floats directly over the
-            // scene - polaroids and the boss note carry their own paper/frame visuals.
-            if (backgroundPanel != null) backgroundPanel.SetActive(false);
-            Debug.Log($"ResultsScreen: backgroundPanel after hide attempt - " +
-                      $"{(backgroundPanel == null ? "field is NULL" : $"activeSelf={backgroundPanel.activeSelf}")}");
+            if (photoWallPanel != null) photoWallPanel.SetActive(true);
+            // The white background stays for this page - "不用背景框" was specifically
+            // about the boss note (P3) sticky note, not the photo wall.
+            if (backgroundPanel != null) backgroundPanel.SetActive(true);
             var s = session.summary;
-
-            if (bossNotePanel != null) bossNotePanel.SetActive(true);
-            if (bossCommentText != null) bossCommentText.text = "The boss is writing a note...";
 
             if (captionText != null)
                 captionText.text = $"<size=130%><b>Tonight's Damage Report</b></size>\n" +
                                    $"You made a mess in <b>{s.dirtCount}</b> spots, " +
-                                   $"hit <b>{session.customerFacePhotos.Count}</b> customers in the face" +
-                                   (s.playerFaceHits > 0 ? $", and took <b>{s.playerFaceHits}</b> hits yourself" : "") + "!";
+                                   $"hit <b>{session.customerFacePhotos.Count}</b> customers in the face!";
 
-            var all = new List<PhotoRecord>();
-            all.AddRange(session.customerFacePhotos);
-            all.AddRange(session.playerFacePhotos);
-            all.AddRange(session.environmentPhotos);
-            all.Sort((a, b) => a.gameTime.CompareTo(b.gameTime));
+            CacheSlotBaselines();
 
-            int spawned = 0;
-            foreach (var rec in CurateRepresentative(all, MaxPhotoWallEntries))
+            var combined = new List<PhotoRecord>();
+            combined.AddRange(session.customerFacePhotos);
+            combined.AddRange(session.environmentPhotos);
+            var photos = CurateRepresentative(SortedByTime(combined), photoWallSlots?.Length ?? 0);
+
+            int filled = ArrangeAndFillSlots(photos);
+            Debug.Log($"ResultsScreen: photo wall filled {filled}/{photoWallSlots?.Length ?? 0} slot(s) " +
+                      $"from {photos.Count} curated photo(s).");
+        }
+
+        // Slot Transforms get mutated every time the wall is shown (position/scale scaled
+        // by count) - this records each slot's original hand-set values exactly once so
+        // that scaling always starts from the same baseline instead of compounding.
+        void CacheSlotBaselines()
+        {
+            if (slotBaselinePositions != null || photoWallSlots == null) return;
+            slotBaselinePositions = new Vector2[photoWallSlots.Length];
+            slotBaselineScales = new Vector3[photoWallSlots.Length];
+            for (int i = 0; i < photoWallSlots.Length; i++)
             {
-                var tex = LoadPhoto(rec.path);
+                if (photoWallSlots[i] == null) continue;
+                var rt = (RectTransform)photoWallSlots[i].transform;
+                slotBaselinePositions[i] = rt.anchoredPosition;
+                slotBaselineScales[i] = rt.localScale;
+            }
+        }
+
+        // Fills the first `photos.Count` slots and hides the rest, scaling size up and
+        // pulling position in toward center as the active count drops toward minPhotoCount -
+        // this only ever shrinks the spread and grows the size relative to the hand-set
+        // 8-photo baseline, so it can never spread wider or reach higher than what was
+        // manually placed (i.e. can't grow into the title).
+        int ArrangeAndFillSlots(List<PhotoRecord> photos)
+        {
+            if (photoWallSlots == null) return 0;
+
+            int activeCount = photos.Count;
+            int clamped = Mathf.Clamp(activeCount, minPhotoCount, maxPhotoCount);
+            float t = maxPhotoCount > minPhotoCount ? (float)(clamped - minPhotoCount) / (maxPhotoCount - minPhotoCount) : 1f;
+            float sizeScale = Mathf.Lerp(sizeScaleAtMin, 1f, t);
+            float spreadScale = Mathf.Lerp(spreadScaleAtMin, 1f, t);
+
+            int filled = 0;
+            for (int i = 0; i < photoWallSlots.Length; i++)
+            {
+                var slot = photoWallSlots[i];
+                if (slot == null) continue;
+
+                if (i >= activeCount) { slot.SetActive(false); continue; }
+
+                var tex = LoadPhoto(photos[i].path);
                 if (tex == null)
                 {
-                    Debug.LogWarning($"ResultsScreen: photo failed to load: '{rec.path}' (exists: {File.Exists(rec.path ?? "")})");
+                    Debug.LogWarning($"ResultsScreen: photo failed to load: '{photos[i].path}' (exists: {File.Exists(photos[i].path ?? "")})");
+                    slot.SetActive(false);
                     continue;
                 }
-                spawned++;
-                var entry = Instantiate(photoEntryPrefab, photoGrid);
-                var raw = entry.GetComponentInChildren<RawImage>();
+
+                slot.SetActive(true);
+                filled++;
+
+                var rt = (RectTransform)slot.transform;
+                rt.anchoredPosition = slotBaselinePositions[i] * spreadScale;
+                rt.localScale = slotBaselineScales[i] * sizeScale;
+
+                var raw = slot.GetComponentInChildren<RawImage>();
                 if (raw != null) raw.texture = tex;
-                var caption = entry.GetComponentInChildren<TMP_Text>();
+                var caption = slot.GetComponentInChildren<TMP_Text>();
                 if (caption != null)
                 {
-                    var ts = System.TimeSpan.FromSeconds(Mathf.Max(0f, rec.gameTime));
-                    caption.text = string.IsNullOrEmpty(rec.caption)
+                    var ts = System.TimeSpan.FromSeconds(Mathf.Max(0f, photos[i].gameTime));
+                    caption.text = string.IsNullOrEmpty(photos[i].caption)
                         ? $"{ts.Minutes}:{ts.Seconds:00}"
-                        : $"{ts.Minutes}:{ts.Seconds:00} - {rec.caption}";
+                        : $"{ts.Minutes}:{ts.Seconds:00} - {photos[i].caption}";
                 }
-                entry.transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(-6f, 6f)); // 拍立得歪斜感
             }
+            return filled;
+        }
 
-            // Diagnostic breadcrumb while the "polaroids not showing" report is open -
-            // this line tells us definitively whether the wall got populated.
-            Debug.Log($"ResultsScreen: photo wall spawned {spawned}/{all.Count} polaroid(s) " +
-                      $"(grid active: {photoGrid != null && photoGrid.gameObject.activeInHierarchy}, " +
-                      $"entry prefab set: {photoEntryPrefab != null})");
+        // ── P3: boss note + LLM comment (Experimental only) ──
+        void ShowBossNote(SessionData session)
+        {
+            if (bossNotePanel != null) bossNotePanel.SetActive(true);
+            if (backgroundPanel != null) backgroundPanel.SetActive(false);
+            if (bossCommentText != null) bossCommentText.text = "The boss is writing a note...";
+        }
+
+        static List<PhotoRecord> SortedByTime(List<PhotoRecord> src)
+        {
+            var copy = new List<PhotoRecord>(src);
+            copy.Sort((a, b) => a.gameTime.CompareTo(b.gameTime));
+            return copy;
         }
 
         // Picks up to `max` entries spread evenly across the (already time-sorted) list,
-        // so the wall represents the whole round rather than just whatever was taken first.
+        // so the selection represents the whole round rather than just whatever was taken first.
         static List<PhotoRecord> CurateRepresentative(List<PhotoRecord> sorted, int max)
         {
+            if (max <= 0) return new List<PhotoRecord>();
             if (sorted.Count <= max) return sorted;
+            if (max == 1) return new List<PhotoRecord> { sorted[sorted.Count / 2] };
             var result = new List<PhotoRecord>(max);
             for (int i = 0; i < max; i++)
                 result.Add(sorted[i * (sorted.Count - 1) / (max - 1)]);
