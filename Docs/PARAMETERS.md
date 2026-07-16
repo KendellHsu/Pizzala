@@ -129,6 +129,8 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 
 | 參數 | 預設值 | 說明 |
 |---|---|---|
+| `customerPrefabs` | （空） | 客人 Prefab 清單，生成時均勻隨機挑一個（多角色混合，例：PZ_Customer + PZ_Customer_UncleB）。留空則用 `customerPrefab` |
+| `customerPrefab` | PZ_Customer | 單一客人 Prefab（舊欄位／備援）；`customerPrefabs` 為空時才用 |
 | `sectorCount` | 6 | 整圈均分幾個扇區（越多槽位越密） |
 | `sectorJitter` | 0.35 | 扇區內的角度隨機抖動比例（0~0.5），0 = 永遠站正中央 |
 | `distanceTiers` | (2.4~3), (4.6~5.4) | 距離層：每層一個半徑帶（`minRadius` / `maxRadius`，公尺） |
@@ -260,3 +262,4 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-15 | 加入 `frisbeeWobbleDamping` 章動阻尼（隨自旋縮放）抑制丟出後的晃動 |
 | 2026-07-16 | 針對 VR 出手速度偏慢調整飛盤預設：`frisbeeSpinToFly` 10→6、`frisbeeSpinRatioThreshold` 0.8→0.5、`frisbeeAeroScale` 1→3（升力更易觸發、滑翔與迴旋更明顯）；同步 ThrowTuning.asset |
 | 2026-07-16 | DirtManager 新增 `paintOnCharacters`、`paintSize`、`paintWrapDepth`：砸中客人改用 texture-space 染色（SaucePaintable 把醬料畫進角色貼圖 UV 空間，完全跟著蒙皮動畫），Decal 掛骨頭降為後備路徑 |
+| 2026-07-16 | CustomerSpawner 新增 `customerPrefabs`（客人 Prefab 清單，生成時均勻隨機挑一個，支援多角色混合）；原 `customerPrefab` 保留為備援。搭配新工具 `Tools/Pizzala/Build UncleB Customer Prefab` 產生第二隻角色 UncleB 客人並自動接進生成器 |

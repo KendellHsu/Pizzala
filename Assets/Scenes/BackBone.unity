@@ -153,7 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Core.GameManager
   condition: 0
   participantId: P00
-  enableThrowback: 0
+  enableThrowback: 1
   throwbackOnTimeout: 0
   enforceFlavor: 1
   enforceThrowType: 0
@@ -580,6 +580,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1393457926}
+  - {fileID: 1869289670}
   m_Father: {fileID: 970037736}
   m_LocalEulerAnglesHint: {x: 0, y: 300, z: 0}
 --- !u!1 &258325562
@@ -1684,6 +1685,8 @@ MonoBehaviour:
   photoGrid: {fileID: 732559693}
   photoEntryPrefab: {fileID: 3647143307840857493, guid: a5ea83b02cb0f884b96711aa4dd1e49b, type: 3}
   captionText: {fileID: 183845957}
+  bossNotePanel: {fileID: 0}
+  bossCommentText: {fileID: 0}
 --- !u!1 &1227517350
 GameObject:
   m_ObjectHideFlags: 0
@@ -2466,13 +2469,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1869289666}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.5, z: -0, w: -0.8660254}
+  m_LocalPosition: {x: 0, y: -0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 258325563}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 220128844}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1926003470
 GameObject:
@@ -2719,6 +2722,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6043dabb3084c288a5e8e2746db8929, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Customers.CustomerSpawner
+  customerPrefabs:
+  - {fileID: 8000398149439542082, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
+  - {fileID: 2938680833480630522, guid: be3141c72ea045848a658c2cd778ed33, type: 3}
   customerPrefab: {fileID: 8000398149439542082, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
   sectorCount: 6
   sectorJitter: 0.35
@@ -12718,7 +12724,6 @@ SceneRoots:
   - {fileID: 1727421254}
   - {fileID: 1150283659}
   - {fileID: 970037736}
-  - {fileID: 1869289670}
   - {fileID: 1926003474}
   - {fileID: 1941574075}
   - {fileID: 1186990723}

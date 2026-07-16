@@ -2,7 +2,9 @@
 // CustomerSpawner.cs — 客人動態生成(槽位制,移植自舊版原型)
 // 掛載:場景根物件 "CustomerSpawner",放在玩家站位(原點)。
 // Inspector:
-//   customerPrefab — 客人 Prefab(拖 PZ_Customer)
+//   customerPrefabs — 客人 Prefab 清單(多角色混合,生成時均勻隨機挑一個,
+//                     例:PZ_Customer(Soldier)+ PZ_Customer_UncleB)
+//   customerPrefab  — 單一客人 Prefab(舊欄位/備援);customerPrefabs 為空才用
 //   sectorCount / sectorJitter / distanceTiers — 環形槽位幾何
 //   maxSpawnedCustomers — 同時在場的生成客人上限(人口密度上限)
 //   minSpacing — 與任何現有客人(含場景預擺)的最小間距(公尺)
@@ -38,6 +40,10 @@ namespace Pizzala.Customers
     public class CustomerSpawner : MonoBehaviour
     {
         [Header("客人 Prefab")]
+        [Tooltip("客人 Prefab 清單,生成時均勻隨機挑一個(多角色混合)。留空則用下方單一 customerPrefab。")]
+        public GameObject[] customerPrefabs;
+
+        [Tooltip("單一客人 Prefab(舊欄位/備援);customerPrefabs 為空時才用。")]
         public GameObject customerPrefab;
 
         [Header("環形槽位(以本物件為圓心,360° 環繞整個空間)")]
@@ -90,7 +96,7 @@ namespace Pizzala.Customers
 
         void SpawnAtRandomFreeSlot()
         {
-            if (customerPrefab == null) return;
+            if (!HasAnyCustomerPrefab()) return;
             if (occupiedSlots.Count >= maxSpawnedCustomers) return; // 人口上限,這輪不生
 
             var freeSlots = new List<(int sector, int tier)>();
@@ -129,14 +135,17 @@ namespace Pizzala.Customers
 
         void SpawnCustomer(int sector, int tier, Vector3 position, Quaternion rotation)
         {
+            var prefab = PickCustomerPrefab();
+            if (prefab == null) return; // 理論上 HasAnyCustomerPrefab 已擋掉
+
             occupiedSlots.Add((sector, tier));
 
-            var go = Instantiate(customerPrefab, position, rotation, transform);
+            var go = Instantiate(prefab, position, rotation, transform);
 
             var customer = go.GetComponent<CustomerController>();
             if (customer == null)
             {
-                Debug.LogError("[CustomerSpawner] customerPrefab 上找不到 CustomerController");
+                Debug.LogError($"[CustomerSpawner] {prefab.name} 上找不到 CustomerController");
                 Destroy(go);
                 occupiedSlots.Remove((sector, tier));
                 return;
@@ -144,9 +153,36 @@ namespace Pizzala.Customers
 
             customer.sector = ClassifySector(position);
             GameManager.Instance.RegisterCustomer(customer); // 指派 customerId、訂閱事件、推移動參數
-            go.name = $"PZ_Customer (spawned {customer.customerId})";
+            go.name = $"{prefab.name} (spawned {customer.customerId})";
 
             StartCoroutine(LifeRoutine(customer, sector, tier));
+        }
+
+        // 生成用候選:優先用 customerPrefabs(蓄水池抽樣均勻隨機,忽略 null),
+        // 清單為空才退回單一 customerPrefab。
+        GameObject PickCustomerPrefab()
+        {
+            GameObject pick = null;
+            if (customerPrefabs != null)
+            {
+                int seen = 0;
+                foreach (var p in customerPrefabs)
+                {
+                    if (p == null) continue;
+                    seen++;
+                    if (Random.Range(0, seen) == 0) pick = p;
+                }
+            }
+            return pick != null ? pick : customerPrefab;
+        }
+
+        bool HasAnyCustomerPrefab()
+        {
+            if (customerPrefab != null) return true;
+            if (customerPrefabs != null)
+                foreach (var p in customerPrefabs)
+                    if (p != null) return true;
+            return false;
         }
 
         // 在扇區角度與半徑帶內隨機散佈,不是死板格點。
