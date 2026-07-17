@@ -21,7 +21,7 @@ namespace Pizzala.EditorTools
 
         static readonly (string flavorName, string sourcePath, string iconName)[] Icons =
         {
-            ("Margherita", "Assets/Art/Pizza/2D/pizza_Margherita_2D.png", "FlavorIcon_Margherita.png"),
+            ("Mustard", "Assets/Art/Pizza/2D/pizza_mustard_2D.png", "FlavorIcon_Mustard.png"),
             ("Pepperoni", "Assets/Art/Pizza/2D/pizza_Pepperoni_2D.png", "FlavorIcon_Pepperoni.png"),
             ("CosmicPinkMarshmallow", "Assets/Art/Pizza/2D/pizza_pinkMM_2D.png", "FlavorIcon_CosmicPinkMarshmallow.png"),
         };
