@@ -27,7 +27,11 @@ namespace Pizzala.LLM
         const string Model = "gemini-flash-latest";
         const string Endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + Model + ":generateContent";
         const string ApiKeyFileName = "gemini_api_key.txt";
-        const int TimeoutSeconds = 12;
+        // 20s + one retry: the free tier regularly 503s or just sits there when Google's
+        // side is busy - nothing wrong on ours. The player is reading pages 1-2 while this
+        // runs, so waiting longer costs nothing; the note page shows "writing..." meanwhile.
+        const int TimeoutSeconds = 20;
+        const int MaxAttempts = 2;
 
         // Accuracy is genuinely hard in VR and most real playtests land near 0% - the
         // note should never mock that number itself. Jokes land on specific incidents
@@ -70,27 +74,32 @@ namespace Pizzala.LLM
                 contents = new[] { new GeminiContent { parts = new[] { new GeminiPart { text = prompt } } } }
             });
 
-            using (var req = new UnityWebRequest(Endpoint, "POST"))
+            for (int attempt = 1; attempt <= MaxAttempts; attempt++)
             {
-                byte[] bodyRaw = Encoding.UTF8.GetBytes(body);
-                req.uploadHandler = new UploadHandlerRaw(bodyRaw);
-                req.downloadHandler = new DownloadHandlerBuffer();
-                req.SetRequestHeader("Content-Type", "application/json");
-                req.SetRequestHeader("x-goog-api-key", apiKey);
-                req.timeout = TimeoutSeconds;
-
-                yield return req.SendWebRequest();
-
-                if (req.result != UnityWebRequest.Result.Success)
+                using (var req = new UnityWebRequest(Endpoint, "POST"))
                 {
-                    Debug.LogWarning($"[BossCommentService] Gemini request failed ({req.error}) - using fallback comment.");
-                    onComplete?.Invoke(FallbackComment(summary));
-                    yield break;
-                }
+                    byte[] bodyRaw = Encoding.UTF8.GetBytes(body);
+                    req.uploadHandler = new UploadHandlerRaw(bodyRaw);
+                    req.downloadHandler = new DownloadHandlerBuffer();
+                    req.SetRequestHeader("Content-Type", "application/json");
+                    req.SetRequestHeader("x-goog-api-key", apiKey);
+                    req.timeout = TimeoutSeconds;
 
-                string text = ExtractText(req.downloadHandler.text);
-                onComplete?.Invoke(string.IsNullOrEmpty(text) ? FallbackComment(summary) : text.Trim());
+                    yield return req.SendWebRequest();
+
+                    if (req.result == UnityWebRequest.Result.Success)
+                    {
+                        string text = ExtractText(req.downloadHandler.text);
+                        onComplete?.Invoke(string.IsNullOrEmpty(text) ? FallbackComment(summary) : text.Trim());
+                        yield break;
+                    }
+
+                    Debug.LogWarning($"[BossCommentService] Gemini request failed ({req.error}) - " +
+                                     (attempt < MaxAttempts ? "retrying." : "using fallback comment."));
+                }
             }
+
+            onComplete?.Invoke(FallbackComment(summary));
         }
 
         IEnumerator LoadApiKey()
@@ -144,11 +153,39 @@ namespace Pizzala.LLM
             return sb.ToString();
         }
 
+        // Same situation buckets as before (big mess / got pizza'd in the face / otherwise),
+        // but each picks randomly from a pool so back-to-back rounds don't read the exact
+        // same note - the fallback fires often enough (free-tier Gemini flakiness) that
+        // repeat players would notice a single canned line.
+        static readonly string[] MessyComments =
+        {
+            "Rough one tonight, but you showed up and threw pizza - that's the job. Clean up before your next shift and I'll see you then.",
+            "The shop looks like a sauce crime scene. Mop's in the back. Still - good hustle out there tonight. See you tomorrow.",
+            "I counted the splats. All of them. We'll talk about your aim later - for now, get some rest. You earned it, mess and all.",
+            "Health inspector called. I told them it was 'abstract art'. Let's aim for the customers' HANDS next shift, yeah? You've got this.",
+        };
+
+        static readonly string[] FaceHitComments =
+        {
+            "Saw you take one right in the face tonight. Occupational hazard. You wear the sauce well - see you next shift.",
+            "Rule one of pizza: sometimes it comes back. You found that out the hard way tonight. Good spirit though - come back for round two.",
+            "That customer had quite an arm, huh? Keep your head moving out there. Otherwise, decent shift - see you tomorrow.",
+        };
+
+        static readonly string[] DefaultComments =
+        {
+            "Solid effort out there tonight. Keep at it - you'll get the hang of it. See you next shift.",
+            "Not bad at all for a night's work. The regulars were smiling - that's what counts. Same time tomorrow?",
+            "You're getting the rhythm of this place. A few wild throws, sure, but everyone starts somewhere. Good shift.",
+            "Decent night. The ovens are cooling, the till's counted, and nobody quit - I call that a win. See you next shift.",
+        };
+
         static string FallbackComment(SessionSummary s)
         {
-            return s.dirtCount > 10
-                ? "Rough one tonight, but you showed up and threw pizza - that's the job. Clean up before your next shift and I'll see you then."
-                : "Solid effort out there tonight. Keep at it - you'll get the hang of it. See you next shift.";
+            string[] pool = s.dirtCount > 10 ? MessyComments
+                          : s.playerFaceHits > 0 ? FaceHitComments
+                          : DefaultComments;
+            return pool[UnityEngine.Random.Range(0, pool.Length)];
         }
     }
 }
