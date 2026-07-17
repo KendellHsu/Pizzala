@@ -59,6 +59,7 @@ namespace Pizzala.Core
         public ResultsScreenController resultsScreen;
         public ActivityTracker activityTracker;
         public BossCommentService bossCommentService; // experimental group only; leave empty to skip
+        public BoothStatusScreen boothScreen;         // live hits/time on the booth; leave empty to skip
 
         [Tooltip("後備丟回披薩(下面陣列沒填到的口味用這個)")]
         public GameObject throwbackPrefab;
@@ -70,6 +71,12 @@ namespace Pizzala.Core
         public Texture2D[] playerDirtyFaceTextures;
 
         public bool RoundActive { get; private set; }
+
+        // Live round state for the booth screen. The session's own hit count isn't usable
+        // here - SessionLogger only tallies it in BuildSummary() once the round is over.
+        public int Hits { get; private set; }
+        public float TimeRemaining => RoundActive ? Mathf.Max(0f, roundEndTime - Time.time) : 0f;
+        float roundEndTime;
 
         int missedOrders;
         int playerFaceHitCount;
@@ -99,6 +106,7 @@ namespace Pizzala.Core
             if (RoundActive || tuning == null || SessionLogger.Instance == null) return;
             missedOrders = 0;
             playerFaceHitCount = 0;
+            Hits = 0;
             if (DirtManager.Instance != null) DirtManager.Instance.ResetCount();
             SessionLogger.Instance.BeginSession(condition, participantId);
             if (activityTracker != null) activityTracker.Begin();
@@ -108,13 +116,24 @@ namespace Pizzala.Core
 
         IEnumerator RoundLoop()
         {
-            float endTime = Time.time + tuning.roundDurationSeconds;
-            while (Time.time < endTime)
+            // Kept as a field, not a local, so the booth screen can read the countdown.
+            roundEndTime = Time.time + tuning.roundDurationSeconds;
+            while (Time.time < roundEndTime)
             {
                 GiveOrderToRandomIdleCustomer();
                 yield return new WaitForSeconds(tuning.orderIntervalSeconds);
             }
             EndRound();
+        }
+
+        // The booth screen is pushed from here rather than from RoundLoop: that coroutine
+        // only ticks once per order interval, which would make the countdown jump in
+        // several-second steps.
+        void Update()
+        {
+            if (!RoundActive || boothScreen == null) return;
+            boothScreen.SetHits(Hits);
+            boothScreen.SetTimeRemaining(TimeRemaining);
         }
 
         void GiveOrderToRandomIdleCustomer()
@@ -222,6 +241,7 @@ namespace Pizzala.Core
             if (flavorOk && throwOk)
             {
                 record.outcome = ThrowOutcome.Hit;
+                Hits++;
                 customer.ResolveOrder(true);
                 Destroy(pizza.gameObject, 0.5f); // 客人收下披薩
             }
