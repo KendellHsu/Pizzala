@@ -6,18 +6,22 @@ using Pizzala.Customers;
 
 namespace Pizzala.EditorTools
 {
-    // 從 PZ_Customer(Soldier 版)產生一個乾淨、可直接生成的 UncleB 客人 Prefab。
+    // 從 PZ_Customer(Soldier 版)產生一個乾淨、可直接生成的 UncleB 客人 Prefab,
+    // 存成 PZ_Customer 的 **Prefab Variant**(而不是斷線的獨立 prefab),
+    // 之後 PZ_Customer 改共用邏輯(Zone/ThrowOrigin/FaceAnchor/FlavorIcon/
+    // CustomerController 的程式行為)UncleB 會自動跟上,只有這裡動過的欄位保留覆寫。
     // 隊友的 PZ_Customer_uncleB_* 是預覽品質(模型/命名錯位、疊了兩個 Animator、
     // CustomerController 的 idle/walk 控制器沒接對),不適合直接丟給生成器。
     // 一鍵完成:
-    //   1. 以 PZ_Customer 為基底(沿用所有 Zone/ThrowOrigin/FaceAnchor/FlavorIcon/
-    //      CustomerController 邏輯),把 Soldier 模型子物件換成 UncleB_standing 模型
+    //   1. Instantiate PZ_Customer(建立與基底連結的 prefab instance),
+    //      把 Soldier 模型子物件換成 UncleB_standing 模型
     //   2. UncleB 模型掛「單一」Animator,idle 控制器 = uncleB_standing
     //   3. CustomerController.idle/walkAnimatorController = uncleB standing / walking
     //      (與 Soldier 相同機制:走動時切 walk 控制器,clip 靠骨架路徑對應)
     //   4. 清空 face 表情貼圖:UncleB 無「整身表情變體」貼圖,清空後 SetFace(null)
     //      會直接略過,模型保留自身貼圖(情緒仍靠丟回預警的閃紅表現)
-    //   5. 存成 Assets/Prefabs/PZ_Customer_UncleB.prefab
+    //   5. SaveAsPrefabAssetAndConnect 存成 Assets/Prefabs/PZ_Customer_UncleB.prefab
+    //      (存到跟基底不同的路徑,Unity 會自動建立 Variant 關係)
     //   6. 把目前開啟場景 CustomerSpawner 的 customerPrefabs 設為
     //      [PZ_Customer, PZ_Customer_UncleB](兩角色混合隨機生成)
     // 可重複執行:prefab 原地覆蓋、場景欄位原地更新。
@@ -36,20 +40,26 @@ namespace Pizzala.EditorTools
         [MenuItem("Tools/Pizzala/Build UncleB Customer Prefab")]
         public static void Build()
         {
+            var basePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(BasePrefabPath);
             var modelFbx = AssetDatabase.LoadAssetAtPath<GameObject>(ModelFbxPath);
             var idleCtrl = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(IdleControllerPath);
             var walkCtrl = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(WalkControllerPath);
-            if (AssetDatabase.LoadAssetAtPath<GameObject>(BasePrefabPath) == null)
+            if (basePrefab == null)
             { Debug.LogError($"UncleBCustomerBuilder: 找不到基底 {BasePrefabPath}"); return; }
             if (modelFbx == null)
             { Debug.LogError($"UncleBCustomerBuilder: 找不到模型 {ModelFbxPath}"); return; }
             if (idleCtrl == null || walkCtrl == null)
             { Debug.LogError("UncleBCustomerBuilder: 找不到 UncleB idle/walk 動畫控制器,請確認 NPC 分支已合入。"); return; }
 
-            // 載入基底 prefab 內容來編輯(不動到原 PZ_Customer 資產)
-            var root = PrefabUtility.LoadPrefabContents(BasePrefabPath);
+            // 用獨立的 preview scene instantiate 基底 prefab —— 這裡的 root 是與
+            // PZ_Customer「連線」的 prefab instance,存檔時才會被存成 Variant。
+            // (LoadPrefabContents 產生的是斷線副本,SaveAsPrefabAsset 存出來只會是
+            // 獨立 prefab,不會建立 Variant 關係。)
+            var previewScene = EditorSceneManager.NewPreviewScene();
             try
             {
+                var root = (GameObject)PrefabUtility.InstantiatePrefab(basePrefab, previewScene);
+
                 // Soldier 模型 = 帶 Animator 且不在根物件上的那個子物件
                 var soldierAnim = root.GetComponentsInChildren<Animator>(true)
                                       .FirstOrDefault(a => a.gameObject != root);
@@ -86,12 +96,12 @@ namespace Pizzala.EditorTools
                 cc.walkAnimatorController = walkCtrl;
                 cc.faceNormal = cc.faceHappy = cc.faceAngry = cc.faceDirty = null;
 
-                PrefabUtility.SaveAsPrefabAsset(root, OutPrefabPath);
-                Debug.Log($"UncleBCustomerBuilder: 已產生 {OutPrefabPath}");
+                PrefabUtility.SaveAsPrefabAssetAndConnect(root, OutPrefabPath, InteractionMode.AutomatedAction);
+                Debug.Log($"UncleBCustomerBuilder: 已產生 {OutPrefabPath}(PZ_Customer 的 Prefab Variant)");
             }
             finally
             {
-                PrefabUtility.UnloadPrefabContents(root);
+                EditorSceneManager.ClosePreviewScene(previewScene);
             }
 
             AssetDatabase.SaveAssets();
