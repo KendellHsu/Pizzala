@@ -7,6 +7,7 @@
 //   flavor      — 這個出餐口的口味(會覆寫 Prefab 上的設定)
 // ─────────────────────────────────────────────────────────────
 using UnityEngine;
+using Pizzala.Core;
 using Pizzala.Data;
 
 namespace Pizzala.Throwing
@@ -54,7 +55,13 @@ namespace Pizzala.Throwing
             }
 
             respawnTimer -= Time.deltaTime;
-            if (respawnTimer <= 0f) { departed = null; Spawn(); }
+            if (respawnTimer <= 0f)
+            {
+                // 回合結束後不再補貨;已經在場上的披薩(玩家手上或已落地)不受影響,照樣留著
+                if (GameManager.Instance != null && !GameManager.Instance.RoundActive) return;
+                departed = null;
+                Spawn();
+            }
         }
 
         void Spawn()
