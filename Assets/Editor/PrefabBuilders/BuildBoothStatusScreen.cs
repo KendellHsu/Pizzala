@@ -62,7 +62,7 @@ namespace Pizzala.EditorTools
             hitsRect.offsetMin = new Vector2(24, 0);
             hitsRect.offsetMax = new Vector2(-24, -14);
 
-            var time = NewText("TimeText", root.transform, font, "TIME  2:00");
+            var time = NewText("TimeText", root.transform, font, "TIME  3:00");
             var timeRect = (RectTransform)time.transform;
             timeRect.anchorMin = new Vector2(0, 0f);
             timeRect.anchorMax = new Vector2(1, 0.5f);

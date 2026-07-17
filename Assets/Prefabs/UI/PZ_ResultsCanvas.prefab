@@ -1061,7 +1061,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4366151034815652398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1113,7 +1113,6 @@ MonoBehaviour:
   minPhotoCount: 2
   maxPhotoCount: 8
   sizeScaleAtMin: 1.6
-  spreadScaleAtMin: 0.55
   bossNotePanel: {fileID: 7590000533808707712}
   bossCommentText: {fileID: 6416643587208615006}
 --- !u!1 &8166233822358237682
