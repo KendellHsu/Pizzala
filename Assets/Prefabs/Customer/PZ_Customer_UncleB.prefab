@@ -86,6 +86,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2520638019367460530, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
+      propertyPath: idleAnimatorController
+      value: 
+      objectReference: {fileID: 9100000, guid: 6ad628c7fbb408a489e7b2a691161b87, type: 2}
+    - target: {fileID: 2520638019367460530, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
+      propertyPath: walkAnimatorController
+      value: 
+      objectReference: {fileID: 9100000, guid: 06f8efb8160c41348a48dae0e96352f0, type: 2}
+    - target: {fileID: 2520638019367460530, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
+      propertyPath: throwAnimatorController
+      value: 
+      objectReference: {fileID: 9100000, guid: 873a86e1e72e45145ab55d13ba31f6a2, type: 2}
     - target: {fileID: 3401370931701466932, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
       propertyPath: m_Radius
       value: 0.15

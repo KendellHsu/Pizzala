@@ -227,16 +227,17 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3564982364283983775}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.031}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 6813164515360876261}
   - {fileID: 4025064044986775999}
   m_Father: {fileID: 4359228213018223878}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.03, y: 0.11}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.025, y: 0.115}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2231993020331035836
@@ -334,7 +335,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2951060483758615598}
-  - {fileID: 6813164515360876261}
   m_Father: {fileID: 7673911599087104307}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1142582344497785381
@@ -434,16 +434,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4278233828889756799}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4359228213018223878}
+  m_Father: {fileID: 2951060483758615598}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.025, y: 0.105}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &3406721875374332309
@@ -572,7 +572,7 @@ RectTransform:
   m_GameObject: {fileID: 7892866201163802140}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.425, y: 0.425, z: 0.425}
+  m_LocalScale: {x: 0.44, y: 0.44, z: 0.44}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2951060483758615598}
@@ -675,10 +675,11 @@ MonoBehaviour:
   sector: 1
   flavorIcon: {fileID: 3406721875374332309}
   flavorSprites:
-  - {fileID: 21300000, guid: 9c5217b8a37cac74f9a9972fcaea08a9, type: 3}
+  - {fileID: 21300000, guid: 8365ae3fb766ece4382d54101d972daf, type: 3}
   - {fileID: 21300000, guid: b44e6077aa6afdc4a99eab5c89fb8a75, type: 3}
   - {fileID: 21300000, guid: ad00eee396189f643b25596db67b59d9, type: 3}
   flavorCountDown: {fileID: 1124350475004789057}
+  pizzaBox: {fileID: 6654118719273284645}
   pizzaBoxAnimation: {fileID: 5639264112406805073}
   pizzaBoxCloseClip: PizzaBoxCloseClip
   pizzaBoxSlot: {fileID: 450677961785507073}
@@ -690,9 +691,9 @@ MonoBehaviour:
   throwOrigin: {fileID: 5388289517157428821}
   requiredThrowType: 0
   canWander: 1
-  idleAnimatorController: {fileID: 9100000, guid: 3e72691c1d9a0ae44a9cdbcd524b1086, type: 2}
-  walkAnimatorController: {fileID: 9100000, guid: 513285175b10d2f4fbedc7ea05b22376, type: 2}
-  throwAnimatorController: {fileID: 9100000, guid: b609bf14525a6094b8aa0f81ae83e4ce, type: 2}
+  idleAnimatorController: {fileID: 0}
+  walkAnimatorController: {fileID: 0}
+  throwAnimatorController: {fileID: 0}
 --- !u!1 &8258847632833827711
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,6 +975,11 @@ Animation:
 --- !u!4 &6274636971440598687 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+  m_PrefabInstance: {fileID: 5807748415446223220}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6654118719273284645 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e218f0575994bae45b4bd13938135312, type: 3}
   m_PrefabInstance: {fileID: 5807748415446223220}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8519924234807584775
