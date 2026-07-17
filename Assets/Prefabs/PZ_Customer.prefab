@@ -26,12 +26,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771875030358310836}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.85, z: -0.275}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7673911599087104307}
+  m_Father: {fileID: 6093607710123236580}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6879304168698796917
 MonoBehaviour:
@@ -66,7 +66,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.15
+  m_Radius: 0.25
   m_Center: {x: 0, y: 1, z: 0.26}
 --- !u!1 &1261508223031896586
 GameObject:
@@ -200,6 +200,37 @@ CapsuleCollider:
   m_Height: 1.4
   m_Direction: 1
   m_Center: {x: 0, y: 0.7, z: 0}
+--- !u!1 &2272428114414009167
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6242188630133491346}
+  m_Layer: 0
+  m_Name: PizzaSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6242188630133491346
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2272428114414009167}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.85, z: -0.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6093607710123236580}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4275020424592842237
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,7 +562,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5676148693708285181}
-  - {fileID: 7018353154730543695}
   - {fileID: 6089317645360186358}
   - {fileID: 690538444004290927}
   - {fileID: 4782943003522385463}
@@ -539,6 +569,7 @@ Transform:
   - {fileID: 8711212011033705444}
   - {fileID: 4359228213018223878}
   - {fileID: 6813164515360876261}
+  - {fileID: 6093607710123236580}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2520638019367460530
@@ -555,22 +586,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Customers.CustomerController
   customerId: 0
   sector: 1
-  faceRenderer: {fileID: 4105560859820189113}
-  faceNormal: {fileID: 2800000, guid: 7c8fe6d188e79e948b87d5e09f04ad6f, type: 3}
-  faceHappy: {fileID: 0}
-  faceAngry: {fileID: 0}
-  faceDirty: {fileID: 0}
   flavorIcon: {fileID: 3406721875374332309}
   flavorSprites:
   - {fileID: 21300000, guid: 9c5217b8a37cac74f9a9972fcaea08a9, type: 3}
   - {fileID: 21300000, guid: b44e6077aa6afdc4a99eab5c89fb8a75, type: 3}
   - {fileID: 21300000, guid: ad00eee396189f643b25596db67b59d9, type: 3}
+  flavorCountDown: {fileID: 0}
+  pizzaBox: {fileID: 6907122432625755742}
+  pizzaBoxAnimation: {fileID: 6871012030935152175}
+  pizzaBoxCloseClip: PizzaBoxCloseClip
+  pizzaBoxSlot: {fileID: 6242188630133491346}
+  boxPizzaByFlavor:
+  - {fileID: 919132149155446097, guid: 397a28bd18d5fc642b8acf4cb3e39d64, type: 3}
+  - {fileID: 919132149155446097, guid: 861a668c7935ab1439295c88a6584c6d, type: 3}
+  - {fileID: 919132149155446097, guid: 012529577629a064a87ee581bc650b0c, type: 3}
   faceAnchor: {fileID: 4782943003522385463}
   throwOrigin: {fileID: 5388289517157428821}
   requiredThrowType: 0
   canWander: 1
-  idleAnimatorController: {fileID: 9100000, guid: 3e72691c1d9a0ae44a9cdbcd524b1086, type: 2}
-  walkAnimatorController: {fileID: 9100000, guid: 513285175b10d2f4fbedc7ea05b22376, type: 2}
+  idleAnimatorController: {fileID: 0}
+  walkAnimatorController: {fileID: 0}
+  throwAnimatorController: {fileID: 0}
 --- !u!1 &8258847632833827711
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,3 +771,96 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: af532a586f4a729459709e02ac7833d5, type: 3}
   m_PrefabInstance: {fileID: 5282443450589561622}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5988220220048112399
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7673911599087104307}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.85
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.58
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      propertyPath: m_Name
+      value: pizzaBox
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7018353154730543695}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6242188630133491346}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e218f0575994bae45b4bd13938135312, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6871012030935152175}
+  m_SourcePrefab: {fileID: 100100000, guid: e218f0575994bae45b4bd13938135312, type: 3}
+--- !u!4 &6093607710123236580 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e218f0575994bae45b4bd13938135312, type: 3}
+  m_PrefabInstance: {fileID: 5988220220048112399}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6907122432625755742 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e218f0575994bae45b4bd13938135312, type: 3}
+  m_PrefabInstance: {fileID: 5988220220048112399}
+  m_PrefabAsset: {fileID: 0}
+--- !u!111 &6871012030935152175
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6907122432625755742}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: -623603649343465320, guid: e218f0575994bae45b4bd13938135312, type: 3}
+  m_Animations:
+  - {fileID: -623603649343465320, guid: e218f0575994bae45b4bd13938135312, type: 3}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
