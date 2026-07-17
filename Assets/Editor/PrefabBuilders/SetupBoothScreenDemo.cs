@@ -1,17 +1,17 @@
 // ─────────────────────────────────────────────────────────────
-// SetupBoothScreenDemo.cs — drops a self-contained test rig for the booth status screen
-// into a scratch scene so you can preview the follow behaviour without a headset:
-//   - BoothCenter (empty at origin) = the ring the screen orbits
-//   - FakeHead (empty) = stand-in for the VR camera; BoothScreenDemo rotates it with A/D
-//   - a PZ_BoothStatusScreen instance, its playerHead/boothCenter wired to the above
-//   - a plain Camera looking at the booth so you can watch it in Game view
-//   - a Demo object with BoothScreenDemo driving it (A/D turn, Space = +1 hit, time ticks)
+// SetupBoothScreenDemo.cs — builds a bare scratch scene with just the booth status screen
+// and a FreeCamera, for checking the follow behaviour in isolation. There's no booth model
+// here, so it shows the motion but not how it sits on the real booth - for that, copy
+// BackBone to a throwaway scene and use Setup Booth Preview (Current Scene) instead.
+//
+// Preview camera uses URP's FreeCamera: MOVE THE MOUSE to look around (= turning your
+// head), WASD to move. That rotation is what the screen's follow logic reads.
 // Run from Unity: Tools > Pizzala > Setup Booth Screen Demo. Safe to re-run.
 // ─────────────────────────────────────────────────────────────
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Rendering; // FreeCamera
 using Pizzala.UI;
 using Pizzala.DevTools;
 
@@ -38,36 +38,32 @@ namespace Pizzala.EditorTools
             var boothCenter = new GameObject("BoothCenter");
             boothCenter.transform.position = Vector3.zero;
 
-            var fakeHead = new GameObject("FakeHead");
-            fakeHead.transform.position = new Vector3(0, 1.5f, 0);
-
             var screenInstance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, scene);
             var screen = screenInstance.GetComponent<BoothStatusScreen>();
             screen.boothCenter = boothCenter.transform;
-            screen.playerHead = fakeHead.transform;
 
-            // A camera behind the player looking forward, so the Game view shows the screen
-            // as it slides around the ring.
-            var cam = GameObject.FindFirstObjectByType<Camera>();
-            if (cam == null)
-            {
-                var camGO = new GameObject("Demo Camera", typeof(Camera));
-                cam = camGO.GetComponent<Camera>();
-            }
-            cam.transform.position = new Vector3(0, 1.6f, -1.4f);
-            cam.transform.rotation = Quaternion.Euler(8f, 0f, 0f);
+            // The camera IS the head here - FreeCamera turns it with the mouse, and the
+            // screen's follow logic reads that rotation.
+            var cam = Object.FindFirstObjectByType<Camera>();
+            if (cam == null) cam = new GameObject("PreviewHead", typeof(Camera)).GetComponent<Camera>();
+            cam.gameObject.name = "PreviewHead";
+            if (cam.GetComponent<FreeCamera>() == null) cam.gameObject.AddComponent<FreeCamera>();
+            cam.transform.position = boothCenter.transform.position + Vector3.up * 1.6f;
+            cam.transform.rotation = Quaternion.identity;
+            cam.nearClipPlane = 0.05f; // the screen sits <1m away - default 0.3 would clip it
             cam.clearFlags = CameraClearFlags.SolidColor;
             cam.backgroundColor = new Color(0.15f, 0.15f, 0.18f);
 
-            var demoGO = new GameObject("Demo");
+            screen.playerHead = cam.transform;
+
+            var demoGO = new GameObject("BoothDemo");
             var demo = demoGO.AddComponent<BoothScreenDemo>();
             demo.screen = screen;
-            demo.fakeHead = fakeHead.transform;
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene, ScenePath);
             Debug.Log("SetupBoothScreenDemo: scene ready at " + ScenePath +
-                      ". Press Play, then A/D to turn (watch the screen follow), Space to add a hit.");
+                      ". Press Play, then MOVE THE MOUSE to look around (Space = +1 hit).");
         }
     }
 }

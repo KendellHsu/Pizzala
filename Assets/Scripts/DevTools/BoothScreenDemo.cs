@@ -1,8 +1,12 @@
-// DEMO ONLY - preview the booth status screen without a headset. A/D (or left/right
-// arrows) rotate a stand-in "head" so you can watch the screen slide around the booth
-// ring; Space adds a hit; time counts down from demoRoundSeconds. Feeds the exact same
-// SetHits/SetTimeRemaining the real GameManager will call in BackBone, so what you see
-// here is what the wired-up version does.
+// DEMO ONLY - feeds fake hits/time to the booth status screen so it can be previewed
+// without a live round. Space = +1 hit, time counts down from demoRoundSeconds.
+//
+// This does NOT simulate head turning - that comes from the camera itself:
+//   - no headset: put URP's FreeCamera on the preview camera and point the screen's
+//     playerHead at it, then just move the mouse to look around (see Setup Booth Preview)
+//   - with a headset: point playerHead at the real XR camera; nothing else needed
+// Either way this component only supplies the numbers, matching what the real
+// GameManager will call in BackBone (SetHits / SetTimeRemaining).
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Pizzala.UI;
@@ -12,8 +16,6 @@ namespace Pizzala.DevTools
     public class BoothScreenDemo : MonoBehaviour
     {
         public BoothStatusScreen screen;
-        public Transform fakeHead;      // assign this as the screen's playerHead for the demo
-        public float turnSpeed = 90f;   // deg/sec
         public float demoRoundSeconds = 120f;
 
         int hits;
@@ -29,14 +31,7 @@ namespace Pizzala.DevTools
         void Update()
         {
             var kb = Keyboard.current;
-            if (kb == null || fakeHead == null) return;
-
-            float turn = 0f;
-            if (kb.aKey.isPressed || kb.leftArrowKey.isPressed) turn -= 1f;
-            if (kb.dKey.isPressed || kb.rightArrowKey.isPressed) turn += 1f;
-            fakeHead.Rotate(0f, turn * turnSpeed * Time.deltaTime, 0f);
-
-            if (kb.spaceKey.wasPressedThisFrame) hits++;
+            if (kb != null && kb.spaceKey.wasPressedThisFrame) hits++;
 
             timeLeft = Mathf.Max(0f, timeLeft - Time.deltaTime);
             Push();
