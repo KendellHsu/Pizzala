@@ -85,7 +85,7 @@ Project 視窗 `Assets/` 右鍵 → **Create → Folder**,命名 `Prefabs`。之
    | Box Collider | Size 約 (0.3, 0.04, 0.3),中心對齊餅面;若模型比例差太多,調整根物件 Scale 讓披薩實際約 0.3m 寬 |
    | XR Grab Interactable | Movement Type = **Velocity Tracking**;**Throw On Detach 打勾**;Throw Velocity Scale = **1.5**;Smooth Position 建議打勾 |
    | `PizzaProjectile` | Flavor = Margherita(基底隨便設) |
-3. 把 `PZ_Pizza_Base` 從 Hierarchy 拖進 `Assets/Prefabs/` 存成 Prefab,場景裡的先留著測試用
+3. 把 `PZ_Pizza_Base` 從 Hierarchy 拖進 `Assets/Prefabs/Pizza/` 存成 Prefab,場景裡的先留著測試用
 
 ### 5-2. 口味 Variant
 1. Project 視窗右鍵 `PZ_Pizza_Base` → **Create → Prefab Variant**,做三個:
@@ -105,7 +105,7 @@ Project 視窗 `Assets/` 右鍵 → **Create → Folder**,命名 `Prefabs`。之
 2. **移除**元件:XR Grab Interactable、`PizzaProjectile`
 3. **加上**:`ThrowbackProjectile`(無欄位)
 4. Collider 的 Is Trigger 保持**不勾**;Rigidbody 保留
-5. 拖進 `Assets/Prefabs/` 存成新 Prefab,場景裡的刪掉
+5. 拖進 `Assets/Prefabs/Pizza/` 存成新 Prefab,場景裡的刪掉
 
 ✋ **驗收點 6**:Prefab 上只有 Rigidbody + Collider + ThrowbackProjectile。
 
@@ -224,7 +224,7 @@ Project 視窗 `Assets/` 右鍵 → **Create → Folder**,命名 `Prefabs`。之
    - Rect Transform:Width **200**、Height **240**
 2. 底下 UI → Image 改名 `Frame`:stretch 全填滿,顏色白色(拍立得框,美術之後換圖)
 3. Frame 底下 UI → **Raw Image** 改名 `Photo`:Width 180、Height 180,置於框內偏上(Pos Y 約 +20)
-4. 把 PZ_PhotoEntry 拖進 `Assets/Prefabs/` 存 Prefab,**刪掉暫時 Canvas**
+4. 把 PZ_PhotoEntry 拖進 `Assets/Prefabs/UI/` 存 Prefab,**刪掉暫時 Canvas**
 
 ### 12-2. PZ_ResultsCanvas
 1. Hierarchy 右鍵 → **UI → Canvas**,改名 `PZ_ResultsCanvas`
@@ -242,7 +242,7 @@ Project 視窗 `Assets/` 右鍵 → **Create → Folder**,命名 `Prefabs`。之
    | Stats Text | StatsText |
    | Experimental Panel | ExperimentalPanel |
    | Photo Grid | PhotoGrid |
-   | Photo Entry Prefab | Assets/Prefabs/PZ_PhotoEntry |
+   | Photo Entry Prefab | Assets/Prefabs/UI/PZ_PhotoEntry |
    | Caption Text | CaptionText |
 
 ✋ **驗收點 12**:Play 時兩個 Panel 自動隱藏(Start 會關)。
@@ -268,7 +268,7 @@ Project 視窗 `Assets/` 右鍵 → **Create → Folder**,命名 `Prefabs`。之
 | Face Splat Overlay | PZ_FaceSplatCanvas |
 | Results Screen | PZ_ResultsCanvas |
 | Activity Tracker | Systems 自己(拖 Systems 物件即可) |
-| Throwback Prefab | Assets/Prefabs/PZ_ThrowbackPizza |
+| Throwback Prefab | Assets/Prefabs/Pizza/PZ_ThrowbackPizza |
 | Player Dirty Face Textures | 留空(等美術) |
 
 同場補完:
