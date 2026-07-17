@@ -378,7 +378,7 @@ MonoBehaviour:
   orbitRadius: 1.25
   height: 0.34
   tiltUpDegrees: 0
-  angleOffsetDegrees: 25
+  angleOffsetDegrees: 40
   deadzoneDegrees: 25
   followDelaySeconds: 1.75
   followSpeed: 3
