@@ -305,7 +305,7 @@ RectTransform:
   m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1456229617849180057}
+  - {fileID: 2405919575243048232}
   - {fileID: 1179209255383673065}
   - {fileID: 5742102628647627639}
   m_Father: {fileID: 0}
@@ -313,7 +313,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 360, y: 230}
+  m_SizeDelta: {x: 624, y: 384}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1979826696278381542
 Canvas:
@@ -375,14 +375,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.UI.BoothStatusScreen
   playerHead: {fileID: 0}
   boothCenter: {fileID: 0}
-  orbitRadius: 0.7
-  height: 1.1
-  tiltUpDegrees: 15
+  orbitRadius: 1.25
+  height: 0.34
+  tiltUpDegrees: 0
+  angleOffsetDegrees: 25
   deadzoneDegrees: 25
+  followDelaySeconds: 1.75
   followSpeed: 3
+  settleDegrees: 1.5
   hitsText: {fileID: 5373668683509713641}
   timeText: {fileID: 9178089434507606137}
---- !u!1 &6757075536576037305
+--- !u!1 &4875487084166176391
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -390,9 +393,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1456229617849180057}
-  - component: {fileID: 5285319765482287049}
-  - component: {fileID: 5866473437904444001}
+  - component: {fileID: 2405919575243048232}
+  - component: {fileID: 4794968003181381070}
+  - component: {fileID: 5150960023244198683}
   m_Layer: 5
   m_Name: BackPanel
   m_TagString: Untagged
@@ -400,13 +403,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1456229617849180057
+--- !u!224 &2405919575243048232
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6757075536576037305}
+  m_GameObject: {fileID: 4875487084166176391}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -419,21 +422,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &5285319765482287049
+--- !u!222 &4794968003181381070
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6757075536576037305}
+  m_GameObject: {fileID: 4875487084166176391}
   m_CullTransparentMesh: 1
---- !u!114 &5866473437904444001
+--- !u!114 &5150960023244198683
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6757075536576037305}
+  m_GameObject: {fileID: 4875487084166176391}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
