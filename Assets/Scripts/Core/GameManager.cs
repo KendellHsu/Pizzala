@@ -302,6 +302,23 @@ namespace Pizzala.Core
             StartCoroutine(ThrowbackRoutine(customer, flavor, prefab));
         }
 
+        // Dev 測試專用:略過 enableThrowback/RoundActive,直接跑真正的丟回流程
+        // (預警閃紅 → 出手動畫 → throwbackReleaseDelay → 發射),方便單獨對時間軸。
+        // 由 DevTools/ThrowAnimTestTrigger 呼叫。
+        public void DebugTriggerThrowback(CustomerController customer, PizzaFlavor flavor)
+        {
+            if (customer == null) { Debug.LogWarning("[GameManager] DebugTriggerThrowback: customer 是 null"); return; }
+            if (head == null) { Debug.LogWarning("[GameManager] DebugTriggerThrowback: head 未設定,且場上找不到 Camera.main"); return; }
+            var prefab = PickThrowbackPrefab(flavor);
+            if (prefab == null)
+            {
+                Debug.LogWarning($"[GameManager] DebugTriggerThrowback: 口味 {flavor} 沒有對應的丟回 Prefab"
+                                + "(throwbackPrefabsByFlavor 該格是空的,且後備 throwbackPrefab 也沒填)");
+                return;
+            }
+            StartCoroutine(ThrowbackRoutine(customer, flavor, prefab));
+        }
+
         GameObject PickThrowbackPrefab(PizzaFlavor flavor)
         {
             if (throwbackPrefabsByFlavor != null && (int)flavor < throwbackPrefabsByFlavor.Length
@@ -320,6 +337,14 @@ namespace Pizzala.Core
 
             if (customer == null) yield break; // 預警期間客人剛好離場(動態生成的會despawn)
 
+            // 先起手播出手動畫,等揮臂到放手那一刻(throwbackReleaseDelay)披薩才真正離手,
+            // 讓披薩飛出的時機對上動作。延遲期間 IsThrowingBack 維持,客人定住面向玩家。
+            customer.PlayThrow();
+            if (tuning.throwbackReleaseDelay > 0f)
+                yield return new WaitForSeconds(tuning.throwbackReleaseDelay);
+            if (customer == null) yield break; // 延遲期間客人剛好離場
+
+            // 放手點取延遲後的最新手部位置(客人在起手期間可能轉身面向玩家)
             Vector3 origin = customer.throwOrigin != null
                              ? customer.throwOrigin.position
                              : customer.transform.position + Vector3.up * 1.4f;

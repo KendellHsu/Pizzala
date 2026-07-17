@@ -1,32 +1,33 @@
 // ─────────────────────────────────────────────────────────────
-// CustomerController.cs — 客人狀態機:等餐 → 開心 / 生氣(+丟回)
+// CustomerController.cs — 客人狀態機:點餐前 → 等餐 → 拿到(滿意) / 生氣(+丟回)
 // 掛載:客人 Prefab 根物件。
 // Inspector:
 //   customerId    — 場上每個客人給不同編號(0,1,2...)
 //   sector        — 這個客人在玩家的左/中/右(對應方位統計)
-//   faceRenderer  — 舊表情 Quad(備援用,模型不在時才會被換貼圖)
-//   faceNormal/Happy/Angry/Dirty — 四張「整身貼圖」(texture_0 的表情
-//                   變體,美術組產出);表情=整張角色貼圖直接換
-//   flavorIcon    — 頭上口味圖示的 SpriteRenderer
+//   flavorIcon    — 頭上口味圖示的 SpriteRenderer(點餐後才顯示)
 //   flavorSprites — 口味圖示陣列,順序對應 PizzaFlavor 列舉
 //                   (0=Margherita 1=Pepperoni 2=CosmicPinkMarshmallow)
 //   faceAnchor    — 臉部位置的空物件(截圖相機對準用)
 //   throwOrigin   — 丟回披薩的出發點(手或胸前的空物件)
 //   requiredThrowType — 進階玩法:要求特定投擲方式,Unknown=不限
 //   canWander     — 等餐時是否遊走(情緒加速機制),關掉=站樁
-//   idle/walkAnimatorController — 站立/走路的 Animator Controller,
-//                   移動時切換;留空 walk = 不切動畫(照樣會滑動)
-// 情緒加速:等餐時間切三段(耐心→不耐煩→暴躁),越久遊走越快,
+//   idle/walk/throwAnimatorController — 站立/走路/丟回的 Animator Controller,
+//                   對應狀態切換;留空則該狀態不換動畫
+// 情緒:等餐耐心切三段(耐心→不耐煩→暴躁),越久遊走越快;
+//   剩餘耐心改由頭上倒數圈(FlavorCountDown)呈現,不再換整身表情貼圖。
 // 門檻與速度由 GameManager 從 ThrowTuning 推入(ApplyTuning)。
 // ─────────────────────────────────────────────────────────────
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using Pizzala.Data;
 using Pizzala.Throwing;
 
 namespace Pizzala.Customers
 {
-    public enum CustomerState { Idle, Waiting, Happy, Angry }
+    // 客人生命週期(僅內部/除錯用;菜單顯示看 HasActiveOrder,不看這個):
+    //   PreOrder 點餐前(無菜單) → Waiting 等餐 → Served 拿到滿意 / Angry 超時或被砸
+    public enum CustomerState { PreOrder, Waiting, Served, Angry }
 
     // 等餐情緒三段:耐心(站著)→ 不耐煩(慢速遊走)→ 暴躁(快速遊走)
     public enum WaitMood { Patient, Impatient, Urgent }
@@ -37,13 +38,13 @@ namespace Pizzala.Customers
         public int customerId;
         public TargetSector sector;
 
-        [Header("表情(換貼圖)")]
-        public Renderer faceRenderer;
-        public Texture faceNormal, faceHappy, faceAngry, faceDirty;
-
         [Header("訂單顯示")]
         public SpriteRenderer flavorIcon;
         public Sprite[] flavorSprites; // 順序 = PizzaFlavor 列舉順序
+
+        [Tooltip("頭上耐心倒數圈:UI Image(Image Type=Filled、Fill Method=Vertical、Origin=Bottom)," +
+                 "fillAmount 隨剩餘耐心從 1 降到 0(水位下降)。留空則不顯示倒數")]
+        public Image flavorCountDown;
 
         [Header("定位點")]
         public Transform faceAnchor;
@@ -59,7 +60,10 @@ namespace Pizzala.Customers
         public RuntimeAnimatorController idleAnimatorController;
         public RuntimeAnimatorController walkAnimatorController;
 
-        public CustomerState State { get; private set; } = CustomerState.Idle;
+        [Tooltip("丟回披薩時的出手動畫控制器;留空=丟回時不換動畫")]
+        public RuntimeAnimatorController throwAnimatorController;
+
+        public CustomerState State { get; private set; } = CustomerState.PreOrder;
         public WaitMood Mood { get; private set; } = WaitMood.Patient;
         public bool HasActiveOrder { get; private set; }
         public PizzaFlavor CurrentOrder { get; private set; }
@@ -85,15 +89,17 @@ namespace Pizzala.Customers
         float pauseMinSeconds = 1f;
         float pauseMaxSeconds = 2.5f;
         float pauseUntil; // 停頓到這個時間點才繼續走
+        float walkAnimBaseSpeed = 0.5f; // 走路 clip 播 1x 時對應的移動速度 m/s;移動越快動畫越快
+        float orderPatience;            // 目前訂單的總耐心秒數,用來算倒數圈比例
 
         Transform lookTarget;   // 沒在走路時面向這裡(玩家頭部)
         Animator animator;
         Renderer[] modelRenderers; // 模型本體(士兵 SkinnedMesh),丟回預警閃紅用
         Vector3 wanderTarget;
         bool isWalking;
+        bool isThrowingAnim; // 播丟回出手動畫中,期間鎖住 idle/walk 切換,不被遊走狀態機搶回控制器
 
         Coroutine patienceRoutine;
-        Coroutine faceResetRoutine;
 
         public event System.Action<CustomerController> OnOrderTimeout;
         public event System.Action<CustomerController, bool> OnOrderResolved; // bool = 是否滿意
@@ -108,8 +114,8 @@ namespace Pizzala.Customers
 
         void Start()
         {
-            SetFace(faceNormal);
             if (flavorIcon != null) flavorIcon.enabled = false;
+            if (flavorCountDown != null) flavorCountDown.enabled = false;
             HomePosition = transform.position;
             wanderTarget = HomePosition;
         }
@@ -127,6 +133,7 @@ namespace Pizzala.Customers
                 pauseChance = tuning.customerWanderPauseChance;
                 pauseMinSeconds = tuning.customerWanderPauseMinSeconds;
                 pauseMaxSeconds = tuning.customerWanderPauseMaxSeconds;
+                walkAnimBaseSpeed = tuning.customerWalkAnimBaseSpeed;
             }
             lookTarget = look;
         }
@@ -134,6 +141,16 @@ namespace Pizzala.Customers
         void Update()
         {
             UpdateWander();
+            UpdateCountdown();
+        }
+
+        // 頭上耐心倒數圈:fillAmount 隨剩餘耐心從 1 掉到 0(水位下降)。
+        // Mood 三段變速本來就跟這條同一個時鐘(elapsed / OrderStartTime),所以圈與速度天然同步。
+        void UpdateCountdown()
+        {
+            if (flavorCountDown == null || !HasActiveOrder || orderPatience <= 0f) return;
+            flavorCountDown.fillAmount =
+                Mathf.Clamp01(1f - (Time.time - OrderStartTime) / orderPatience);
         }
 
         void UpdateWander()
@@ -186,6 +203,9 @@ namespace Pizzala.Customers
                     transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 8f);
 
             SetWalking(true);
+            // 移動越快走路動畫播越快(不耐煩→暴躁),避免快走時腳步打滑
+            if (animator != null && !isThrowingAnim)
+                animator.speed = Mathf.Max(0.1f, speed / Mathf.Max(walkAnimBaseSpeed, 0.01f));
         }
 
         void FaceLookTarget()
@@ -200,11 +220,43 @@ namespace Pizzala.Customers
 
         void SetWalking(bool walking)
         {
+            if (isThrowingAnim) return; // 出手動畫播放中,別搶回 idle/walk 控制器
             if (walking == isWalking) return;
             isWalking = walking;
             if (animator == null) return;
+            if (!walking) animator.speed = 1f; // 回到站立:動畫用正常速度
             var target = walking ? walkAnimatorController : idleAnimatorController;
             if (target != null) animator.runtimeAnimatorController = target;
+        }
+
+        // 丟回披薩的出手動畫:切到 throw 控制器播一次(長度自動取 clip 長),
+        // 播完切回 idle。播放期間 isThrowingAnim 鎖住 SetWalking。
+        // 由 GameManager 在丟回發射的瞬間呼叫。
+        public void PlayThrow()
+        {
+            if (throwAnimatorController == null || animator == null) return;
+            StartCoroutine(ThrowAnimRoutine());
+        }
+
+        IEnumerator ThrowAnimRoutine()
+        {
+            isThrowingAnim = true;
+            isWalking = false;
+            animator.speed = 1f; // 出手動畫用正常速度,不受走路變速影響
+            animator.runtimeAnimatorController = throwAnimatorController;
+            yield return null; // 等 animator 進到新狀態,下一幀才讀得到 clip 長度
+
+            float len = 1f;
+            if (animator.runtimeAnimatorController == throwAnimatorController)
+            {
+                var info = animator.GetCurrentAnimatorStateInfo(0);
+                if (info.length > 0.01f) len = info.length;
+            }
+            yield return new WaitForSeconds(len);
+
+            isThrowingAnim = false;
+            if (animator != null)
+                animator.runtimeAnimatorController = idleAnimatorController; // 收回 idle,下一幀 SetWalking 重新評估
         }
 
         // 純函式,方便不進 Play Mode 驗證門檻
@@ -220,12 +272,19 @@ namespace Pizzala.Customers
             CurrentOrder = flavor;
             HasActiveOrder = true;
             OrderStartTime = Time.time;
+            orderPatience = patienceSeconds;
             State = CustomerState.Waiting;
 
             if (flavorIcon != null && flavorSprites != null && (int)flavor < flavorSprites.Length)
             {
                 flavorIcon.sprite = flavorSprites[(int)flavor];
                 flavorIcon.enabled = true;
+            }
+
+            if (flavorCountDown != null)
+            {
+                flavorCountDown.fillAmount = 1f; // 滿水位起跳
+                flavorCountDown.enabled = true;
             }
 
             if (patienceRoutine != null) StopCoroutine(patienceRoutine);
@@ -237,7 +296,7 @@ namespace Pizzala.Customers
             yield return new WaitForSeconds(seconds);
             if (!HasActiveOrder) yield break;
             ClearOrder();
-            SetMood(CustomerState.Angry);
+            State = CustomerState.Angry; // 超時 → 生氣(耐心圈已歸零;後續由 GameManager 決定丟回/離場)
             OnOrderTimeout?.Invoke(this);
         }
 
@@ -245,7 +304,7 @@ namespace Pizzala.Customers
         public void ResolveOrder(bool satisfied)
         {
             ClearOrder();
-            SetMood(satisfied ? CustomerState.Happy : CustomerState.Angry);
+            State = satisfied ? CustomerState.Served : CustomerState.Angry;
             OnOrderResolved?.Invoke(this, satisfied);
         }
 
@@ -254,53 +313,18 @@ namespace Pizzala.Customers
             HasActiveOrder = false;
             if (patienceRoutine != null) { StopCoroutine(patienceRoutine); patienceRoutine = null; }
             if (flavorIcon != null) flavorIcon.enabled = false;
+            if (flavorCountDown != null) flavorCountDown.enabled = false;
         }
 
+        // 被披薩砸到(臉/身體):標記髒污。情緒改由倒數圈呈現,不再換表情貼圖;
+        // 丟回與否由 GameManager 決定(砸臉機率丟回、身體只噴醬)。
         public void GetDirty()
         {
             IsDirty = true;
-            SetMood(CustomerState.Angry);
-        }
-
-        void SetMood(CustomerState mood)
-        {
-            State = mood;
-            SetFace(mood == CustomerState.Happy ? faceHappy
-                  : mood == CustomerState.Angry ? (IsDirty ? faceDirty : faceAngry)
-                  : faceNormal);
-
-            if (faceResetRoutine != null) StopCoroutine(faceResetRoutine);
-            faceResetRoutine = StartCoroutine(ResetFaceLater(2.5f));
-        }
-
-        IEnumerator ResetFaceLater(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            State = CustomerState.Idle;
-            SetFace(IsDirty ? faceDirty : faceNormal); // 髒臉是永久的,直到回合結束
-        }
-
-        // 表情 = 換掉整張角色貼圖(texture_0 的表情變體),
-        // 直接換士兵模型材質的主貼圖;沒有模型才退回舊的表情 Quad。
-        void SetFace(Texture tex)
-        {
-            if (tex == null) return;
-
-            if (modelRenderers != null && modelRenderers.Length > 0)
-            {
-                foreach (var r in modelRenderers)
-                    foreach (var m in r.materials)
-                        m.mainTexture = tex;
-                return;
-            }
-
-            if (faceRenderer != null)
-                faceRenderer.material.mainTexture = tex;
         }
 
         // 丟回預警:身體閃紅,結束後由 GameManager 發射投射物。
-        // 指定 bodyRenderer 就閃它;沒指定就閃模型本體(SkinnedMesh),
-        // 再沒有才 fallback 到 faceRenderer(舊的表情 Quad,可能不可見)。
+        // 指定 bodyRenderer 就閃它;沒指定就閃模型本體(SkinnedMesh)。
         public IEnumerator Telegraph(float seconds, Renderer bodyRenderer)
         {
             Renderer[] targets;
@@ -308,8 +332,6 @@ namespace Pizzala.Customers
                 targets = new[] { bodyRenderer };
             else if (modelRenderers != null && modelRenderers.Length > 0)
                 targets = modelRenderers;
-            else if (faceRenderer != null)
-                targets = new Renderer[] { faceRenderer };
             else
             {
                 yield return new WaitForSeconds(seconds);

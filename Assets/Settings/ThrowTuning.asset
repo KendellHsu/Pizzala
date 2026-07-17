@@ -35,6 +35,7 @@ MonoBehaviour:
   customerLeaveDelay: 2.5
   telegraphSeconds: 0.8
   throwbackSpeed: 5
+  throwbackReleaseDelay: 0.65
   roundDurationSeconds: 180
   orderIntervalSeconds: 6
   frisbeeSpinToFly: 6

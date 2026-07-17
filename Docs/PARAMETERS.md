@@ -41,6 +41,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `customerWanderPauseChance` | 0.7 | 走到遊走目標點後停頓的機率（0~1） |
 | `customerWanderPauseMinSeconds` | 1 | 每次停頓的秒數下限 |
 | `customerWanderPauseMaxSeconds` | 2.5 | 每次停頓的秒數上限 |
+| `customerWalkAnimBaseSpeed` | 0.5 | 走路動畫播 1x 時對應的移動速度（m/s）；移動越快動畫播越快，避免快走腳步打滑。調小＝同速下動畫更快 |
 
 ### 客人動態生成（CustomerSpawner 讀取）
 
@@ -58,6 +59,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 |---|---|---|
 | `telegraphSeconds` | 0.8 | 丟回前的預警時間（秒），給玩家反應窗口 |
 | `throwbackSpeed` | 5 | 丟回披薩的飛行速度 m/s（越慢越好躲） |
+| `throwbackReleaseDelay` | 0.3 | 出手動畫開始後等幾秒披薩才真正離手；調到動畫揮臂放手那一刻，讓披薩飛出時機對上動作 |
 
 ### 回合設定
 
@@ -237,6 +239,10 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `customerId` | — | 客人編號 |
 | `requiredThrowType` | Unknown | 進階玩法：指定投擲手勢；Unknown = 不限 |
 | `canWander` | true | 是否允許情緒遊走 |
+| `flavorCountDown` | （倒數圈 Image） | 頭上耐心倒數圈，UI Image（Filled／Vertical／Bottom）；`fillAmount` 隨剩餘耐心 1→0（水位下降）。留空 = 不顯示 |
+| `idleAnimatorController` | （站立控制器） | 站立動畫 Animator Controller；留空 = 不切動畫 |
+| `walkAnimatorController` | （走路控制器） | 走動時切換的 Animator Controller；留空 = 走動不換動畫 |
+| `throwAnimatorController` | （丟回控制器） | 丟回披薩出手時切換的 Animator Controller；留空 = 丟回不換動畫 |
 
 ---
 
@@ -246,6 +252,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 |---|---|---|---|
 | [ThrowbackTestTrigger.cs](../Assets/Scripts/DevTools/ThrowbackTestTrigger.cs) | `speed` | 6 | 測試丟回的飛行速度 |
 | [CustomerOrderTestTrigger.cs](../Assets/Scripts/DevTools/CustomerOrderTestTrigger.cs) | `patienceSeconds` | 8 | 測試訂單的耐心秒數 |
+| [ThrowAnimTestTrigger.cs](../Assets/Scripts/DevTools/ThrowAnimTestTrigger.cs) | `flavor` | Margherita | 按 T 直接觸發真實丟回流程（預警→出手動畫→throwbackReleaseDelay→發射），對動畫/延遲時間軸用 |
 
 ---
 
@@ -257,6 +264,10 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-15 | DirtManager 新增 `attachToNearestBone`、`characterDecalDepthScale`（髒污掛骨頭跟動畫、身上投影深度縮放） |
 | 2026-07-15 | FrisbeeEdgeGrab 新增 `alignToController` / `gripRotationEuler`：抓取時盤面對齊控制器、角度可調 |
 | 2026-07-15 | 飛盤手感參數集中進 ThrowTuning（`frisbee*` 8 項）；FrisbeeFlight / FrisbeeEdgeGrab 改讀 `GameManager.Instance.tuning`，元件不再有可調欄位 |
+| 2026-07-17 | CustomerController 新增 `throwAnimatorController`（丟回出手動畫控制器）；補列既有的 `idle/walkAnimatorController`。丟回發射瞬間由 GameManager 呼叫 `PlayThrow()` 播放，播完自動切回 idle。已接到 PZ_Customer(soldier throwing)、PZ_Customer_UncleB(uncleB throwing) 與 UncleBCustomerBuilder |
+| 2026-07-17 | ThrowTuning 新增 `throwbackReleaseDelay`（預設 0.3s）：丟回時先播出手動畫，等這個秒數披薩才真正離手發射，用來對齊動畫揮臂放手的時機 |
+| 2026-07-17 | CustomerController 移除換貼圖表情機制：刪除序列化欄位 `faceRenderer`、`faceNormal/faceHappy/faceAngry/faceDirty`（情緒改由頭上倒數圈呈現）。狀態列舉更名為三相位語意 `CustomerState { PreOrder, Waiting, Served, Angry }`（原 Idle→PreOrder、Happy→Served）。`GetDirty()` 只標記髒污不再換臉；丟回預警閃紅（`Telegraph`）保留 |
+| 2026-07-17 | CustomerController 新增 `flavorCountDown`（頭上耐心倒數圈，UI Image 靠 `fillAmount` 呈現剩餘耐心水位）；接單顯示、耐心歸零/解決時隱藏。ThrowTuning 新增 `customerWalkAnimBaseSpeed`（走路動畫隨移動速度變速，越快越急）|
 | 2026-07-15 | 飛盤飛行改為 Hummel/Hubbard 氣動模型：自旋改讀手腕實際角速度並提高剛體 maxAngularVelocity，升力由自旋力道與純度 gate；ThrowTuning 飛盤欄位改版（移除 spinPerSpeed/maxSpin/stabilizeStrength/liftPerSpeed，新增 spinToFly/spinRatioThreshold/maxAngularVelocity/aeroScale/area/CL0/CLA/CD0/CDA/alpha0Deg） |
 | 2026-07-15 | 加入完整力矩模型（俯仰 CM0/CMA/CMq、滾轉 CRR/CRP、自旋衰減 CNR + 直徑 d）產生 turn & fade；披薩 Prefab Rigidbody 調整為 Mass 0.175、Angular Damping 0、Interpolate |
 | 2026-07-15 | 加入 `frisbeeWobbleDamping` 章動阻尼（隨自旋縮放）抑制丟出後的晃動 |

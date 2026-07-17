@@ -64,6 +64,9 @@ namespace Pizzala.Throwing
         [Tooltip("每次停頓的秒數上限")]
         public float customerWanderPauseMaxSeconds = 2.5f;
 
+        [Tooltip("走路動畫播 1x 時對應的移動速度 m/s;移動越快動畫播越快(避免快走腳步打滑)。調小=同速下動畫更快")]
+        public float customerWalkAnimBaseSpeed = 0.5f;
+
         [Header("客人動態生成(CustomerSpawner 讀取)")]
         [Tooltip("回合開始時 Spawner 先補幾個客人(場景預擺的不算)")]
         public int initialSpawnCount = 2;
@@ -85,6 +88,9 @@ namespace Pizzala.Throwing
 
         [Tooltip("丟回披薩的飛行速度 m/s(越慢越好躲)")]
         public float throwbackSpeed = 5f;
+
+        [Tooltip("出手動畫開始後,等幾秒披薩才真正離手發射;調到動畫揮臂放手那一刻,讓披薩飛出的時機對上動作")]
+        public float throwbackReleaseDelay = 0.3f;
 
         [Header("回合設定")]
         public float roundDurationSeconds = 180f;
