@@ -44,7 +44,8 @@ namespace Pizzala.Core
         public bool enforceThrowType = false;
 
         [Header("回合啟動")]
-        public bool autoStart = true;
+        [Tooltip("關=等開始畫面按 B 才開始(正式流程);開=延遲後自動開始,方便沒有開始畫面時測試")]
+        public bool autoStart = false;
         public float autoStartDelay = 5f;
 
         [Header("參數資產")]
@@ -72,6 +73,13 @@ namespace Pizzala.Core
         public Texture2D[] playerDirtyFaceTextures;
 
         public bool RoundActive { get; private set; }
+        public bool IsPaused { get; private set; }
+
+        // The one gate for "may the player throw right now". Time.timeScale = 0 freezes the
+        // pizza's flight but NOT the XR release event, so without an explicit check a throw
+        // let go while paused would still be recorded and would launch on resume. Same hole
+        // let players keep throwing after the round ended.
+        public bool CanThrow => RoundActive && !IsPaused;
 
         // Live round state for the booth screen. The session's own hit count isn't usable
         // here - SessionLogger only tallies it in BuildSummary() once the round is over.
@@ -147,6 +155,32 @@ namespace Pizzala.Core
             if (activityTracker != null) activityTracker.Begin();
             RoundActive = true;
             StartCoroutine(RoundLoop());
+        }
+
+        // Freezing time is what actually pauses the game: the countdown (Time.time), the
+        // customers (Time.deltaTime / WaitForSeconds) and pizzas in flight (physics) all
+        // stop on their own. Anything that must keep living through a pause - the pause
+        // menu's own follow and its 3-2-1 - has to use unscaled time.
+        public void PauseRound()
+        {
+            if (!RoundActive || IsPaused) return;
+            IsPaused = true;
+            Time.timeScale = 0f;
+        }
+
+        public void ResumeRound()
+        {
+            if (!IsPaused) return;
+            IsPaused = false;
+            Time.timeScale = 1f;
+        }
+
+        // timeScale is global and survives leaving Play mode in the Editor - a round that
+        // ends (or a scene that unloads) while paused would otherwise leave the whole
+        // Editor frozen until you noticed.
+        void OnDisable()
+        {
+            if (IsPaused) Time.timeScale = 1f;
         }
 
         IEnumerator RoundLoop()
@@ -404,6 +438,7 @@ namespace Pizzala.Core
         {
             if (!RoundActive) return;
             RoundActive = false;
+            ResumeRound(); // ending while paused would leave timeScale at 0 and freeze the results screen
             StopAllCoroutines();
             if (activityTracker != null) activityTracker.End();
 

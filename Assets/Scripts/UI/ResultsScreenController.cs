@@ -88,6 +88,7 @@ namespace Pizzala.UI
         int pageCount;
 
         public bool HasNextPage => currentSession != null && currentPage + 1 < pageCount;
+        public bool HasPrevPage => currentSession != null && currentPage > 0;
 
         void Start()
         {
@@ -120,13 +121,19 @@ namespace Pizzala.UI
             ShowPage(0);
         }
 
-        // Provisional advance - hook this to the real "next page" input (VR button, timed
-        // auto-advance, whatever gets decided) once that's settled; for now the Demo
-        // loader drives it with a key press so pages can be previewed at all.
+        // Driven by GameFlowController off the right thumbstick (and by DemoResultsLoader
+        // from the keyboard). Both no-op at the ends rather than wrapping around - the
+        // pages are a report to read through, not a carousel.
         public void NextPage()
         {
             if (!HasNextPage) return;
             ShowPage(currentPage + 1);
+        }
+
+        public void PrevPage()
+        {
+            if (!HasPrevPage) return;
+            ShowPage(currentPage - 1);
         }
 
         void ShowPage(int page)
