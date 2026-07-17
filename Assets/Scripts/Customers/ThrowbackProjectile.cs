@@ -93,6 +93,12 @@ namespace Pizzala.Customers
             if (resolved || Time.time - launchTime < 0.1f) return;
 
             bool hitPlayer = col.GetComponentInParent<PlayerHeadHitbox>() != null;
+
+            // 只認「玩家的頭」(命中)或實心環境(落地)。其他 trigger 區(撿取禁區、別的
+            // 客人 hit zone…)一律略過,否則丟回會在飛向玩家的半路被玩家周圍的 trigger 提前
+            // 判定掉,永遠打不到臉。玩家頭若是 trigger,hitPlayer=true 時這條不會擋。
+            if (!hitPlayer && col.isTrigger) return;
+
             resolved = true;
 
             var spray = GetComponent<Pizzala.Dirt.SauceSpray>();

@@ -89,9 +89,6 @@ PrefabInstance:
       addedObject: {fileID: 4989463337191560}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 861a668c7935ab1439295c88a6584c6d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3333333333333333001}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 861a668c7935ab1439295c88a6584c6d, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 3333333333333333002}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 861a668c7935ab1439295c88a6584c6d, type: 3}
       insertIndex: -1
@@ -159,9 +156,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2545735174419685507}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable
+  m_Script: {fileID: 11500000, guid: 959a3ae15ae220049aa32c7c26ae2327, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Throwing.FrisbeeGrabInteractable
   m_InteractionManager: {fileID: 0}
   m_Colliders: []
   m_InteractionLayers:
@@ -411,18 +408,6 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 0
---- !u!114 &3333333333333333001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2545735174419685507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fb28260fdf958240bf775007fbc0ae7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3333333333333333002
 MonoBehaviour:
   m_ObjectHideFlags: 0

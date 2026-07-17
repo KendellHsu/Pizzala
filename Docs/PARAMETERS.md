@@ -286,5 +286,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-15 | 加入 `frisbeeWobbleDamping` 章動阻尼（隨自旋縮放）抑制丟出後的晃動 |
 | 2026-07-16 | 針對 VR 出手速度偏慢調整飛盤預設：`frisbeeSpinToFly` 10→6、`frisbeeSpinRatioThreshold` 0.8→0.5、`frisbeeAeroScale` 1→3（升力更易觸發、滑翔與迴旋更明顯）；同步 ThrowTuning.asset |
 | 2026-07-16 | 修正邊緣抓取失效：`selectEntered` 監聽晚於 XRGeneralGrabTransformer 快取 attach，改用子類別 `FrisbeeGrabInteractable`（覆寫 `InitializeDynamicAttachPose`，在快取前設定盤緣握點+對齊）；三顆 prefab 的 XRGrabInteractable 換成它，移除 FrisbeeEdgeGrab |
+| 2026-07-18 | 修 bug：丟回披薩（`PZ_ThrowbackPizza_*`）抓不到邊緣 — 三顆的 XRGrabInteractable 換成 `FrisbeeGrabInteractable` 並開啟 Use Dynamic Attach |
+| 2026-07-18 | 修 bug：丟回披薩被玩家周圍的撿取禁區（PickupExclusionZone）trigger 提前判定，打不到玩家頭 → 玩家臉特效不觸發。`ThrowbackProjectile` 改為只認玩家頭(命中)或實心環境(落地)，略過其他 trigger 區 |
 | 2026-07-16 | DirtManager 新增 `paintOnCharacters`、`paintSize`、`paintWrapDepth`：砸中客人改用 texture-space 染色（SaucePaintable 把醬料畫進角色貼圖 UV 空間，完全跟著蒙皮動畫），Decal 掛骨頭降為後備路徑 |
 | 2026-07-16 | CustomerSpawner 新增 `customerPrefabs`（客人 Prefab 清單，生成時均勻隨機挑一個，支援多角色混合）；原 `customerPrefab` 保留為備援。搭配新工具 `Tools/Pizzala/Build UncleB Customer Prefab` 產生第二隻角色 UncleB 客人並自動接進生成器 |

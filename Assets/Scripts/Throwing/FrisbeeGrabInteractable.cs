@@ -1,0 +1,72 @@
+// ─────────────────────────────────────────────────────────────
+// FrisbeeGrabInteractable.cs — 會把握點吸附到盤緣的 XR Grab Interactable
+// 掛載:披薩 Prefab 根物件(取代原本的 XRGrabInteractable)。
+//
+// 為什麼是子類別而不是外掛監聽:
+//   XRGeneralGrabTransformer 會在 OnGrab 當下「快取」attach 偏移,之後每幀只用快取。
+//   OnGrab 發生在 selectEntered 事件「之前」,所以用 selectEntered 監聽改 attach 沒用
+//   (改到的是已被快取、沒人再看的 attach)。
+//   InitializeDynamicAttachPose 是 XRI 官方留的擴充點,在快取「之前」執行 → 在這裡把
+//   動態 attach 移到盤緣才會被 transformer 採用。
+//
+// Prefab 需求:Use Dynamic Attach 勾起來(否則不會呼叫本方法)。
+// 手感參數集中在 ThrowTuning 資產,透過 GameManager.Instance.tuning 讀取,Play 中即時生效。
+// ─────────────────────────────────────────────────────────────
+using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using Pizzala.Core;
+
+namespace Pizzala.Throwing
+{
+    public class FrisbeeGrabInteractable : XRGrabInteractable
+    {
+        const float FallbackDiscRadius = 0.15f;
+
+        static ThrowTuning Tuning => GameManager.Instance != null ? GameManager.Instance.tuning : null;
+
+        protected override void InitializeDynamicAttachPose(IXRSelectInteractor interactor, Transform dynamicAttachTransform)
+        {
+            // 先讓 XRI 做預設(依 Match Position/Rotation + Snap 把 attach 放到手的位置)
+            base.InitializeDynamicAttachPose(interactor, dynamicAttachTransform);
+
+            var t = Tuning;
+            float discRadius = (t != null && t.frisbeeDiscRadius > 0f) ? t.frisbeeDiscRadius : AutoRadius();
+            float gripHeight = t != null ? t.frisbeeGripHeight : 0f;
+            bool alignToController = t == null || t.frisbeeAlignToController;
+            Vector3 gripRotationEuler = t != null ? t.frisbeeGripRotationEuler : Vector3.zero;
+
+            // 手(抓取者)目前的 attach 世界座標
+            Transform handAttach = interactor.GetAttachTransform(this);
+            if (handAttach == null) return;
+
+            // 轉進披薩本地座標,壓平到盤面 XZ,取最近盤緣方向
+            Vector3 local = transform.InverseTransformPoint(handAttach.position);
+            Vector3 planar = new Vector3(local.x, 0f, local.z);
+            Vector3 dir = planar.sqrMagnitude > 1e-6f ? planar.normalized : Vector3.forward;
+            Vector3 rimLocal = dir * discRadius + Vector3.up * gripHeight;
+
+            // dynamicAttachTransform 已是 this 的子物件(見 XRI 文件)
+            if (dynamicAttachTransform.parent == transform)
+                dynamicAttachTransform.localPosition = rimLocal;
+            else
+                dynamicAttachTransform.position = transform.TransformPoint(rimLocal);
+
+            // 盤面對齊控制器
+            if (alignToController)
+            {
+                Quaternion offset = Quaternion.Euler(gripRotationEuler);
+                if (dynamicAttachTransform.parent == transform)
+                    dynamicAttachTransform.localRotation = offset;
+                else
+                    dynamicAttachTransform.rotation = transform.rotation * offset;
+            }
+        }
+
+        float AutoRadius()
+        {
+            var box = GetComponent<BoxCollider>();
+            return box != null ? box.size.x * 0.5f : FallbackDiscRadius;
+        }
+    }
+}
