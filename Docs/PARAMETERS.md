@@ -121,8 +121,10 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `throwbackOnTimeout` | false | 訂單超時的客人是否去撿地上 pizza 丟回玩家？撿不到（場上沒可撿的）就直接離場。關 = 超時直接離場 |
 | `enforceFlavor` | true | 是否檢查口味正確 |
 | `enforceThrowType` | false | 是否檢查投擲手勢類型 |
-| `autoStart` | true | 是否自動開始回合 |
+| `autoStart` | false | 關 = 等開始畫面按 B 才開始（正式流程）；開 = 延遲後自動開始，方便沒有開始畫面時測試 |
 | `autoStartDelay` | 5 | 自動開始的延遲（秒） |
+| `bossCommentService` | （空） | Boss 評論服務（Gemini）；只有實驗組會用到，留空則跳過 |
+| `boothScreen` | （空） | 攤位上即時顯示命中數／剩餘時間的螢幕；留空則跳過 |
 
 ---
 
@@ -290,3 +292,4 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-18 | 修 bug：丟回披薩被玩家周圍的撿取禁區（PickupExclusionZone）trigger 提前判定，打不到玩家頭 → 玩家臉特效不觸發。`ThrowbackProjectile` 改為只認玩家頭(命中)或實心環境(落地)，略過其他 trigger 區 |
 | 2026-07-16 | DirtManager 新增 `paintOnCharacters`、`paintSize`、`paintWrapDepth`：砸中客人改用 texture-space 染色（SaucePaintable 把醬料畫進角色貼圖 UV 空間，完全跟著蒙皮動畫），Decal 掛骨頭降為後備路徑 |
 | 2026-07-16 | CustomerSpawner 新增 `customerPrefabs`（客人 Prefab 清單，生成時均勻隨機挑一個，支援多角色混合）；原 `customerPrefab` 保留為備援。搭配新工具 `Tools/Pizzala/Build UncleB Customer Prefab` 產生第二隻角色 UncleB 客人並自動接進生成器 |
+| 2026-07-18 | 合併 partner-mvp 分支：`autoStart` 預設 true→false（改為等開始畫面按 B）；GameManager 新增暫停系統（`IsPaused`/`CanThrow`/`PauseRound()`/`ResumeRound()`，暫停靠 `Time.timeScale = 0`）與新欄位 `bossCommentService`、`boothScreen`（攤位即時命中數／倒數畫面） |
