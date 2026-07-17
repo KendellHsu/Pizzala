@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 513285175b10d2f4fbedc7ea05b22376, type: 2}
     - target: {fileID: 2520638019367460530, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
       propertyPath: throwAnimatorController
-      value: 
+      value:
       objectReference: {fileID: 9100000, guid: b609bf14525a6094b8aa0f81ae83e4ce, type: 2}
     - target: {fileID: 7673911599087104307, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
       propertyPath: m_LocalPosition.x
