@@ -9,7 +9,9 @@ using UnityEngine;
 
 namespace Pizzala.Data
 {
-    public enum ExperimentCondition { Control, Experimental } // 對照組 / 實驗組
+    // Middle appended at the end (not inserted between the other two) so existing
+    // saved sessions' numeric condition values (0/1) don't get reinterpreted.
+    public enum ExperimentCondition { Control, Experimental, Middle } // 對照組 / 實驗組 / 中間組(無 LLM 回饋)
 
     public enum PizzaFlavor { Margherita, Pepperoni, CosmicPinkMarshmallow }
 
@@ -109,6 +111,16 @@ namespace Pizzala.Data
         public int avgHeartRate = -1, maxHeartRate = -1;
     }
 
+    // A captured photo plus when it was taken and what it shows - lets the results
+    // screen display a timestamp/caption under each polaroid without guessing.
+    [Serializable]
+    public class PhotoRecord
+    {
+        public string path;
+        public float gameTime;
+        public string caption = "";
+    }
+
     [Serializable]
     public class SessionData
     {
@@ -121,10 +133,11 @@ namespace Pizzala.Data
         public List<DodgeRecord> dodges = new List<DodgeRecord>();
         public List<SensorSample> sensorTimeline = new List<SensorSample>();
 
-        public List<string> customerFacePhotos = new List<string>();
-        public List<string> environmentPhotos = new List<string>();
-        public List<string> playerFacePhotos = new List<string>();
+        public List<PhotoRecord> customerFacePhotos = new List<PhotoRecord>();
+        public List<PhotoRecord> environmentPhotos = new List<PhotoRecord>();
+        public List<PhotoRecord> playerFacePhotos = new List<PhotoRecord>();
 
         public SessionSummary summary = new SessionSummary();
+        public string bossComment = ""; // LLM-generated note shown to the experimental group, logged for analysis
     }
 }

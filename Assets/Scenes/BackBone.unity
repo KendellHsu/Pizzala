@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 34325301}
   - component: {fileID: 34325300}
   - component: {fileID: 34325299}
+  - component: {fileID: 34325304}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -170,6 +171,8 @@ MonoBehaviour:
   faceSplatOverlay: {fileID: 1926003475}
   resultsScreen: {fileID: 1186990724}
   activityTracker: {fileID: 34325300}
+  bossCommentService: {fileID: 34325304}
+  boothScreen: {fileID: 0}
   throwbackPrefab: {fileID: 2722252330292994515, guid: 822b80b1b7a7e744baf91859aa67ce7a, type: 3}
   throwbackPrefabsByFlavor:
   - {fileID: 2722252330292994515, guid: 822b80b1b7a7e744baf91859aa67ce7a, type: 3}
@@ -290,6 +293,45 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &34325304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34325298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26d6b8b63999ba148901fb0267b76ca9, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.LLM.BossCommentService
+--- !u!1 &79086001 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5012061655601249863, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
+  m_PrefabInstance: {fileID: 7490152644460885923}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &79086003
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79086001}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3e72691c1d9a0ae44a9cdbcd524b1086, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage:
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &183845956
 GameObject:
   m_ObjectHideFlags: 0

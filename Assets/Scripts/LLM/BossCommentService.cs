@@ -1,0 +1,154 @@
+// ─────────────────────────────────────────────────────────────
+// BossCommentService.cs — calls Gemini to write the boss's post-shift note
+// (experiment group only). Attach to the same object as GameManager.
+//
+// API key: read at runtime from Assets/StreamingAssets/gemini_api_key.txt
+// (gitignored - each machine supplies its own, get a free one at
+// aistudio.google.com). Loaded via UnityWebRequest so it also works on
+// Android/Quest builds, not just the Editor/Standalone file system.
+//
+// Network call is async (coroutine) - never blocks EndRound(). If the key
+// is missing or the request fails/times out, GetComment() falls back to a
+// canned comment so the experiment never gets stuck on a blank note.
+// ─────────────────────────────────────────────────────────────
+using System;
+using System.Collections;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using UnityEngine;
+using UnityEngine.Networking;
+using Pizzala.Data;
+
+namespace Pizzala.LLM
+{
+    public class BossCommentService : MonoBehaviour
+    {
+        const string Model = "gemini-flash-latest";
+        const string Endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + Model + ":generateContent";
+        const string ApiKeyFileName = "gemini_api_key.txt";
+        const int TimeoutSeconds = 12;
+
+        // Accuracy is genuinely hard in VR and most real playtests land near 0% - the
+        // note should never mock that number itself. Jokes land on specific incidents
+        // (face hits, mess count) instead, which is why the summary block below leads
+        // with those rather than accuracy.
+        const string PromptTemplate =
+            "You are the boss of a pizza shop. An employee (the player) just finished a shift. " +
+            "Here is tonight's performance data:\n\n{0}\n\n" +
+            "Write a short note the boss leaves for them after the shift, in English, 40-60 words.\n" +
+            "Tone: mostly encouraging, with one or two funny roasts about specific mishaps (like " +
+            "hitting a customer in the face or making a mess) - not about the accuracy number, " +
+            "since accurate throws are genuinely hard and most people miss a lot; that's normal, " +
+            "not a personal failing. End on a positive note that makes them want to come back for " +
+            "another shift. Write it like a real handwritten note, not a bulleted list. " +
+            "Output only the note text, no titles or explanations.";
+
+        string apiKey;
+        bool apiKeyLoadAttempted;
+
+        public void GetComment(SessionSummary summary, Action<string> onComplete)
+        {
+            StartCoroutine(GetCommentRoutine(summary, onComplete));
+        }
+
+        IEnumerator GetCommentRoutine(SessionSummary summary, Action<string> onComplete)
+        {
+            if (!apiKeyLoadAttempted)
+                yield return LoadApiKey();
+
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                Debug.LogWarning("[BossCommentService] No API key found at StreamingAssets/" + ApiKeyFileName + " - using fallback comment.");
+                onComplete?.Invoke(FallbackComment(summary));
+                yield break;
+            }
+
+            string prompt = string.Format(PromptTemplate, BuildStatsBlock(summary));
+            string body = JsonUtility.ToJson(new GeminiRequest
+            {
+                contents = new[] { new GeminiContent { parts = new[] { new GeminiPart { text = prompt } } } }
+            });
+
+            using (var req = new UnityWebRequest(Endpoint, "POST"))
+            {
+                byte[] bodyRaw = Encoding.UTF8.GetBytes(body);
+                req.uploadHandler = new UploadHandlerRaw(bodyRaw);
+                req.downloadHandler = new DownloadHandlerBuffer();
+                req.SetRequestHeader("Content-Type", "application/json");
+                req.SetRequestHeader("x-goog-api-key", apiKey);
+                req.timeout = TimeoutSeconds;
+
+                yield return req.SendWebRequest();
+
+                if (req.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogWarning($"[BossCommentService] Gemini request failed ({req.error}) - using fallback comment.");
+                    onComplete?.Invoke(FallbackComment(summary));
+                    yield break;
+                }
+
+                string text = ExtractText(req.downloadHandler.text);
+                onComplete?.Invoke(string.IsNullOrEmpty(text) ? FallbackComment(summary) : text.Trim());
+            }
+        }
+
+        IEnumerator LoadApiKey()
+        {
+            apiKeyLoadAttempted = true;
+            string path = Path.Combine(Application.streamingAssetsPath, ApiKeyFileName);
+
+            using (var req = UnityWebRequest.Get(path))
+            {
+                yield return req.SendWebRequest();
+                if (req.result == UnityWebRequest.Result.Success)
+                    apiKey = req.downloadHandler.text.Trim();
+            }
+        }
+
+        // Only the fields we actually read - the rest of the response is ignored.
+        [Serializable] class GeminiPart { public string text; }
+        [Serializable] class GeminiContent { public GeminiPart[] parts; }
+        [Serializable] class GeminiRequest { public GeminiContent[] contents; }
+        [Serializable] class GeminiCandidate { public GeminiContent content; }
+        [Serializable] class GeminiResponse { public GeminiCandidate[] candidates; }
+
+        static string ExtractText(string json)
+        {
+            try
+            {
+                var response = JsonUtility.FromJson<GeminiResponse>(json);
+                return response?.candidates != null && response.candidates.Length > 0
+                    ? response.candidates[0].content.parts[0].text
+                    : null;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[BossCommentService] Couldn't parse Gemini response: {e.Message}");
+                return null;
+            }
+        }
+
+        static string BuildStatsBlock(SessionSummary s)
+        {
+            var inv = CultureInfo.InvariantCulture;
+            var sb = new StringBuilder();
+            sb.AppendLine($"- Threw {s.totalThrows} times, hit {s.hits} ({s.accuracyPercent.ToString("F0", inv)}%)");
+            sb.AppendLine($"- Made a mess in {s.dirtCount} spots");
+            sb.AppendLine($"- Missed {s.missedOrders} orders");
+            if (s.playerFaceHits > 0)
+                sb.AppendLine($"- Got hit back in the face {s.playerFaceHits} time(s)");
+            if (s.dodgeTotal > 0)
+                sb.AppendLine($"- Dodged {s.dodgeSuccess}/{s.dodgeTotal} pizzas thrown back");
+            sb.AppendLine($"- Moved {s.totalHeadDistance.ToString("F0", inv)}m, squatted {s.squatCount} times");
+            return sb.ToString();
+        }
+
+        static string FallbackComment(SessionSummary s)
+        {
+            return s.dirtCount > 10
+                ? "Rough one tonight, but you showed up and threw pizza - that's the job. Clean up before your next shift and I'll see you then."
+                : "Solid effort out there tonight. Keep at it - you'll get the hang of it. See you next shift.";
+        }
+    }
+}

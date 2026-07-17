@@ -8,9 +8,11 @@
 //   一顆 Collider(圓盤形可用壓扁的 Box 或 Capsule)
 // Inspector:flavor 設定這顆披薩的口味。
 // ─────────────────────────────────────────────────────────────
+using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using Pizzala.Data;
 using Pizzala.Core;
 using Pizzala.Customers;
@@ -58,6 +60,17 @@ namespace Pizzala.Throwing
 
         void OnReleased(SelectExitEventArgs args)
         {
+            // Paused, or the round is over: letting go must not count as a throw. Blocking
+            // it in GameManager.OnPizzaReleased() alone isn't enough - that only skips the
+            // record, while the pizza still arms itself, sprays sauce and (via XRI's
+            // throwOnDetach) flies off with the hand's velocity. That's the bug where you
+            // could keep throwing after time ran out.
+            if (GameManager.Instance != null && !GameManager.Instance.CanThrow)
+            {
+                CancelRelease(args.interactorObject);
+                return;
+            }
+
             WasThrown = true;
             inFlight = true;
             releaseTime = Time.time;
@@ -69,6 +82,32 @@ namespace Pizzala.Throwing
             var spray = GetComponent<Pizzala.Dirt.SauceSpray>();
             if (spray == null) spray = gameObject.AddComponent<Pizzala.Dirt.SauceSpray>();
             spray.Activate(flavor);
+        }
+
+        // XRI has already detached and (if throwOnDetach) launched the pizza by the time
+        // selectExited fires, so undo both: kill the velocity it was just given, then put it
+        // back in the hand on the next frame. Re-selecting has to wait a frame - doing it
+        // inside the exit callback re-enters the interaction manager mid-update. Plain
+        // "yield return null" is used rather than any WaitForSeconds because frames still
+        // tick while paused (timeScale = 0) but seconds do not.
+        void CancelRelease(IXRSelectInteractor interactor)
+        {
+            var rb = GetComponent<Rigidbody>();
+            if (rb != null && !rb.isKinematic)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+            if (interactor != null) StartCoroutine(ReturnToHand(interactor));
+        }
+
+        IEnumerator ReturnToHand(IXRSelectInteractor interactor)
+        {
+            yield return null;
+            if (grab == null || grab.interactionManager == null) yield break;
+            if (grab.isSelected) yield break;               // something else grabbed it already
+            if (interactor.transform == null) yield break;  // controller went away
+            grab.interactionManager.SelectEnter(interactor, grab);
         }
 
         void OnCollisionEnter(Collision c)

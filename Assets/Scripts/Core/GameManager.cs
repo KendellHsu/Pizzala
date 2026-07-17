@@ -22,6 +22,7 @@ using Pizzala.Customers;
 using Pizzala.Dirt;
 using Pizzala.Photo;
 using Pizzala.UI;
+using Pizzala.LLM;
 
 namespace Pizzala.Core
 {
@@ -43,7 +44,8 @@ namespace Pizzala.Core
         public bool enforceThrowType = false;
 
         [Header("回合啟動")]
-        public bool autoStart = true;
+        [Tooltip("關=等開始畫面按 B 才開始(正式流程);開=延遲後自動開始,方便沒有開始畫面時測試")]
+        public bool autoStart = false;
         public float autoStartDelay = 5f;
 
         [Header("參數資產")]
@@ -58,6 +60,8 @@ namespace Pizzala.Core
         public FaceSplatOverlay faceSplatOverlay;
         public ResultsScreenController resultsScreen;
         public ActivityTracker activityTracker;
+        public BossCommentService bossCommentService; // experimental group only; leave empty to skip
+        public BoothStatusScreen boothScreen;         // live hits/time on the booth; leave empty to skip
 
         [Tooltip("後備丟回披薩(下面陣列沒填到的口味用這個)")]
         public GameObject throwbackPrefab;
@@ -69,6 +73,19 @@ namespace Pizzala.Core
         public Texture2D[] playerDirtyFaceTextures;
 
         public bool RoundActive { get; private set; }
+        public bool IsPaused { get; private set; }
+
+        // The one gate for "may the player throw right now". Time.timeScale = 0 freezes the
+        // pizza's flight but NOT the XR release event, so without an explicit check a throw
+        // let go while paused would still be recorded and would launch on resume. Same hole
+        // let players keep throwing after the round ended.
+        public bool CanThrow => RoundActive && !IsPaused;
+
+        // Live round state for the booth screen. The session's own hit count isn't usable
+        // here - SessionLogger only tallies it in BuildSummary() once the round is over.
+        public int Hits { get; private set; }
+        public float TimeRemaining => RoundActive ? Mathf.Max(0f, roundEndTime - Time.time) : 0f;
+        float roundEndTime;
 
         // 目前在場的所有客人(預擺 + 動態生成),訂單都從這份名單發
         readonly List<CustomerController> activeCustomers = new List<CustomerController>();
@@ -132,6 +149,7 @@ namespace Pizzala.Core
             if (RoundActive || tuning == null || SessionLogger.Instance == null) return;
             missedOrders = 0;
             playerFaceHitCount = 0;
+            Hits = 0;
             if (DirtManager.Instance != null) DirtManager.Instance.ResetCount();
             SessionLogger.Instance.BeginSession(condition, participantId);
             if (activityTracker != null) activityTracker.Begin();
@@ -139,15 +157,52 @@ namespace Pizzala.Core
             StartCoroutine(RoundLoop());
         }
 
+        // Freezing time is what actually pauses the game: the countdown (Time.time), the
+        // customers (Time.deltaTime / WaitForSeconds) and pizzas in flight (physics) all
+        // stop on their own. Anything that must keep living through a pause - the pause
+        // menu's own follow and its 3-2-1 - has to use unscaled time.
+        public void PauseRound()
+        {
+            if (!RoundActive || IsPaused) return;
+            IsPaused = true;
+            Time.timeScale = 0f;
+        }
+
+        public void ResumeRound()
+        {
+            if (!IsPaused) return;
+            IsPaused = false;
+            Time.timeScale = 1f;
+        }
+
+        // timeScale is global and survives leaving Play mode in the Editor - a round that
+        // ends (or a scene that unloads) while paused would otherwise leave the whole
+        // Editor frozen until you noticed.
+        void OnDisable()
+        {
+            if (IsPaused) Time.timeScale = 1f;
+        }
+
         IEnumerator RoundLoop()
         {
-            float endTime = Time.time + tuning.roundDurationSeconds;
-            while (Time.time < endTime)
+            // Kept as a field, not a local, so the booth screen can read the countdown.
+            roundEndTime = Time.time + tuning.roundDurationSeconds;
+            while (Time.time < roundEndTime)
             {
                 GiveOrderToRandomIdleCustomer();
                 yield return new WaitForSeconds(tuning.orderIntervalSeconds);
             }
             EndRound();
+        }
+
+        // The booth screen is pushed from here rather than from RoundLoop: that coroutine
+        // only ticks once per order interval, which would make the countdown jump in
+        // several-second steps.
+        void Update()
+        {
+            if (!RoundActive || boothScreen == null) return;
+            boothScreen.SetHits(Hits);
+            boothScreen.SetTimeRemaining(TimeRemaining);
         }
 
         void GiveOrderToRandomIdleCustomer()
@@ -220,7 +275,7 @@ namespace Pizzala.Core
                         if (snapshotCamera != null)
                         {
                             record.photoPath = snapshotCamera.CaptureAt(zone.customer.faceAnchor);
-                            SessionLogger.Instance.AddCustomerFacePhoto(record.photoPath);
+                            SessionLogger.Instance.AddCustomerFacePhoto(record.photoPath, "Hit in the face");
                         }
                         // 砸到臉:依機率決定要不要丟回(不像丟錯口味那樣一定丟)
                         if (Random.value < tuning.faceHitThrowbackChance)
@@ -262,6 +317,7 @@ namespace Pizzala.Core
                 record.outcome = ThrowOutcome.Hit;
                 customer.ShowPizzaInBox(pizza.flavor); // 盒中生成對應口味 pizza
                 customer.CloseBox();                    // 正確才關盒
+                Hits++;
                 customer.ResolveOrder(true);
                 Destroy(pizza.gameObject, 0.5f);        // 消除丟中的那顆披薩
             }
@@ -418,12 +474,13 @@ namespace Pizzala.Core
         {
             if (!RoundActive) return;
             RoundActive = false;
+            ResumeRound(); // ending while paused would leave timeScale at 0 and freeze the results screen
             StopAllCoroutines();
             if (activityTracker != null) activityTracker.End();
 
             // 環境髒亂總覽照(實驗組素材)
             if (snapshotCamera != null && overviewCameraPoint != null)
-                SessionLogger.Instance.AddEnvironmentPhoto(snapshotCamera.CaptureFrom(overviewCameraPoint));
+                SessionLogger.Instance.AddEnvironmentPhoto(snapshotCamera.CaptureFrom(overviewCameraPoint), "Store overview");
 
             SavePlayerFacePhoto();
 
@@ -435,8 +492,24 @@ namespace Pizzala.Core
                 act != null ? act.SquatCount : 0,
                 act != null ? act.TurnDegreesTotal : 0f);
 
-            SessionLogger.Instance.SaveToDisk();
-            if (resultsScreen != null) resultsScreen.Show(SessionLogger.Instance.Session);
+            var session = SessionLogger.Instance.Session;
+            if (resultsScreen != null) resultsScreen.Show(session); // starts on page 1; NextPage() reaches the boss note page
+
+            if (bossCommentService != null && session.condition == ExperimentCondition.Experimental)
+            {
+                // Async - don't block EndRound() on the network call. Save happens once the
+                // comment (or its fallback) is in hand, so the logged JSON always has it.
+                bossCommentService.GetComment(session.summary, comment =>
+                {
+                    session.bossComment = comment;
+                    if (resultsScreen != null) resultsScreen.SetBossComment(comment);
+                    SessionLogger.Instance.SaveToDisk();
+                });
+            }
+            else
+            {
+                SessionLogger.Instance.SaveToDisk();
+            }
         }
 
         // 依中彈次數挑一張「玩家髒臉」合成圖存檔(美術產出 2~3 個髒度層次)
@@ -455,7 +528,7 @@ namespace Pizzala.Core
                 System.IO.Directory.CreateDirectory(dir);
                 string path = System.IO.Path.Combine(dir, $"player_{System.DateTime.Now:HHmmss}.png");
                 System.IO.File.WriteAllBytes(path, png);
-                SessionLogger.Instance.AddPlayerFacePhoto(path);
+                SessionLogger.Instance.AddPlayerFacePhoto(path, $"Got hit {playerFaceHitCount}x");
             }
             catch (System.Exception e)
             {
