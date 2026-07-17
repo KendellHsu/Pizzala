@@ -52,6 +52,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `maxSpawnInterval` | 15 | 之後每隔幾秒生成一個新客人（上限） |
 | `customerLifetime` | 40 | 生成客人閒著沒訂單的最長停留秒數，超過就離場讓位 |
 | `customerLeaveDelay` | 2.5 | 訂單結束（滿意/生氣）後停留幾秒才離場 |
+| `customerPickupReach` | 0.8 | 超時客人撿地上 pizza 反擊：走到離目標披薩多近算「撿到」（公尺） |
 
 ### 丟回機制
 
@@ -60,6 +61,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `telegraphSeconds` | 0.8 | 丟回前的預警時間（秒），給玩家反應窗口 |
 | `throwbackSpeed` | 5 | 丟回披薩的飛行速度 m/s（越慢越好躲） |
 | `throwbackReleaseDelay` | 0.3 | 出手動畫開始後等幾秒披薩才真正離手；調到動畫揮臂放手那一刻，讓披薩飛出時機對上動作 |
+| `faceHitThrowbackChance` | 1 | 被砸到臉時觸發丟回的機率（0~1）；1=一定丟回、0=從不。丟錯口味的丟回不受此影響 |
 
 ### 回合設定
 
@@ -96,7 +98,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `frisbeeCNR` | -0.0000071 | 自旋衰減力矩 CNr（自旋隨飛行慢慢變慢） |
 | `frisbeeWobbleDamping` | 3 | 晃動阻尼（1/s）：吃掉盤面翻擺（垂直盤軸角速度），效果隨自旋縮放。0=最會晃、調高=更穩 |
 
-### 飛盤抓取（FrisbeeEdgeGrab 讀取）
+### 飛盤抓取（FrisbeeGrabInteractable 讀取）
 
 | 參數 | 預設值 | 說明 |
 |---|---|---|
@@ -116,7 +118,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `condition` | Control | 實驗條件（Control / Experimental） |
 | `participantId` | "P00" | 受試者編號 |
 | `enableThrowback` | true | 玩法保險絲：關掉就完全沒有丟回 |
-| `throwbackOnTimeout` | false | 訂單超時也丟回？關 = 只有實際拿到披薩的客人才丟回 |
+| `throwbackOnTimeout` | false | 訂單超時的客人是否去撿地上 pizza 丟回玩家？撿不到（場上沒可撿的）就直接離場。關 = 超時直接離場 |
 | `enforceFlavor` | true | 是否檢查口味正確 |
 | `enforceThrowType` | false | 是否檢查投擲手勢類型 |
 | `autoStart` | true | 是否自動開始回合 |
@@ -143,7 +145,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 
 ## 4. 披薩補貨（PizzaSpawner）
 
-> 飛盤手感參數（自旋／穩定／升力／盤半徑／盤面對齊）已集中到 ThrowTuning，見上面 [1. ThrowTuning → 飛盤物理](#飛盤物理frisbeeflight--frisbeeedgegrab-讀取)。`FrisbeeFlight` / `FrisbeeEdgeGrab` 元件本身已無可調欄位。
+> 飛盤手感參數（自旋／穩定／升力／盤半徑／盤面對齊）已集中到 ThrowTuning，見上面 [1. ThrowTuning → 飛盤物理](#飛盤物理frisbeeflight--frisbeeedgegrab-讀取)。`FrisbeeFlight` / `FrisbeeGrabInteractable` 元件本身已無可調欄位。
 
 ### PizzaSpawner（[PizzaSpawner.cs](../Assets/Scripts/Throwing/PizzaSpawner.cs)）
 
@@ -151,6 +153,10 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 |---|---|---|
 | `respawnDelay` | 1.5 | 補貨延遲（秒） |
 | `leaveDistance` | 0.5 | 披薩離開生成點多遠就準備補貨（公尺） |
+
+### PickupExclusionZone（[PickupExclusionZone.cs](../Assets/Scripts/Throwing/PickupExclusionZone.cs)）
+
+超時客人撿地上 pizza 的「不可撿」範圍。掛在場景物件上、物件需帶 Collider（勾 Is Trigger），在 Scene 視圖拖大小/位置圈住出餐台、玩家周圍補貨圈等。可擺多個；無可調欄位，範圍就是那顆 Collider。地上 pizza 由 `PizzaProjectile` 落地（命中環境）時自動登記進 `GroundPizzaRegistry`。
 
 ---
 
@@ -274,9 +280,11 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-17 | CustomerController 新增 Pizza 盒欄位 `pizzaBoxAnimation`（舊版 Animation 元件）/ `pizzaBoxCloseClip` / `pizzaBoxSlot` / `boxPizzaByFlavor`。接到 Hand（對/錯口味皆是）由 `ShowPizzaInBox()` 在盒中生成丟進去那顆口味的 pizza；只有正確口味才 `CloseBox()` 播關盒 clip。GameManager.ResolveHandCatch 兩分支都呼叫，並銷毀丟中的 pizza。錯口味丟回時，盒中那顆由 `ClearBoxPizza()` 在丟回發射瞬間消失（延遲＝`throwbackReleaseDelay`）。新增 `pizzaBox` 欄位：點餐前隱藏盒子、接單（`GiveOrder`）時才顯示；接住正確口味 `CloseBox()` 播完關盒動畫後才把盒子收起來（`SetActive(false)`），不會播到一半消失 |
 | 2026-07-17 | CustomerController 移除換貼圖表情機制：刪除序列化欄位 `faceRenderer`、`faceNormal/faceHappy/faceAngry/faceDirty`（情緒改由頭上倒數圈呈現）。狀態列舉更名為三相位語意 `CustomerState { PreOrder, Waiting, Served, Angry }`（原 Idle→PreOrder、Happy→Served）。`GetDirty()` 只標記髒污不再換臉；丟回預警閃紅（`Telegraph`）保留 |
 | 2026-07-17 | CustomerController 新增 `flavorCountDown`（頭上耐心倒數圈，UI Image 靠 `fillAmount` 呈現剩餘耐心水位）；接單顯示、耐心歸零/解決時隱藏。ThrowTuning 新增 `customerWalkAnimBaseSpeed`（走路動畫隨移動速度變速，越快越急）|
+| 2026-07-18 | 丟錯口味改為丟回但**不離場、訂單保留**（GameManager.ResolveHandCatch else 不再 ResolveOrder）。砸臉丟回改機率觸發：ThrowTuning 新增 `faceHitThrowbackChance`。超時客人改為撿地上 pizza 反擊：新增 `GroundPizzaRegistry`（PizzaProjectile 落地登記）+ `PickupExclusionZone`（場景排除區）；CustomerController.PatienceCountdown 超時走去撿最近可撿的 pizza 丟回、撿不到直接離場，開關＝`GameManager.throwbackOnTimeout`（語意改為「超時撿地上 pizza 丟回」），距離＝`ThrowTuning.customerPickupReach` |
 | 2026-07-15 | 飛盤飛行改為 Hummel/Hubbard 氣動模型：自旋改讀手腕實際角速度並提高剛體 maxAngularVelocity，升力由自旋力道與純度 gate；ThrowTuning 飛盤欄位改版（移除 spinPerSpeed/maxSpin/stabilizeStrength/liftPerSpeed，新增 spinToFly/spinRatioThreshold/maxAngularVelocity/aeroScale/area/CL0/CLA/CD0/CDA/alpha0Deg） |
 | 2026-07-15 | 加入完整力矩模型（俯仰 CM0/CMA/CMq、滾轉 CRR/CRP、自旋衰減 CNR + 直徑 d）產生 turn & fade；披薩 Prefab Rigidbody 調整為 Mass 0.175、Angular Damping 0、Interpolate |
 | 2026-07-15 | 加入 `frisbeeWobbleDamping` 章動阻尼（隨自旋縮放）抑制丟出後的晃動 |
 | 2026-07-16 | 針對 VR 出手速度偏慢調整飛盤預設：`frisbeeSpinToFly` 10→6、`frisbeeSpinRatioThreshold` 0.8→0.5、`frisbeeAeroScale` 1→3（升力更易觸發、滑翔與迴旋更明顯）；同步 ThrowTuning.asset |
+| 2026-07-16 | 修正邊緣抓取失效：`selectEntered` 監聽晚於 XRGeneralGrabTransformer 快取 attach，改用子類別 `FrisbeeGrabInteractable`（覆寫 `InitializeDynamicAttachPose`，在快取前設定盤緣握點+對齊）；三顆 prefab 的 XRGrabInteractable 換成它，移除 FrisbeeEdgeGrab |
 | 2026-07-16 | DirtManager 新增 `paintOnCharacters`、`paintSize`、`paintWrapDepth`：砸中客人改用 texture-space 染色（SaucePaintable 把醬料畫進角色貼圖 UV 空間，完全跟著蒙皮動畫），Decal 掛骨頭降為後備路徑 |
 | 2026-07-16 | CustomerSpawner 新增 `customerPrefabs`（客人 Prefab 清單，生成時均勻隨機挑一個，支援多角色混合）；原 `customerPrefab` 保留為備援。搭配新工具 `Tools/Pizzala/Build UncleB Customer Prefab` 產生第二隻角色 UncleB 客人並自動接進生成器 |

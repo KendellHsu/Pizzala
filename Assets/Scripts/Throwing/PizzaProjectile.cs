@@ -108,6 +108,10 @@ namespace Pizzala.Throwing
 
             record = null;
 
+            // 丟偏落在環境上(沒中客人任何 HitZone)= 地上一顆殘局,登記成可撿。
+            // 命中客人手/臉/身的那顆會被收下或彈開,不算地上可撿。
+            if (zone == null) GroundPizzaRegistry.Register(this);
+
             var spray = GetComponent<Pizzala.Dirt.SauceSpray>();
             if (spray != null) spray.Deactivate(); // 落地後換滑行痕跡接手
 
@@ -116,5 +120,7 @@ namespace Pizzala.Throwing
             if (trail == null) trail = gameObject.AddComponent<Pizzala.Dirt.SauceTrail>();
             trail.Activate(flavor);
         }
+
+        void OnDestroy() => GroundPizzaRegistry.Unregister(this); // 被撿走/清場時退出登記表
     }
 }

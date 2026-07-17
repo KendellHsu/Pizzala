@@ -28,6 +28,7 @@ MonoBehaviour:
   customerWanderPauseChance: 1
   customerWanderPauseMinSeconds: 1
   customerWanderPauseMaxSeconds: 2.5
+  customerWalkAnimBaseSpeed: 0.5
   initialSpawnCount: 2
   minSpawnInterval: 8
   maxSpawnInterval: 15

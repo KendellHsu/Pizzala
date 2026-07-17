@@ -36,7 +36,7 @@ namespace Pizzala.Core
         [Header("玩法開關(保險絲)")]
         public bool enableThrowback = true;
 
-        [Tooltip("訂單超時也丟回?關=只有實際拿到披薩的客人(丟錯口味、被砸臉)才丟回")]
+        [Tooltip("訂單超時的客人是否去撿地上 pizza 丟回玩家?撿不到(場上沒可撿的)就直接離場。關=超時直接離場")]
         public bool throwbackOnTimeout = false;
 
         public bool enforceFlavor = true;
@@ -222,7 +222,9 @@ namespace Pizzala.Core
                             record.photoPath = snapshotCamera.CaptureAt(zone.customer.faceAnchor);
                             SessionLogger.Instance.AddCustomerFacePhoto(record.photoPath);
                         }
-                        TryThrowback(zone.customer, pizza.flavor); // 砸到臉的那顆被丟回來
+                        // 砸到臉:依機率決定要不要丟回(不像丟錯口味那樣一定丟)
+                        if (Random.value < tuning.faceHitThrowbackChance)
+                            TryThrowback(zone.customer, pizza.flavor);
                         break;
 
                     case HitZoneType.Body:
@@ -265,24 +267,28 @@ namespace Pizzala.Core
             }
             else
             {
+                // 丟錯口味:不解決訂單、客人不離場,繼續等正確口味(倒數照跑)。
+                // 只把錯的那顆呈現在盒中,再原樣丟回;盒中那顆會在丟回發射瞬間清掉。
                 record.outcome = ThrowOutcome.WrongFlavor;
-                customer.ShowPizzaInBox(pizza.flavor);  // 錯的口味也呈現在盒中(不關盒)
-                customer.ResolveOrder(false);
+                customer.ShowPizzaInBox(pizza.flavor);
                 Destroy(pizza.gameObject, 0.5f);        // 消除丟中的那顆
-                TryThrowback(customer, pizza.flavor);   // 再原樣丟回來
+                TryThrowback(customer, pizza.flavor);   // 原樣丟回來(客人續等餐)
             }
         }
 
         void HandleOrderTimeout(CustomerController customer)
         {
+            // 超時的丟回改由客人自己「撿地上 pizza 反擊」處理(見 CustomerController.PatienceCountdown),
+            // 這裡只記統計,不再從 throwOrigin 憑空生一顆丟。
             missedOrders++;
-            if (!throwbackOnTimeout)
-            {
-                Debug.Log($"[GameManager] 客人 {customer.customerId} 訂單超時(沒拿到披薩,不丟回)");
-                return;
-            }
-            Debug.Log($"[GameManager] 客人 {customer.customerId} 訂單超時 → 準備丟回");
-            TryThrowback(customer, customer.CurrentOrder);
+            Debug.Log($"[GameManager] 客人 {customer.customerId} 訂單超時");
+        }
+
+        // 給超時撿地上 pizza 的客人呼叫:走完整的丟回流程(預警→出手→發射),
+        // 從客人當前的 throwOrigin 發射(此時客人已走到地上那顆 pizza 旁)。
+        public void ThrowBackFromCustomer(CustomerController customer, PizzaFlavor flavor)
+        {
+            TryThrowback(customer, flavor);
         }
 
         CustomerController FindNearestActiveOrderCustomer(Vector3 point)

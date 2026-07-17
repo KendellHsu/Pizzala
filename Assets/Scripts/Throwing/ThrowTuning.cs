@@ -83,6 +83,9 @@ namespace Pizzala.Throwing
         [Tooltip("訂單結束(滿意/生氣)後停留幾秒才離場,讓玩家看到表情")]
         public float customerLeaveDelay = 2.5f;
 
+        [Tooltip("超時客人撿地上 pizza 反擊:走到離目標披薩多近算「撿到」(公尺)")]
+        public float customerPickupReach = 0.8f;
+
         [Tooltip("丟回前的預警時間(秒),給玩家反應窗口")]
         public float telegraphSeconds = 0.8f;
 
@@ -91,6 +94,10 @@ namespace Pizzala.Throwing
 
         [Tooltip("出手動畫開始後,等幾秒披薩才真正離手發射;調到動畫揮臂放手那一刻,讓披薩飛出的時機對上動作")]
         public float throwbackReleaseDelay = 0.3f;
+
+        [Tooltip("被砸到臉時觸發丟回的機率(0~1);1=一定丟回,0=從不。丟錯口味的丟回不受此影響")]
+        [Range(0f, 1f)]
+        public float faceHitThrowbackChance = 1f;
 
         [Header("回合設定")]
         public float roundDurationSeconds = 180f;

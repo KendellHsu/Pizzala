@@ -20,6 +20,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Pizzala.Core;
 using Pizzala.Data;
 using Pizzala.Throwing;
 
@@ -91,6 +92,9 @@ namespace Pizzala.Customers
         // 由 GameManager 標記:丟回披薩中(預警→出手),期間定住不遊走
         public bool IsThrowingBack { get; set; }
 
+        // 超時反擊中(走去撿地上 pizza→丟回),期間自己驅動移動,離場要等它結束
+        public bool IsRetaliating { get; private set; }
+
         // 情緒門檻與速度,預設值可用,正式值由 GameManager 從 ThrowTuning 推入
         float impatientAt = 5f;
         float urgentAt = 10f;
@@ -101,6 +105,7 @@ namespace Pizzala.Customers
         float pauseMinSeconds = 1f;
         float pauseMaxSeconds = 2.5f;
         float pauseUntil; // 停頓到這個時間點才繼續走
+        float pickupReach = 0.8f;       // 撿地上 pizza 反擊時,走到多近算撿到
         float walkAnimBaseSpeed = 0.5f; // 走路 clip 播 1x 時對應的移動速度 m/s;移動越快動畫越快
         float orderPatience;            // 目前訂單的總耐心秒數,用來算倒數圈比例
         GameObject currentBoxPizza;     // 盒中目前那顆展示 pizza(錯口味丟回時要清掉)
@@ -149,6 +154,7 @@ namespace Pizzala.Customers
                 pauseMinSeconds = tuning.customerWanderPauseMinSeconds;
                 pauseMaxSeconds = tuning.customerWanderPauseMaxSeconds;
                 walkAnimBaseSpeed = tuning.customerWalkAnimBaseSpeed;
+                pickupReach = tuning.customerPickupReach;
             }
             lookTarget = look;
         }
@@ -170,6 +176,8 @@ namespace Pizzala.Customers
 
         void UpdateWander()
         {
+            if (IsRetaliating) return; // 反擊中由 RetaliateRoutine 自己驅動移動,遊走狀態機讓開
+
             float speed = 0f;
             if (HasActiveOrder && canWander && !IsLeaving && !IsThrowingBack)
             {
@@ -314,9 +322,64 @@ namespace Pizzala.Customers
         {
             yield return new WaitForSeconds(seconds);
             if (!HasActiveOrder) yield break;
-            ClearOrder();
-            State = CustomerState.Angry; // 超時 → 生氣(耐心圈已歸零;後續由 GameManager 決定丟回/離場)
-            OnOrderTimeout?.Invoke(this);
+
+            // 注意:不呼叫 ClearOrder(它會 StopCoroutine 砍掉本協程,底下 yield 就跑不到)。
+            HasActiveOrder = false;
+            patienceRoutine = null;
+            HideOrderUI();
+            State = CustomerState.Angry; // 超時 → 生氣(耐心圈已歸零)
+
+            // 超時反擊:去撿一顆地上可撿的 pizza 丟回玩家臉;撿不到就直接離場。
+            // 開關 = GameManager.throwbackOnTimeout。
+            var gm = GameManager.Instance;
+            bool retaliate = gm != null && gm.throwbackOnTimeout;
+            var ground = retaliate ? Pizzala.Throwing.GroundPizzaRegistry.FindNearestPickable(transform.position) : null;
+            if (ground != null)
+                yield return RetaliateRoutine(ground);
+
+            OnOrderTimeout?.Invoke(this); // 反擊完(或沒得撿)才通知離場
+        }
+
+        // 超時反擊:走向地上那顆 pizza → 撿起(消掉它)→ 由 GameManager 走丟回流程 → 結束。
+        // 期間 IsRetaliating=true 讓 UpdateWander 讓開;OnOrderTimeout 延到反擊後才發,
+        // 所以 CustomerSpawner 的離場流程自然會等到反擊結束才開始。
+        IEnumerator RetaliateRoutine(Pizzala.Throwing.PizzaProjectile ground)
+        {
+            IsRetaliating = true;
+            var flavor = ground.flavor;
+
+            // 走向目標披薩(用暴躁速度衝過去)
+            while (ground != null)
+            {
+                Vector3 target = ground.transform.position;
+                target.y = transform.position.y; // 只在水平面移動
+                if (Vector3.Distance(transform.position, target) <= pickupReach) break;
+
+                Vector3 before = transform.position;
+                transform.position = Vector3.MoveTowards(before, target, urgentSpeed * Time.deltaTime);
+
+                Vector3 dir = transform.position - before;
+                dir.y = 0f;
+                if (dir.sqrMagnitude > 1e-8f)
+                    transform.rotation = Quaternion.Slerp(
+                        transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 8f);
+
+                SetWalking(true);
+                if (animator != null && !isThrowingAnim)
+                    animator.speed = Mathf.Max(0.1f, urgentSpeed / Mathf.Max(walkAnimBaseSpeed, 0.01f));
+                yield return null;
+            }
+            SetWalking(false);
+
+            if (ground != null) Destroy(ground.gameObject); // 撿起來 = 地上那顆消失
+
+            // 丟回玩家臉(走真正的丟回流程:預警→出手動畫→發射)
+            if (GameManager.Instance != null)
+                GameManager.Instance.ThrowBackFromCustomer(this, flavor);
+
+            // 等丟回動作大致跑完(預警+出手約 telegraph+release+一點餘裕)再放行離場
+            yield return new WaitForSeconds(2f);
+            IsRetaliating = false;
         }
 
         // 盒中生成指定口味的展示 pizza(對、錯口味都會呈現丟進去的那顆)。
@@ -383,6 +446,13 @@ namespace Pizzala.Customers
         {
             HasActiveOrder = false;
             if (patienceRoutine != null) { StopCoroutine(patienceRoutine); patienceRoutine = null; }
+            HideOrderUI();
+        }
+
+        // 收掉菜單/倒數/盒子。抽出來讓 PatienceCountdown 超時時能用,
+        // 又不必呼叫 ClearOrder(那會 StopCoroutine 把自己這條協程砍掉)。
+        void HideOrderUI()
+        {
             if (flavorIcon != null) flavorIcon.enabled = false;
             if (flavorCountDown != null) flavorCountDown.enabled = false;
 
