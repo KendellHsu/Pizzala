@@ -154,7 +154,8 @@ namespace Pizzala.Core
         {
             var idle = new List<CustomerController>();
             foreach (var c in activeCustomers)
-                if (c != null && !c.HasActiveOrder && !c.IsLeaving) idle.Add(c);
+                // isActiveAndEnabled:排除場景裡被停用的客人(對 inactive 物件 StartCoroutine 會炸)
+                if (c != null && c.isActiveAndEnabled && !c.HasActiveOrder && !c.IsLeaving) idle.Add(c);
             if (idle.Count == 0) return;
 
             var pick = idle[Random.Range(0, idle.Count)];
@@ -257,14 +258,17 @@ namespace Pizzala.Core
             if (flavorOk && throwOk)
             {
                 record.outcome = ThrowOutcome.Hit;
+                customer.ShowPizzaInBox(pizza.flavor); // 盒中生成對應口味 pizza
+                customer.CloseBox();                    // 正確才關盒
                 customer.ResolveOrder(true);
-                Destroy(pizza.gameObject, 0.5f); // 客人收下披薩
+                Destroy(pizza.gameObject, 0.5f);        // 消除丟中的那顆披薩
             }
             else
             {
                 record.outcome = ThrowOutcome.WrongFlavor;
+                customer.ShowPizzaInBox(pizza.flavor);  // 錯的口味也呈現在盒中(不關盒)
                 customer.ResolveOrder(false);
-                Destroy(pizza.gameObject, 0.5f);        // 客人接住那顆錯的
+                Destroy(pizza.gameObject, 0.5f);        // 消除丟中的那顆
                 TryThrowback(customer, pizza.flavor);   // 再原樣丟回來
             }
         }
@@ -363,6 +367,7 @@ namespace Pizzala.Core
 
             bool resolved = false, hitPlayer = false;
             proj.onResolved = h => { resolved = true; hitPlayer = h; };
+            customer.ClearBoxPizza();                          // 盒中那顆在披薩被丟出的同一刻消失
             proj.Launch(head.position, tuning.throwbackSpeed); // 鎖定發射瞬間的頭部位置,不追蹤
 
             customer.IsThrowingBack = false; // 出手完成,恢復走動

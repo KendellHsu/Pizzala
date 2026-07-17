@@ -240,6 +240,11 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `requiredThrowType` | Unknown | 進階玩法：指定投擲手勢；Unknown = 不限 |
 | `canWander` | true | 是否允許情緒遊走 |
 | `flavorCountDown` | （倒數圈 Image） | 頭上耐心倒數圈，UI Image（Filled／Vertical／Bottom）；`fillAmount` 隨剩餘耐心 1→0（水位下降）。留空 = 不顯示 |
+| `pizzaBox` | （盒子物件） | Pizza 盒物件（含模型與 HandZone）；點餐前隱藏、接單時才出現。留空 = 一直顯示 |
+| `pizzaBoxAnimation` | （盒子 Animation） | Pizza 盒 Animation 元件（舊版動畫）；接住正確口味時播關盒 clip。留空 = 不播關盒 |
+| `pizzaBoxCloseClip` | Close | 關盒動畫的 clip 名稱（要和 Animation 元件 clip 清單裡一致） |
+| `pizzaBoxSlot` | （盒中位置） | 盒中生成 pizza 的位置（空物件，擺在盒子開口內）。留空 = 不生成盒中 pizza |
+| `boxPizzaByFlavor` | — | 盒中展示用 pizza prefab，順序對應 PizzaFlavor（建議用靜態、不可抓取的版本） |
 | `idleAnimatorController` | （站立控制器） | 站立動畫 Animator Controller；留空 = 不切動畫 |
 | `walkAnimatorController` | （走路控制器） | 走動時切換的 Animator Controller；留空 = 走動不換動畫 |
 | `throwAnimatorController` | （丟回控制器） | 丟回披薩出手時切換的 Animator Controller；留空 = 丟回不換動畫 |
@@ -266,6 +271,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-15 | 飛盤手感參數集中進 ThrowTuning（`frisbee*` 8 項）；FrisbeeFlight / FrisbeeEdgeGrab 改讀 `GameManager.Instance.tuning`，元件不再有可調欄位 |
 | 2026-07-17 | CustomerController 新增 `throwAnimatorController`（丟回出手動畫控制器）；補列既有的 `idle/walkAnimatorController`。丟回發射瞬間由 GameManager 呼叫 `PlayThrow()` 播放，播完自動切回 idle。已接到 PZ_Customer(soldier throwing)、PZ_Customer_UncleB(uncleB throwing) 與 UncleBCustomerBuilder |
 | 2026-07-17 | ThrowTuning 新增 `throwbackReleaseDelay`（預設 0.3s）：丟回時先播出手動畫，等這個秒數披薩才真正離手發射，用來對齊動畫揮臂放手的時機 |
+| 2026-07-17 | CustomerController 新增 Pizza 盒欄位 `pizzaBoxAnimation`（舊版 Animation 元件）/ `pizzaBoxCloseClip` / `pizzaBoxSlot` / `boxPizzaByFlavor`。接到 Hand（對/錯口味皆是）由 `ShowPizzaInBox()` 在盒中生成丟進去那顆口味的 pizza；只有正確口味才 `CloseBox()` 播關盒 clip。GameManager.ResolveHandCatch 兩分支都呼叫，並銷毀丟中的 pizza。錯口味丟回時，盒中那顆由 `ClearBoxPizza()` 在丟回發射瞬間消失（延遲＝`throwbackReleaseDelay`）。新增 `pizzaBox` 欄位：點餐前隱藏盒子、接單（`GiveOrder`）時才顯示；接住正確口味 `CloseBox()` 播完關盒動畫後才把盒子收起來（`SetActive(false)`），不會播到一半消失 |
 | 2026-07-17 | CustomerController 移除換貼圖表情機制：刪除序列化欄位 `faceRenderer`、`faceNormal/faceHappy/faceAngry/faceDirty`（情緒改由頭上倒數圈呈現）。狀態列舉更名為三相位語意 `CustomerState { PreOrder, Waiting, Served, Angry }`（原 Idle→PreOrder、Happy→Served）。`GetDirty()` 只標記髒污不再換臉；丟回預警閃紅（`Telegraph`）保留 |
 | 2026-07-17 | CustomerController 新增 `flavorCountDown`（頭上耐心倒數圈，UI Image 靠 `fillAmount` 呈現剩餘耐心水位）；接單顯示、耐心歸零/解決時隱藏。ThrowTuning 新增 `customerWalkAnimBaseSpeed`（走路動畫隨移動速度變速，越快越急）|
 | 2026-07-15 | 飛盤飛行改為 Hummel/Hubbard 氣動模型：自旋改讀手腕實際角速度並提高剛體 maxAngularVelocity，升力由自旋力道與純度 gate；ThrowTuning 飛盤欄位改版（移除 spinPerSpeed/maxSpin/stabilizeStrength/liftPerSpeed，新增 spinToFly/spinRatioThreshold/maxAngularVelocity/aeroScale/area/CL0/CLA/CD0/CDA/alpha0Deg） |

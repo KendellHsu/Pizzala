@@ -46,6 +46,18 @@ namespace Pizzala.Customers
                  "fillAmount 隨剩餘耐心從 1 降到 0(水位下降)。留空則不顯示倒數")]
         public Image flavorCountDown;
 
+        [Header("Pizza 盒(接住成功)")]
+        [Tooltip("Pizza 盒物件(含模型與 HandZone);點餐前隱藏,接單時才出現。留空 = 一直顯示")]
+        public GameObject pizzaBox;
+        [Tooltip("Pizza 盒的 Animation 元件(舊版動畫);接住正確口味時播關盒 clip。留空 = 不播關盒")]
+        public Animation pizzaBoxAnimation;
+        [Tooltip("關盒動畫的 clip 名稱(要和 Animation 元件 clip 清單裡的名字一致)")]
+        public string pizzaBoxCloseClip = "Close";
+        [Tooltip("盒中生成 pizza 的位置(空物件,擺在盒子開口內)。留空 = 不生成盒中 pizza")]
+        public Transform pizzaBoxSlot;
+        [Tooltip("盒中展示用的 pizza prefab,順序對應 PizzaFlavor 列舉(建議用靜態、不可抓取的版本)")]
+        public GameObject[] boxPizzaByFlavor;
+
         [Header("定位點")]
         public Transform faceAnchor;
         public Transform throwOrigin;
@@ -91,6 +103,8 @@ namespace Pizzala.Customers
         float pauseUntil; // 停頓到這個時間點才繼續走
         float walkAnimBaseSpeed = 0.5f; // 走路 clip 播 1x 時對應的移動速度 m/s;移動越快動畫越快
         float orderPatience;            // 目前訂單的總耐心秒數,用來算倒數圈比例
+        GameObject currentBoxPizza;     // 盒中目前那顆展示 pizza(錯口味丟回時要清掉)
+        bool boxClosing;                // 關盒動畫播放中:訂單結束也先別收盒,等動畫播完
 
         Transform lookTarget;   // 沒在走路時面向這裡(玩家頭部)
         Animator animator;
@@ -116,6 +130,7 @@ namespace Pizzala.Customers
         {
             if (flavorIcon != null) flavorIcon.enabled = false;
             if (flavorCountDown != null) flavorCountDown.enabled = false;
+            if (pizzaBox != null) pizzaBox.SetActive(false); // 點餐前不出現盒子
             HomePosition = transform.position;
             wanderTarget = HomePosition;
         }
@@ -269,6 +284,8 @@ namespace Pizzala.Customers
 
         public void GiveOrder(PizzaFlavor flavor, float patienceSeconds)
         {
+            if (!isActiveAndEnabled) return; // 停用中不接單(PatienceCountdown 的 StartCoroutine 會在 inactive 物件上炸)
+
             CurrentOrder = flavor;
             HasActiveOrder = true;
             OrderStartTime = Time.time;
@@ -287,6 +304,8 @@ namespace Pizzala.Customers
                 flavorCountDown.enabled = true;
             }
 
+            if (pizzaBox != null) pizzaBox.SetActive(true); // 接單 → 盒子出現
+
             if (patienceRoutine != null) StopCoroutine(patienceRoutine);
             patienceRoutine = StartCoroutine(PatienceCountdown(patienceSeconds));
         }
@@ -298,6 +317,58 @@ namespace Pizzala.Customers
             ClearOrder();
             State = CustomerState.Angry; // 超時 → 生氣(耐心圈已歸零;後續由 GameManager 決定丟回/離場)
             OnOrderTimeout?.Invoke(this);
+        }
+
+        // 盒中生成指定口味的展示 pizza(對、錯口味都會呈現丟進去的那顆)。
+        // 由 GameManager 在 ResolveHandCatch 接到 Hand 時呼叫(丟中的 pizza 由 GameManager 另外銷毀)。
+        public void ShowPizzaInBox(PizzaFlavor flavor)
+        {
+            if (pizzaBoxSlot == null)
+            { Debug.LogWarning($"[CustomerController] {name}: pizzaBoxSlot 未接,盒中不會生成 pizza"); return; }
+            if (boxPizzaByFlavor == null || (int)flavor >= boxPizzaByFlavor.Length)
+            { Debug.LogWarning($"[CustomerController] {name}: boxPizzaByFlavor 沒有 {flavor}(index {(int)flavor})對應的格子"); return; }
+
+            var prefab = boxPizzaByFlavor[(int)flavor];
+            if (prefab == null)
+            { Debug.LogWarning($"[CustomerController] {name}: boxPizzaByFlavor[{(int)flavor}] 是空的"); return; }
+
+            if (currentBoxPizza != null) Destroy(currentBoxPizza); // 先清掉上一顆,避免疊
+            currentBoxPizza = Instantiate(prefab, pizzaBoxSlot.position, pizzaBoxSlot.rotation, pizzaBoxSlot);
+        }
+
+        // 清掉盒中那顆展示 pizza(錯口味丟回時,由 GameManager 在丟回發射瞬間呼叫,
+        // 讓盒中那顆剛好在披薩被丟出去的時間點消失)。
+        public void ClearBoxPizza()
+        {
+            if (currentBoxPizza == null) return; // 沒有盒中 pizza(例:砸臉丟回)就別動盒子
+
+            Destroy(currentBoxPizza);
+            currentBoxPizza = null;
+
+            // 錯口味丟回:訂單早就結束了,那顆飛出去的同時把盒子也收掉
+            if (!HasActiveOrder && pizzaBox != null) pizzaBox.SetActive(false);
+        }
+
+        // 關盒動畫(只有接住正確口味才關);播完才把盒子收起來。
+        public void CloseBox()
+        {
+            if (pizzaBoxAnimation == null || string.IsNullOrEmpty(pizzaBoxCloseClip))
+            { Debug.LogWarning($"[CustomerController] {name}: pizzaBoxAnimation / pizzaBoxCloseClip 未接,不播關盒動畫"); return; }
+
+            boxClosing = true; // 擋住 ClearOrder 提早收盒
+            pizzaBoxAnimation.Play(pizzaBoxCloseClip);
+            StartCoroutine(HideBoxAfterClose());
+        }
+
+        // 等關盒動畫整段播完,才把盒子(連同盒中 pizza)收起來
+        IEnumerator HideBoxAfterClose()
+        {
+            float len = 0.5f;
+            var state = pizzaBoxAnimation[pizzaBoxCloseClip];
+            if (state != null && state.length > 0.01f) len = state.length;
+            yield return new WaitForSeconds(len);
+            if (pizzaBox != null) pizzaBox.SetActive(false);
+            boxClosing = false;
         }
 
         // 訂單被解決(成功或口味錯),由 GameManager 呼叫
@@ -314,6 +385,11 @@ namespace Pizzala.Customers
             if (patienceRoutine != null) { StopCoroutine(patienceRoutine); patienceRoutine = null; }
             if (flavorIcon != null) flavorIcon.enabled = false;
             if (flavorCountDown != null) flavorCountDown.enabled = false;
+
+            // 訂單結束就收盒,菜單和盒子一起消失(避免「沒菜單卻有盒子」)。
+            // 兩個例外先留著盒子:關盒動畫播放中、錯口味那顆還在盒裡等丟回。
+            if (pizzaBox != null && !boxClosing && currentBoxPizza == null)
+                pizzaBox.SetActive(false);
         }
 
         // 被披薩砸到(臉/身體):標記髒污。情緒改由倒數圈呈現,不再換表情貼圖;
