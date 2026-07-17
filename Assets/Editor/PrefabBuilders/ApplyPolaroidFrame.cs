@@ -13,6 +13,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Pizzala.EditorTools
 {
@@ -71,6 +72,18 @@ namespace Pizzala.EditorTools
                 captionRect.anchorMax = CaptionAnchorMax;
                 captionRect.offsetMin = Vector2.zero;
                 captionRect.offsetMax = Vector2.zero;
+
+                // Was a fixed size 22 with auto-sizing off - real captions ("Right in the
+                // face!", "Health code violation"...) are much longer than the "Caption"
+                // placeholder and don't fit, overflowing past the strip. Auto-size shrinks
+                // to whatever actually fits instead.
+                var tmp = captionRect.GetComponent<TMP_Text>();
+                if (tmp != null)
+                {
+                    tmp.enableAutoSizing = true;
+                    tmp.fontSizeMin = 8;
+                    tmp.fontSizeMax = 16;
+                }
             }
             else Debug.LogWarning("ApplyPolaroidFrame: CaptionText not found on PZ_PhotoEntry.");
 

@@ -107,14 +107,46 @@ namespace Pizzala.DevTools
             return data;
         }
 
+        // Demo-only variety: these old JSON files carry no per-photo event context, so we
+        // can't caption "which customer / what flavor". To at least stop every polaroid
+        // reading "Hit in the face", pick a line from a pool keyed off the filename - stable
+        // per photo (same photo always gets the same line) so re-running the demo doesn't
+        // reshuffle. Real gameplay sets richer captions at capture time in GameManager.
+        static readonly string[] FaceCaptions =
+        {
+            "Right in the face!", "Splat!", "Direct hit", "Oops... sorry!",
+            "Faceplant special", "That's gonna leave a mark", "Nailed 'em", "Extra sauce, sir?",
+        };
+        static readonly string[] EnvCaptions =
+        {
+            "What a mess", "Cleanup on aisle 3", "The aftermath", "Sauce everywhere",
+            "Health code violation", "Store overview",
+        };
+        static readonly string[] PlayerCaptions =
+        {
+            "You got hit!", "Payback's rough", "Didn't see that coming",
+        };
+
         static PhotoRecord RemapPhoto(string originalPath, string photosDir)
         {
             string fileName = Path.GetFileName(originalPath.Replace('\\', '/'));
-            string caption = fileName.StartsWith("face_") ? "Hit in the face"
-                            : fileName.StartsWith("env_") ? "Store overview"
-                            : fileName.StartsWith("player_") ? "Got hit"
-                            : "";
+            string[] pool = fileName.StartsWith("face_") ? FaceCaptions
+                          : fileName.StartsWith("env_") ? EnvCaptions
+                          : fileName.StartsWith("player_") ? PlayerCaptions
+                          : null;
+            string caption = pool != null ? pool[StableIndex(fileName, pool.Length)] : "";
             return new PhotoRecord { path = Path.Combine(photosDir, fileName), gameTime = 0f, caption = caption };
+        }
+
+        // Deterministic filename -> pool index, so a given photo always gets the same line.
+        static int StableIndex(string key, int count)
+        {
+            unchecked
+            {
+                int hash = 17;
+                foreach (char c in key) hash = hash * 31 + c;
+                return (hash & 0x7fffffff) % count;
+            }
         }
 
         // Mirrors the pre-PhotoRecord SessionData shape (see git history on GameData.cs) -

@@ -34,20 +34,21 @@ namespace Pizzala.EditorTools
         const string ResultsCanvasPath = "Assets/Prefabs/UI/PZ_ResultsCanvas.prefab";
         const string PhotoEntryPath = "Assets/Prefabs/UI/PZ_PhotoEntry.prefab";
 
-        // Scattered starting positions/rotations, Y kept within -190..70 (see header comment
-        // on why that margin matters) - PhotoSlot1/2 (the two shown at the lowest count) are
-        // pushed far apart left/right so they don't overlap even after scaling up. Just a
-        // starting point, drag them wherever looks right.
+        // Priority-ordered scatter: the slots fill in an order where EVERY prefix (first 2,
+        // first 3, ... first 8) is well spread, because at low photo counts only the first N
+        // slots show. 1/2 = far left/right, 3 = top-center (triangle), 4 = bottom-center
+        // (diamond), 5/6 = the two bottom corners, 7/8 = inner fill. This is why 3 photos no
+        // longer clump on one side. Y kept within -190..80 for title clearance (see header).
         static readonly (string name, Vector2 pos, float rot)[] SlotLayout =
         {
-            ("PhotoSlot1", new Vector2(-260, -40), -8f),
-            ("PhotoSlot2", new Vector2(260, -20), 6f),
-            ("PhotoSlot3", new Vector2(-140, 60), 5f),
-            ("PhotoSlot4", new Vector2(140, 70), -6f),
-            ("PhotoSlot5", new Vector2(-80, -180), -4f),
-            ("PhotoSlot6", new Vector2(80, -190), 9f),
-            ("PhotoSlot7", new Vector2(-320, -170), 3f),
-            ("PhotoSlot8", new Vector2(320, -160), -3f),
+            ("PhotoSlot1", new Vector2(-255, -25), -8f),
+            ("PhotoSlot2", new Vector2(255, -20), 6f),
+            ("PhotoSlot3", new Vector2(0, 80), 4f),
+            ("PhotoSlot4", new Vector2(-15, -180), -5f),
+            ("PhotoSlot5", new Vector2(-315, -150), 3f),
+            ("PhotoSlot6", new Vector2(315, -140), -3f),
+            ("PhotoSlot7", new Vector2(-155, 35), 7f),
+            ("PhotoSlot8", new Vector2(165, 45), -6f),
         };
 
         static readonly Vector2 PhotoGridPosition = new Vector2(0, -40); // was (0, 60) - moved down for title clearance

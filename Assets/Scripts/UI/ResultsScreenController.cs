@@ -12,11 +12,11 @@
 //     P2 photoWallPanel    — photoWallSlots: up to 8 pre-placed polaroid slots (hand-
 //                            positioned/rotated in the prefab for a "messy pile" look, NOT
 //                            auto-laid-out). Actual photo count varies a lot round to round
-//                            (2-8ish), so only the first N slots activate - N's baseline
-//                            positions get pulled in toward center and scaled up as N drops,
-//                            so a handful of photos still reads as "centered and full" rather
-//                            than a few small cards adrift in empty space (still never grows
-//                            past the hand-set 8-photo layout, so it can't reach the title).
+//                            (2-8ish), so only the first N slots activate - the active group
+//                            is re-centered as a rigid body (translate only, spacing between
+//                            cards never changes) and each card scales up as N drops, so a
+//                            handful of photos still reads as "centered and full" rather than
+//                            a few small cards adrift in empty space.
 //                            (player-face photos live on P1 instead, not in this wall)
 //   Experimental (3 pages): same P1 + P2 as Middle, plus:
 //     P3 bossNotePanel     — LLM-generated boss comment (bossCommentText) - GameManager
@@ -59,21 +59,25 @@ namespace Pizzala.UI
         // however many actually got captured) fill the first N slots in time order.
         public GameObject[] photoWallSlots;
 
-        [Header("Photo Wall Scaling (fewer photos = bigger, more clustered)")]
-        [Tooltip("Below this many photos, sizing/spread stops changing further.")]
+        [Header("Photo Wall Scaling (fewer photos = bigger, group re-centered)")]
+        [Tooltip("Below this many photos, sizing stops changing further.")]
         public int minPhotoCount = 2;
-        [Tooltip("At or above this many photos, slots use their exact hand-set position/scale.")]
+        [Tooltip("At or above this many photos, slots use their exact hand-set size.")]
         public int maxPhotoCount = 8;
-        [Tooltip("Uniform scale multiplier applied at minPhotoCount (1 = unchanged).")]
-        public float sizeScaleAtMin = 1.3f;
-        [Tooltip("How far slot positions pull in toward center at minPhotoCount (1 = unchanged, 0 = all at center).")]
-        public float spreadScaleAtMin = 0.7f;
+        [Tooltip("Uniform scale multiplier applied at minPhotoCount (1 = unchanged). Spacing between cards never changes - only this size and the active group's centering do.")]
+        public float sizeScaleAtMin = 1.0f;
 
         // Cached the first time the photo wall is shown - the design (hand-set) local
         // position/scale of each slot, so repeated Show() calls always scale from the same
         // baseline instead of compounding shrink/grow on top of the previous call's result.
         Vector2[] slotBaselinePositions;
         Vector3[] slotBaselineScales;
+        // Slot array indices, ordered by spatial spread (computed once from the hand-set
+        // positions - see ComputeSpreadOrder). displayOrder[0..N-1] is always the best N-card
+        // spread available, regardless of what order the slots happen to sit in the array or
+        // how they got dragged around - this is what makes "fewer photos, no more overlap"
+        // work without the designer having to keep slot 1/2/3... in any particular priority.
+        int[] displayOrder;
 
         [Header("P3: Boss Note (Experimental only)")]
         public GameObject bossNotePanel;    // torn-paper note container
@@ -215,7 +219,8 @@ namespace Pizzala.UI
         }
 
         // ── P2: photo wall - combined customer+environment photos fill the first N of up to
-        // 8 pre-placed slots; fewer photos -> each slot scales up and pulls toward center.
+        // 8 pre-placed slots; fewer photos -> each slot scales up and the active group
+        // re-centers as a whole (spacing between cards stays exactly as hand-placed).
         // Player-face photos live on P1 instead, so they're deliberately excluded here. ──
         void ShowPhotoWall(SessionData session)
         {
@@ -257,35 +262,93 @@ namespace Pizzala.UI
                 slotBaselinePositions[i] = rt.anchoredPosition;
                 slotBaselineScales[i] = rt.localScale;
             }
+            displayOrder = ComputeSpreadOrder(slotBaselinePositions);
         }
 
-        // Fills the first `photos.Count` slots and hides the rest, scaling size up and
-        // pulling position in toward center as the active count drops toward minPhotoCount -
-        // this only ever shrinks the spread and grows the size relative to the hand-set
-        // 8-photo baseline, so it can never spread wider or reach higher than what was
-        // manually placed (i.e. can't grow into the title).
+        // Greedy farthest-point ordering: start from the slot closest to the overall
+        // centroid, then repeatedly add whichever remaining slot is farthest from every
+        // slot picked so far. Every prefix of the result (first 1, first 2, first 3...) is
+        // therefore a well-spread subset, no matter what physical order the slots are in or
+        // how they were dragged around in the Editor.
+        static int[] ComputeSpreadOrder(Vector2[] positions)
+        {
+            int n = positions.Length;
+            var order = new List<int>(n);
+            var remaining = new List<int>(n);
+            for (int i = 0; i < n; i++) remaining.Add(i);
+            if (n == 0) return order.ToArray();
+
+            Vector2 centroid = Vector2.zero;
+            foreach (var p in positions) centroid += p;
+            centroid /= n;
+
+            int seed = remaining[0];
+            float bestDist = float.MaxValue;
+            foreach (var i in remaining)
+            {
+                float d = (positions[i] - centroid).sqrMagnitude;
+                if (d < bestDist) { bestDist = d; seed = i; }
+            }
+            order.Add(seed);
+            remaining.Remove(seed);
+
+            while (remaining.Count > 0)
+            {
+                int best = remaining[0];
+                float bestMinDist = -1f;
+                foreach (var candidate in remaining)
+                {
+                    float minDist = float.MaxValue;
+                    foreach (var chosen in order)
+                        minDist = Mathf.Min(minDist, (positions[candidate] - positions[chosen]).sqrMagnitude);
+                    if (minDist > bestMinDist) { bestMinDist = minDist; best = candidate; }
+                }
+                order.Add(best);
+                remaining.Remove(best);
+            }
+
+            return order.ToArray();
+        }
+
+        // Fills the first `photos.Count` slots and hides the rest, growing each card's size
+        // as the active count drops toward minPhotoCount, and re-centering the active GROUP
+        // as a rigid body (translate only) so it sits in the middle of the screen. Crucially
+        // this does NOT scale positions toward center - that would also shrink the gaps
+        // between cards, which is the opposite of "keep their spacing, just center the set."
+        // Spacing between any two active cards is always exactly what was hand-placed.
         int ArrangeAndFillSlots(List<PhotoRecord> photos)
         {
-            if (photoWallSlots == null) return 0;
+            if (photoWallSlots == null || displayOrder == null) return 0;
 
             int activeCount = photos.Count;
             int clamped = Mathf.Clamp(activeCount, minPhotoCount, maxPhotoCount);
             float t = maxPhotoCount > minPhotoCount ? (float)(clamped - minPhotoCount) / (maxPhotoCount - minPhotoCount) : 1f;
             float sizeScale = Mathf.Lerp(sizeScaleAtMin, 1f, t);
-            float spreadScale = Mathf.Lerp(spreadScaleAtMin, 1f, t);
+
+            // Centroid of the active subset's hand-set (baseline) positions - shifting every
+            // active slot by this offset re-centers the whole group without touching the
+            // distances between them. Uses displayOrder so the active subset is always the
+            // best-spread one, not just whatever happens to be first in the array.
+            int activeN = Mathf.Min(activeCount, displayOrder.Length);
+            Vector2 centroid = Vector2.zero;
+            for (int rank = 0; rank < activeN; rank++) centroid += slotBaselinePositions[displayOrder[rank]];
+            if (activeN > 0) centroid /= activeN;
 
             int filled = 0;
-            for (int i = 0; i < photoWallSlots.Length; i++)
+            int photoCursor = 0;
+            for (int rank = 0; rank < displayOrder.Length; rank++)
             {
-                var slot = photoWallSlots[i];
+                int idx = displayOrder[rank];
+                var slot = photoWallSlots[idx];
                 if (slot == null) continue;
 
-                if (i >= activeCount) { slot.SetActive(false); continue; }
+                if (rank >= activeCount) { slot.SetActive(false); continue; }
 
-                var tex = LoadPhoto(photos[i].path);
+                var rec = photos[photoCursor++];
+                var tex = LoadPhoto(rec.path);
                 if (tex == null)
                 {
-                    Debug.LogWarning($"ResultsScreen: photo failed to load: '{photos[i].path}' (exists: {File.Exists(photos[i].path ?? "")})");
+                    Debug.LogWarning($"ResultsScreen: photo failed to load: '{rec.path}' (exists: {File.Exists(rec.path ?? "")})");
                     slot.SetActive(false);
                     continue;
                 }
@@ -294,18 +357,18 @@ namespace Pizzala.UI
                 filled++;
 
                 var rt = (RectTransform)slot.transform;
-                rt.anchoredPosition = slotBaselinePositions[i] * spreadScale;
-                rt.localScale = slotBaselineScales[i] * sizeScale;
+                rt.anchoredPosition = slotBaselinePositions[idx] - centroid; // rigid shift only - spacing unchanged
+                rt.localScale = slotBaselineScales[idx] * sizeScale;
 
                 var raw = slot.GetComponentInChildren<RawImage>();
                 if (raw != null) raw.texture = tex;
                 var caption = slot.GetComponentInChildren<TMP_Text>();
                 if (caption != null)
                 {
-                    var ts = System.TimeSpan.FromSeconds(Mathf.Max(0f, photos[i].gameTime));
-                    caption.text = string.IsNullOrEmpty(photos[i].caption)
+                    var ts = System.TimeSpan.FromSeconds(Mathf.Max(0f, rec.gameTime));
+                    caption.text = string.IsNullOrEmpty(rec.caption)
                         ? $"{ts.Minutes}:{ts.Seconds:00}"
-                        : $"{ts.Minutes}:{ts.Seconds:00} - {photos[i].caption}";
+                        : $"{ts.Minutes}:{ts.Seconds:00} - {rec.caption}";
                 }
             }
             return filled;
