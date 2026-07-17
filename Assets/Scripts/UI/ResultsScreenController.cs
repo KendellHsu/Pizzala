@@ -31,6 +31,10 @@ namespace Pizzala.UI
         public GameObject photoEntryPrefab; // 含 RawImage
         public TMP_Text captionText;
 
+        [Header("實驗組:老闆留言(便條紙)")]
+        public GameObject bossNotePanel;    // 撕紙便條的容器,先用色塊佔位即可
+        public TMP_Text bossCommentText;    // 之後由 BossCommentService 填入生成的評語
+
         void Start()
         {
             if (controlPanel != null) controlPanel.SetActive(false);

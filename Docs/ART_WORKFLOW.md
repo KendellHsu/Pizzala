@@ -89,6 +89,7 @@
 1. **建一個放 Prefab 的資料夾**(第一次做時):
    在 Project 視窗的 `Assets` 上按右鍵 → **Create → Folder**,命名 `Prefabs`。
    → 全專案的 Prefab 都統一放 `Assets/Prefabs/`,檔名以 **`PZ_`** 開頭(例 `PZ_Pizza_Base`)。
+   → 依類型再放進對應子資料夾:披薩類 → `Pizza/`、醬汁髒污 → `SauceSplat/`、UI 元件 → `UI/`;不確定放哪就先放根目錄問遊戲組。
 
 2. **把模型拖進場景**:
    在 Project 視窗找到你的模型(例 `Assets/Art/Pizza/pizza1.fbx`),
@@ -102,7 +103,7 @@
    > 純美術資產(例如醬汁貼圖、相框)通常不用加程式元件,交給遊戲組組裝即可 — 看 PREFABS.md 的「負責」欄。
 
 5. **存成 Prefab**:
-   把 Hierarchy 裡調好的物件,**拖回 Project 視窗的 `Assets/Prefabs/` 資料夾**。
+   把 Hierarchy 裡調好的物件,**拖回 Project 視窗的 `Assets/Prefabs/` 對應子資料夾**(見上方分類)。
    它會變成一個藍色方塊圖示的 `.prefab` 檔 → 成功!把檔名改成 `PZ_開頭` 的名字。
 
 6. **之後要改 Prefab**:直接在 Project 雙擊那個 Prefab 進入編輯模式修改,存檔即可,場景裡用到它的地方會一起更新。
