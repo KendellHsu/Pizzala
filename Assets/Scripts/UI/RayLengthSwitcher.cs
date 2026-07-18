@@ -56,15 +56,18 @@ namespace Pizzala.UI
         public void UseUiRay()
         {
             CacheCasters();
-            foreach (var c in casters) c.castDistance = uiRayDistance;
+            foreach (var c in casters) if (c != null) c.castDistance = uiRayDistance;
         }
 
         /// <summary>Back to the short grab ray so the trigger picks up pizza, not the room.</summary>
         public void UsePlayRay()
         {
             CacheCasters();
+            // c may be null here: OnDisable() calls this during scene unload, by which point the
+            // XR rig's casters can already be destroyed (Unity fake-null). Skip those.
             for (int i = 0; i < casters.Count; i++)
-                casters[i].castDistance = playRayDistance > 0f ? playRayDistance : originalDistances[i];
+                if (casters[i] != null)
+                    casters[i].castDistance = playRayDistance > 0f ? playRayDistance : originalDistances[i];
         }
 
         // The cast distance is a live value on a scene component, so a run that ends while a

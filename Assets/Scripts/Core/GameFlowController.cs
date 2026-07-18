@@ -2,23 +2,30 @@
 // GameFlowController.cs — the whole session's state machine.
 // Attach to: the "Systems" object (next to GameManager).
 //
-//   [StartScreen] --trigger the Start button--> [Starting: 5,4,3..] --> [Playing]
+//   [Tutorial] --flick to page 4, trigger "Start Game"--> [Starting: 5,4,3..] --> [Playing]
+//        ^ scene loads here (from Intro) - or Play Again reloads straight into Starting
 //                                                                          |
 //                              [Paused] <-----------B---------------------+
 //                                 |                                        ^
 //                                 +--------B--> [Resuming: 3,2,1] ---------+
 //
-//              [Playing] --time up--> [Results] --flick right stick--> page turn
+//              [Playing] --time up--> [Results] --flick stick--> page turn
+//              [Results] --Play Again--> reload BackBone (skip tutorial)
+//              [Results] --New Player--> load Intro (whole flow again)
 //
-// Controls: the trigger picks up pizza AND presses UI buttons (so Start is a real button
-// you point at, not a face button); B pauses/resumes; the right thumbstick flicks through
-// the results pages.
+// The scene now opens on [Tutorial] (4 videos), not a Start menu: the player arrives here
+// from the Intro scene after the pre-roll Timeline. Flicking the stick pages the videos;
+// the last page shows a "Start Game" button pressed with the trigger. Play Again reloads
+// BackBone with skipTutorialOnce set, dropping straight into the countdown.
 //
-// Keyboard stand-ins for testing without a headset: Y = start, B = pause/resume,
-// U / I = previous / next results page.
+// Controls: trigger picks up pizza AND presses UI buttons; B pauses/resumes; the thumbstick
+// flicks through tutorial videos and results pages (one shared StickFlickReader per use).
 //
-// The stick is an axis, not a button, so it needs its own edge detection - see
-// ReadStickFlick(). B comes from an InputAction, which handles that for us.
+// Keyboard stand-ins for testing without a headset: Y = start/advance, B = pause/resume,
+// U / I = previous / next page (tutorial and results).
+//
+// Stick flicking (an axis needs edge detection) lives in the shared StickFlickReader.
+// B comes from an InputAction, which handles edge detection for us.
 //
 // Pausing itself lives in GameManager (Time.timeScale). Everything here that must keep
 // running while paused - the countdowns, this Update - uses unscaled time, since seconds
@@ -31,25 +38,45 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using Pizzala.UI;
 
 namespace Pizzala.Core
 {
-    public enum GameFlowState { StartScreen, Starting, Playing, Paused, Resuming, Results }
+    // StartScreen is retired (the scene now opens on Tutorial). Kept in the enum only so any
+    // old serialized data / logs referencing it don't break; the flow never enters it.
+    public enum GameFlowState { StartScreen, Tutorial, Starting, Playing, Paused, Resuming, Results }
 
     public class GameFlowController : MonoBehaviour
     {
+        // Set by OnPlayAgainPressed before reloading BackBone: the fresh GameFlowController in
+        // the reloaded scene reads it in OnEnable and skips the tutorial, dropping straight into
+        // the countdown. static so it survives the scene load (New Player clears it via Intro).
+        static bool skipTutorialOnce;
+
         [Header("References")]
         public GameManager gameManager;
         public ResultsScreenController resultsScreen;
+        [Tooltip("Drives the 4 tutorial videos shown when the scene opens. Leave empty to skip the tutorial entirely (goes straight to the countdown).")]
+        public TutorialController tutorialController;
         [Tooltip("Stretches the controller ray while menus are up. Leave empty to skip (the Start button then won't be reachable in VR).")]
         public RayLengthSwitcher rayLengthSwitcher;
+
+        [Header("Scenes")]
+        [Tooltip("Scene reloaded by Play Again (skips the tutorial). Usually this same BackBone scene.")]
+        public string gameSceneName = "BackBone";
+        [Tooltip("Scene loaded by New Player - back to the title + pre-roll + tutorial for the next participant.")]
+        public string introSceneName = "Intro";
 
         [Header("Panels (leave empty to skip)")]
         public GameObject startScreenPanel;
         public GameObject pauseMenuPanel;
         [Tooltip("Shows the 5..1 pre-round count and the 3..1 resume count.")]
         public TMP_Text countdownText;
+
+        [Header("Dev")]
+        [Tooltip("Editor-only convenience: when opening BackBone directly (not via Intro), skip the 4 tutorial videos and drop into the countdown. Ignored in builds.")]
+        public bool skipTutorialInEditor = false;
 
         [Header("Countdowns")]
         [Tooltip("Seconds after pressing Start before the round actually begins.")]
@@ -65,8 +92,10 @@ namespace Pizzala.Core
         // XRI Default Input Actions for movement and turning, so they'd double-fire once the
         // XR rig is in the scene. Y/U/I are only claimed by the XR Device Simulator, which
         // this project doesn't use.
-        [Header("Input - Start (keyboard only; VR uses the Start button)")]
-        [Tooltip("The real Start is a UI button pressed with the trigger - this is only so the flow can be started on a PC with no ray to point with. Clear it to disable.")]
+        [Header("Input - Start Game / advance (trigger)")]
+        [Tooltip("Trigger that confirms the tutorial's last-page Start Game button. Same button that grabs pizza in play, but only read while the tutorial is on its last page.")]
+        public string triggerVrPath = "<XRController>{RightHand}/trigger";
+        [Tooltip("Keyboard stand-in for the trigger (also starts from the tutorial's last page on a PC with no ray).")]
         public string startKeyboardPath = "<Keyboard>/y";
 
         [Header("Input - Pause/Resume (B)")]
@@ -74,7 +103,7 @@ namespace Pizzala.Core
         [Tooltip("Stand-in for B so the flow can be exercised on a PC with no headset.")]
         public string pauseKeyboardPath = "<Keyboard>/b";
 
-        [Header("Input - Results Page (right thumbstick)")]
+        [Header("Input - Page flick (thumbstick; tutorial + results share this)")]
         public string stickVrPath = "<XRController>{RightHand}/thumbstick";
         [Tooltip("Stand-in for flicking the stick left (previous page).")]
         public string stickKeyboardPath = "<Keyboard>/u";
@@ -85,60 +114,60 @@ namespace Pizzala.Core
         [Tooltip("The stick must fall back inside this before another flick counts - stops one long hold from tearing through every page.")]
         [Range(0.05f, 0.5f)] public float stickReleaseThreshold = 0.3f;
 
-        public GameFlowState State { get; private set; } = GameFlowState.StartScreen;
+        public GameFlowState State { get; private set; } = GameFlowState.Tutorial;
 
         InputAction startAction;
         InputAction pauseAction;
-        InputAction stickAction;
+        // One shared flick reader for both tutorial and results paging. They're mutually
+        // exclusive states, so a single instance polled from one Update site is safe.
+        StickFlickReader flick;
         float countdownRemaining;
-        bool stickArmed = true; // false while the stick is still pushed past the threshold
 
         void Awake()
         {
             if (gameManager == null) gameManager = GetComponent<GameManager>();
 
-            // Built in code rather than added to the .inputactions asset: it keeps this
-            // component self-contained, and the asset has no face-button bindings to extend.
-            // Keyboard only: in VR, Start is a UI button pressed with the trigger, and the
-            // trigger can't double as a "start" hotkey because it's also how you grab pizza.
-            if (!string.IsNullOrEmpty(startKeyboardPath))
-                startAction = new InputAction("Start", InputActionType.Button, startKeyboardPath);
+            // Built in code rather than added to the .inputactions asset: keeps this component
+            // self-contained. The trigger confirms the tutorial's Start Game button; we only
+            // read it while the tutorial is on its last page, so it can still double as the
+            // pizza-grab trigger during play without conflict.
+            startAction = new InputAction("StartGame", InputActionType.Button, triggerVrPath);
+            if (!string.IsNullOrEmpty(startKeyboardPath)) startAction.AddBinding(startKeyboardPath);
 
             pauseAction = new InputAction("Pause", InputActionType.Button, pauseVrPath);
             if (!string.IsNullOrEmpty(pauseKeyboardPath)) pauseAction.AddBinding(pauseKeyboardPath);
 
-            // Value, not Button: we want the stick's position every frame so we can do our
-            // own flick + re-centre detection. Pinned to Vector2 so the keyboard stand-in
-            // has to be a 2DVector composite too - mixing an axis in would leave the
-            // action's value type ambiguous and ReadValue<Vector2>() would throw.
-            stickAction = new InputAction("ResultsPage", InputActionType.Value, stickVrPath,
-                                          expectedControlType: "Vector2");
-            if (!string.IsNullOrEmpty(stickKeyboardPath))
-                stickAction.AddCompositeBinding("2DVector")
-                    .With("Left", stickKeyboardPath)
-                    .With("Right", stickKeyboardPath2);
+            flick = new StickFlickReader(stickVrPath, stickKeyboardPath, stickKeyboardPath2,
+                                         stickFlickThreshold, stickReleaseThreshold);
         }
 
         void OnEnable()
         {
             startAction?.Enable();
             pauseAction?.Enable();
-            stickAction?.Enable();
-            EnterStartScreen();
+            flick?.Enable();
+
+            // Play Again reloaded us to skip straight into the round; otherwise (arriving from
+            // Intro, or a plain scene open) run the tutorial. The editor convenience skip only
+            // applies when there's no headset-driven Intro in front of us.
+            bool skip = skipTutorialOnce || (Application.isEditor && skipTutorialInEditor);
+            skipTutorialOnce = false;
+            if (skip || tutorialController == null) BeginStarting();
+            else EnterTutorial();
         }
 
         void OnDisable()
         {
             startAction?.Disable();
             pauseAction?.Disable();
-            stickAction?.Disable();
+            flick?.Disable();
         }
 
         void OnDestroy()
         {
             startAction?.Dispose();
             pauseAction?.Dispose();
-            stickAction?.Dispose();
+            flick?.Dispose();
         }
 
         void Update()
@@ -149,7 +178,7 @@ namespace Pizzala.Core
 
             if (State == GameFlowState.Starting || State == GameFlowState.Resuming) TickCountdown();
 
-            if (State == GameFlowState.StartScreen && Pressed(startAction)) OnStartPressed();
+            if (State == GameFlowState.Tutorial) TickTutorial();
 
             if (Pressed(pauseAction))
             {
@@ -160,28 +189,27 @@ namespace Pizzala.Core
 
             if (State == GameFlowState.Results && resultsScreen != null)
             {
-                int flick = ReadStickFlick();
-                if (flick > 0) resultsScreen.NextPage();
-                else if (flick < 0) resultsScreen.PrevPage();
+                int f = flick.Poll();
+                if (f > 0) resultsScreen.NextPage();
+                else if (f < 0) resultsScreen.PrevPage();
             }
         }
 
-        static bool Pressed(InputAction a) => a != null && a.WasPressedThisFrame();
-
-        // The stick is an axis, so it reports "pushed" every frame it's held - one flick
-        // would otherwise chew through every page at once. Only fire when it crosses the
-        // threshold, then stay locked out until it falls back near centre.
-        int ReadStickFlick()
+        // Tutorial: flick pages the 4 videos; only on the last page does the trigger confirm
+        // "Start Game". Reading the trigger only here keeps it from clashing with pizza-grab.
+        void TickTutorial()
         {
-            if (stickAction == null) return 0;
+            if (tutorialController == null) { BeginStarting(); return; } // nothing to show -> just start
 
-            float x = stickAction.ReadValue<Vector2>().x;
-            if (Mathf.Abs(x) < stickReleaseThreshold) stickArmed = true;
-            if (!stickArmed || Mathf.Abs(x) < stickFlickThreshold) return 0;
+            int f = flick.Poll();
+            if (f > 0) tutorialController.NextPage();
+            else if (f < 0) tutorialController.PrevPage();
 
-            stickArmed = false;
-            return x > 0f ? 1 : -1;
+            if (tutorialController.IsOnLastPage && Pressed(startAction))
+                BeginStarting();
         }
+
+        static bool Pressed(InputAction a) => a != null && a.WasPressedThisFrame();
 
         // ── States ──
 
@@ -193,27 +221,31 @@ namespace Pizzala.Core
             State = next;
         }
 
-        void EnterStartScreen()
+        void EnterTutorial()
         {
-            SetState(GameFlowState.StartScreen, "waiting for the Start button");
-            SetActive(startScreenPanel, true);
+            SetState(GameFlowState.Tutorial, "showing the tutorial videos");
+            SetActive(startScreenPanel, false);
             SetActive(pauseMenuPanel, false);
             SetActive(countdownText, false);
-            rayLengthSwitcher?.UseUiRay(); // the Start button is unreachable with the grab-length ray
+            rayLengthSwitcher?.UseUiRay(); // the Start Game button (last page) needs pointing at
+            tutorialController?.Begin(); // reset to page 1
         }
 
-        /// <summary>Hook the Start button's OnClick to this. Also fired by the keyboard stand-in.</summary>
+        /// <summary>Hook a "Start Game" UI button's OnClick to this if you want a pointer-click
+        /// path in addition to the trigger. Only valid on the tutorial's last page.</summary>
         public void OnStartPressed()
         {
-            if (State != GameFlowState.StartScreen) return;
+            if (State != GameFlowState.Tutorial) return;
+            if (tutorialController != null && !tutorialController.IsOnLastPage) return;
             BeginStarting();
         }
 
         void BeginStarting()
         {
-            SetState(GameFlowState.Starting, $"Start pressed - counting {startCountdownSeconds}s");
+            SetState(GameFlowState.Starting, $"Start Game pressed - counting {startCountdownSeconds}s");
             countdownRemaining = startCountdownSeconds;
             SetActive(startScreenPanel, false); // the number replaces the menu rather than stacking on it
+            tutorialController?.HideCanvas();    // clear the videos before play begins
             SetActive(countdownText, true);
             UpdateCountdownText();
             rayLengthSwitcher?.UsePlayRay(); // back to grab length before they can reach for a pizza
@@ -292,15 +324,27 @@ namespace Pizzala.Core
             // The results screen itself is already up: GameManager.EndRound() calls Show().
         }
 
-        /// <summary>Hook the results screen's Play Again button OnClick to this. Clears the
-        /// results and returns to the start screen; the next Start runs StartRound() again,
-        /// which resets hits/misses/dirt and opens a fresh SessionLogger session - so a new
-        /// round starts from clean data without anything to reset here.</summary>
+        /// <summary>Hook the results screen's Play Again button OnClick to this. Reloads the
+        /// game scene so nothing from the last round lingers - StartRound() alone only resets
+        /// counters, leaving sauce splats, dropped pizzas and dirtied customers on the floor.
+        /// skipTutorialOnce makes the reloaded scene drop straight into the countdown.</summary>
         public void OnPlayAgainPressed()
         {
             if (State != GameFlowState.Results) return;
             resultsScreen?.Hide();
-            EnterStartScreen();
+            skipTutorialOnce = true;
+            SceneManager.LoadScene(gameSceneName);
+        }
+
+        /// <summary>Hook the results screen's New Player button OnClick to this. Loads the
+        /// Intro scene so the next participant gets the whole flow again (title, pre-roll,
+        /// tutorial). Everything clears with the scene unload.</summary>
+        public void OnNewPlayerPressed()
+        {
+            if (State != GameFlowState.Results) return;
+            resultsScreen?.Hide();
+            skipTutorialOnce = false; // a new player watches the tutorial
+            SceneManager.LoadScene(introSceneName);
         }
 
         static void SetActive(GameObject go, bool on) { if (go != null) go.SetActive(on); }
