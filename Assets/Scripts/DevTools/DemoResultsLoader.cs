@@ -38,7 +38,9 @@ namespace Pizzala.DevTools
         public bool autoLoadOnStart = false;
         public ExperimentCondition autoLoadCondition = ExperimentCondition.Experimental;
 
-        SessionData cached;
+        // Keyed by file name: the memorial-hall idea puts MANY pizza boxes in one scene,
+        // each opening its own session's photos - so one flat cache slot isn't enough.
+        readonly Dictionary<string, SessionData> loadedSessions = new Dictionary<string, SessionData>();
 
         void Start()
         {
@@ -70,9 +72,14 @@ namespace Pizzala.DevTools
 
         // Hooked up to a clickable prop in the world (see PhotoBoxTrigger) - loads the same
         // sample session this loader already uses for keys 1/2/3, and jumps straight to its
-        // photo wall. Stand-in for the eventual memorial-hall pizza box, which will load
-        // whichever specific past session it belongs to instead of this one fixed sample.
-        public void ShowRecordedPhotos()
+        // photo wall.
+        public void ShowRecordedPhotos() => ShowRecordedPhotos(sessionFileName);
+
+        // Per-box variant for a scene with MANY pizza boxes: each box's PhotoBoxTrigger
+        // passes its own session file name (type it into the OnActivated event's string
+        // field in the Inspector), so every box opens the photos of the round it belongs
+        // to. The no-arg overload above stays for the single-box/P-key case.
+        public void ShowRecordedPhotos(string fileName)
         {
             if (resultsScreen == null)
             {
@@ -80,13 +87,10 @@ namespace Pizzala.DevTools
                 return;
             }
 
-            if (cached == null)
-            {
-                cached = Load();
-                if (cached == null) return;
-            }
+            var session = LoadCached(fileName);
+            if (session == null) return;
 
-            resultsScreen.ShowPhotoWallOnly(cached);
+            resultsScreen.ShowPhotoWallOnly(session);
         }
 
         void ShowAs(ExperimentCondition condition)
@@ -97,11 +101,8 @@ namespace Pizzala.DevTools
                 return;
             }
 
-            if (cached == null)
-            {
-                cached = Load();
-                if (cached == null) return;
-            }
+            var cached = LoadCached(sessionFileName);
+            if (cached == null) return;
 
             cached.condition = condition;
             resultsScreen.Show(cached); // puts up the "writing a note..." placeholder for Experimental
@@ -118,10 +119,18 @@ namespace Pizzala.DevTools
             Debug.Log($"DemoResultsLoader: showing {sessionFileName} as {condition}.");
         }
 
-        SessionData Load()
+        SessionData LoadCached(string fileName)
+        {
+            if (loadedSessions.TryGetValue(fileName, out var hit)) return hit;
+            var data = Load(fileName);
+            if (data != null) loadedSessions[fileName] = data;
+            return data;
+        }
+
+        SessionData Load(string fileName)
         {
             string dataRoot = Path.Combine(Path.GetFullPath(Path.Combine(Application.dataPath, "..")), "Data");
-            string jsonPath = Path.Combine(dataRoot, "sessions", sessionFileName);
+            string jsonPath = Path.Combine(dataRoot, "sessions", fileName);
             string photosDir = Path.Combine(dataRoot, "photos");
 
             if (!File.Exists(jsonPath))
