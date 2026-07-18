@@ -1,5 +1,7 @@
+using System.Linq;
 using System.Text;
 using UnityEditor;
+using UnityEditor.Animations;
 using UnityEngine;
 using Pizzala.Customers;
 
@@ -12,8 +14,8 @@ namespace Pizzala.EditorTools
     // 檢查項目:
     //   1. Animator 數量(必須恰好 1 個;疊兩個會讓 CustomerController 抓錯)
     //   2. Apply Root Motion(必須關;位移全由 CustomerController 腳本驅動)
-    //   3. idle/walk/throw 三個控制器是否有接
-    //   4. 每個控制器的 clip 骨架路徑是否對得上 prefab 裡的模型
+    //   3. 單一 animatorController 是否有接(內含 Idle/Walk/Throw 三 state)
+    //   4. controller 內的 clip 骨架路徑是否對得上 prefab 裡的模型
     // 結果印在 Console,每個角色一則;有 ❌ 的就是要修的地方。
     public static class CustomerAnimAudit
     {
@@ -89,17 +91,17 @@ namespace Pizzala.EditorTools
                 Debug.LogError(sb.ToString());
                 return;
             }
-            hasProblem |= CheckController(sb, "idle ", cc.idleAnimatorController, animator,
-                required: false); // idle 留空會 fallback 用 Animator 預設 controller
-            hasProblem |= CheckController(sb, "walk ", cc.walkAnimatorController, animator,
-                required: true);  // walk 沒接 = 走動時不換動畫 = 站著滑行
-            hasProblem |= CheckController(sb, "throw", cc.throwAnimatorController, animator,
-                required: false);
-
-            if (cc.idleAnimatorController == null && animator.runtimeAnimatorController == null)
+            // 單一 controller:優先看 CustomerController.animatorController,留空則看 Animator 元件上掛的。
+            var rac = cc.animatorController != null ? cc.animatorController : animator.runtimeAnimatorController;
+            if (rac == null)
             {
                 hasProblem = true;
-                sb.AppendLine("❌ idle 控制器沒接、Animator 也沒有預設控制器 → 走完路切不回站立動畫");
+                sb.AppendLine("❌ CustomerController.animatorController 沒接、Animator 也沒掛控制器 → 完全不會播動畫");
+            }
+            else
+            {
+                hasProblem |= CheckController(sb, "controller", rac, animator);
+                hasProblem |= CheckStates(sb, rac);
             }
 
             if (hasProblem) Debug.LogWarning(sb.ToString());
@@ -109,14 +111,12 @@ namespace Pizzala.EditorTools
         // Generic rig 的 clip 用「transform 路徑」綁骨頭;路徑對不上模型,動畫播了骨頭也不會動。
         // 回傳 true = 有問題。
         static bool CheckController(StringBuilder sb, string label,
-            RuntimeAnimatorController rac, Animator animator, bool required)
+            RuntimeAnimatorController rac, Animator animator)
         {
             if (rac == null)
             {
-                sb.AppendLine(required
-                    ? $"❌ {label} 控制器未指定 → 走動時不會切走路動畫(站著滑行)"
-                    : $"  {label} 控制器未指定(允許留空)");
-                return required;
+                sb.AppendLine($"❌ {label} 未指定");
+                return true;
             }
 
             int total = 0, missing = 0;
@@ -148,6 +148,40 @@ namespace Pizzala.EditorTools
             }
             sb.AppendLine($"✓ {label} = {rac.name}(骨架路徑 {total} 條全對上)");
             return false;
+        }
+
+        // 單一 controller 必須有 Idle/Walk/Throw 三個 state 與 Walking(bool)/Throw(trigger) 兩個參數,
+        // CustomerController 才切得動。回傳 true = 有問題。
+        static bool CheckStates(StringBuilder sb, RuntimeAnimatorController rac)
+        {
+            var ac = rac as AnimatorController;
+            if (ac == null)
+            {
+                // Override controller 之類:退而求其次,只確認 clip 數量。
+                sb.AppendLine($"  (非 AnimatorController,略過 state/參數檢查)");
+                return false;
+            }
+
+            bool problem = false;
+            var paramNames = ac.parameters.Select(p => p.name).ToHashSet();
+            foreach (var need in new[] { "Walking", "Throw" })
+                if (!paramNames.Contains(need))
+                {
+                    problem = true;
+                    sb.AppendLine($"❌ 缺參數 '{need}' → CustomerController 切不動{(need == "Walking" ? "走路" : "丟回")}動畫");
+                }
+
+            var stateNames = ac.layers.Length > 0
+                ? ac.layers[0].stateMachine.states.Select(s => s.state.name).ToHashSet()
+                : new System.Collections.Generic.HashSet<string>();
+            foreach (var need in new[] { "Idle", "Walk", "Throw" })
+                if (!stateNames.Contains(need))
+                {
+                    problem = true;
+                    sb.AppendLine($"❌ 缺 state '{need}'(現有:{string.Join(", ", stateNames)})");
+                }
+            if (!problem) sb.AppendLine("✓ Idle/Walk/Throw 三 state 與 Walking/Throw 參數齊全");
+            return problem;
         }
 
         static string GetPath(Transform root, Transform t)

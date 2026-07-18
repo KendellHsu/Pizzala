@@ -342,9 +342,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `pizzaBoxCloseClip` | Close | 關盒動畫的 clip 名稱（要和 Animation 元件 clip 清單裡一致） |
 | `pizzaBoxSlot` | （盒中位置） | 盒中生成 pizza 的位置（空物件，擺在盒子開口內）。留空 = 不生成盒中 pizza |
 | `boxPizzaByFlavor` | — | 盒中展示用 pizza prefab，順序對應 PizzaFlavor（建議用靜態、不可抓取的版本） |
-| `idleAnimatorController` | （站立控制器） | 站立動畫 Animator Controller；留空 = 不切動畫 |
-| `walkAnimatorController` | （走路控制器） | 走動時切換的 Animator Controller；留空 = 走動不換動畫 |
-| `throwAnimatorController` | （丟回控制器） | 丟回披薩出手時切換的 Animator Controller；留空 = 丟回不換動畫 |
+| `animatorController` | （單一控制器） | 統一 Armature 骨架的 Animator Controller，內含 Idle/Walk/Throw 三 state 與 `Walking`(bool)/`Throw`(trigger) 參數。走動 `SetBool("Walking")`、丟回 `SetTrigger("Throw")`。留空 = 沿用 Animator 元件上原本掛的控制器 |
 
 ---
 
@@ -378,6 +376,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-16 | 針對 VR 出手速度偏慢調整飛盤預設：`frisbeeSpinToFly` 10→6、`frisbeeSpinRatioThreshold` 0.8→0.5、`frisbeeAeroScale` 1→3（升力更易觸發、滑翔與迴旋更明顯）；同步 ThrowTuning.asset |
 | 2026-07-16 | 修正邊緣抓取失效：`selectEntered` 監聽晚於 XRGeneralGrabTransformer 快取 attach，改用子類別 `FrisbeeGrabInteractable`（覆寫 `InitializeDynamicAttachPose`，在快取前設定盤緣握點+對齊）；三顆 prefab 的 XRGrabInteractable 換成它，移除 FrisbeeEdgeGrab |
 | 2026-07-18 | 修 bug：丟回披薩（`PZ_ThrowbackPizza_*`）抓不到邊緣 — 三顆的 XRGrabInteractable 換成 `FrisbeeGrabInteractable` 並開啟 Use Dynamic Attach |
+| 2026-07-18 | 統一 Armature 骨架：美術改用單一 `<角色>_animation.fbx`（內含 standing/walking/throwing 三 take）。CustomerController 動畫欄位 **移除** `idle/walk/throwAnimatorController` 三欄，**改為單一** `animatorController`（內含 Idle/Walk/Throw 三 state；走動 `SetBool("Walking")`、丟回 `SetTrigger("Throw")`，Throw 播完自動回 Idle）。新增 Editor 工具 `Tools/Pizzala/Setup NPC Animations`（切 clip＋產生每角色 controller）與 `Tools/Pizzala/Build NPC Customer Prefabs`（掃 NPC 資料夾產生 6 個 PZ_Customer_* variant 並接進 CustomerSpawner）。移除過時的 UncleBCustomerBuilder |
 | 2026-07-18 | 修 bug：丟回披薩被玩家周圍的撿取禁區（PickupExclusionZone）trigger 提前判定，打不到玩家頭 → 玩家臉特效不觸發。`ThrowbackProjectile` 改為只認玩家頭(命中)或實心環境(落地)，略過其他 trigger 區 |
 | 2026-07-16 | DirtManager 新增 `paintOnCharacters`、`paintSize`、`paintWrapDepth`：砸中客人改用 texture-space 染色（SaucePaintable 把醬料畫進角色貼圖 UV 空間，完全跟著蒙皮動畫），Decal 掛骨頭降為後備路徑 |
 | 2026-07-16 | CustomerSpawner 新增 `customerPrefabs`（客人 Prefab 清單，生成時均勻隨機挑一個，支援多角色混合）；原 `customerPrefab` 保留為備援。搭配新工具 `Tools/Pizzala/Build UncleB Customer Prefab` 產生第二隻角色 UncleB 客人並自動接進生成器 |

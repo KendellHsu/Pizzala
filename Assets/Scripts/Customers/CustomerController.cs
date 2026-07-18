@@ -11,8 +11,9 @@
 //   throwOrigin   — 丟回披薩的出發點(手或胸前的空物件)
 //   requiredThrowType — 進階玩法:要求特定投擲方式,Unknown=不限
 //   canWander     — 等餐時是否遊走(情緒加速機制),關掉=站樁
-//   idle/walk/throwAnimatorController — 站立/走路/丟回的 Animator Controller,
-//                   對應狀態切換;留空則該狀態不換動畫
+//   animatorController — 單一 Animator Controller(統一 Armature 骨架),
+//                   內含 Idle/Walk/Throw 三個 state:走動時 SetBool("Walking"),
+//                   丟回時 SetTrigger("Throw")。留空則沿用 Animator 上原本的控制器。
 // 情緒:等餐耐心切三段(耐心→不耐煩→暴躁),越久遊走越快;
 //   剩餘耐心改由頭上倒數圈(FlavorCountDown)呈現,不再換整身表情貼圖。
 // 門檻與速度由 GameManager 從 ThrowTuning 推入(ApplyTuning)。
@@ -69,12 +70,15 @@ namespace Pizzala.Customers
         [Header("移動(情緒加速)")]
         public bool canWander = true;
 
-        [Header("走路動畫(可留空=不切動畫)")]
-        public RuntimeAnimatorController idleAnimatorController;
-        public RuntimeAnimatorController walkAnimatorController;
+        [Header("角色動畫(單一 Controller,統一 Armature 骨架)")]
+        [Tooltip("內含 Idle/Walk/Throw 三個 state 的 Animator Controller。" +
+                 "走動切 Walking(bool)、丟回觸發 Throw(trigger)。" +
+                 "留空 = 沿用 Animator 元件上原本掛的控制器,不覆寫。")]
+        public RuntimeAnimatorController animatorController;
 
-        [Tooltip("丟回披薩時的出手動畫控制器;留空=丟回時不換動畫")]
-        public RuntimeAnimatorController throwAnimatorController;
+        // Animator 參數名(與各角色 controller 內的參數一致)
+        static readonly int WalkingHash = Animator.StringToHash("Walking");
+        static readonly int ThrowHash   = Animator.StringToHash("Throw");
 
         public CustomerState State { get; private set; } = CustomerState.PreOrder;
         public WaitMood Mood { get; private set; } = WaitMood.Patient;
@@ -131,9 +135,10 @@ namespace Pizzala.Customers
                 // 位移完全由本腳本的 MoveTowards 驅動;Root Motion 開著會跟它打架(原地踏步/抖動)。
                 // 各角色 FBX 匯入的 Animator 預設值不一,這裡統一強制關閉,不依賴 prefab 手動設定。
                 animator.applyRootMotion = false;
+                // 有指定就覆寫;留空則沿用 Animator 上原本掛的控制器(prefab 已接好)。
+                if (animatorController != null)
+                    animator.runtimeAnimatorController = animatorController;
             }
-            if (idleAnimatorController == null && animator != null)
-                idleAnimatorController = animator.runtimeAnimatorController;
             modelRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
 
             // 診斷:確認每隻客人開場抓到的 animator 與 idle 控制器狀態
@@ -270,21 +275,22 @@ namespace Pizzala.Customers
 
         void SetWalking(bool walking)
         {
-            if (isThrowingAnim) return; // 出手動畫播放中,別搶回 idle/walk 控制器
+            if (isThrowingAnim) return; // 出手動畫播放中,別搶回 idle/walk 狀態
             if (walking == isWalking) return;
             isWalking = walking;
             if (animator == null) return;
             if (!walking) animator.speed = 1f; // 回到站立:動畫用正常速度
-            var target = walking ? walkAnimatorController : idleAnimatorController;
-            if (target != null) animator.runtimeAnimatorController = target;
+            animator.SetBool(WalkingHash, walking); // Idle ↔ Walk 由 controller 內 transition 切換
         }
 
-        // 丟回披薩的出手動畫:切到 throw 控制器播一次(長度自動取 clip 長),
-        // 播完切回 idle。播放期間 isThrowingAnim 鎖住 SetWalking。
-        // 由 GameManager 在丟回發射的瞬間呼叫。
+        // Throw state 標名(controller 內丟回狀態的名字);播完自動 transition 回 Idle。
+        const string ThrowStateName = "Throw";
+
+        // 丟回披薩的出手動畫:SetTrigger("Throw") 播一次,播完回 Idle。
+        // 播放期間 isThrowingAnim 鎖住 SetWalking。由 GameManager 在丟回發射的瞬間呼叫。
         public void PlayThrow()
         {
-            if (throwAnimatorController == null || animator == null) return;
+            if (animator == null) return;
             StartCoroutine(ThrowAnimRoutine());
         }
 
@@ -292,21 +298,30 @@ namespace Pizzala.Customers
         {
             isThrowingAnim = true;
             isWalking = false;
-            animator.speed = 1f; // 出手動畫用正常速度,不受走路變速影響
-            animator.runtimeAnimatorController = throwAnimatorController;
-            yield return null; // 等 animator 進到新狀態,下一幀才讀得到 clip 長度
+            animator.speed = 1f;             // 出手動畫用正常速度,不受走路變速影響
+            animator.SetBool(WalkingHash, false); // 先離開 Walk,免得 Walking 還開著搶回去
+            animator.SetTrigger(ThrowHash);
 
-            float len = 1f;
-            if (animator.runtimeAnimatorController == throwAnimatorController)
+            // 等 animator 進到 Throw 狀態(trigger 到實際切換有幾幀延遲),
+            // 進到後再等它播完;沒有 Throw 狀態(controller 未接)就退回固定秒數。
+            float timeout = Time.time + 0.5f;
+            while (Time.time < timeout &&
+                   !animator.GetCurrentAnimatorStateInfo(0).IsName(ThrowStateName))
+                yield return null;
+
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName(ThrowStateName))
             {
-                var info = animator.GetCurrentAnimatorStateInfo(0);
-                if (info.length > 0.01f) len = info.length;
+                // 等到 normalizedTime 走完一輪(非 loop 的 Throw 播一次即 >=1)
+                while (animator.GetCurrentAnimatorStateInfo(0).IsName(ThrowStateName) &&
+                       animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.98f)
+                    yield return null;
             }
-            yield return new WaitForSeconds(len);
+            else
+            {
+                yield return new WaitForSeconds(1f); // 保底:沒偵測到 Throw 狀態
+            }
 
-            isThrowingAnim = false;
-            if (animator != null)
-                animator.runtimeAnimatorController = idleAnimatorController; // 收回 idle,下一幀 SetWalking 重新評估
+            isThrowingAnim = false; // 解鎖,下一幀 SetWalking 依遊走狀態重新評估
         }
 
         // 純函式,方便不進 Play Mode 驗證門檻
