@@ -25,6 +25,21 @@ namespace Pizzala.Throwing
 
         static ThrowTuning Tuning => GameManager.Instance != null ? GameManager.Instance.tuning : null;
 
+        // Refuse NEW grabs whenever play isn't live - tutorial, countdown, pause, results.
+        // Without this the trigger doubles as "grab pizza" during the tutorial, and the player
+        // ends up holding one they can't legally throw (OnReleased cancels and snaps it back).
+        // A hand that's ALREADY holding this pizza is always allowed to keep it, so pausing
+        // mid-hold doesn't rip it out of the hand.
+        // Dev note: scenes with a GameManager but no running round (the _Test_* scenes) block
+        // grabbing too - turn on GameManager.autoStart there, that's what it's for.
+        public override bool IsSelectableBy(IXRSelectInteractor interactor)
+        {
+            var gm = GameManager.Instance;
+            bool newGrabsAllowed = gm == null || gm.CanThrow;
+            return base.IsSelectableBy(interactor)
+                   && (newGrabsAllowed || interactorsSelecting.Contains(interactor));
+        }
+
         protected override void InitializeDynamicAttachPose(IXRSelectInteractor interactor, Transform dynamicAttachTransform)
         {
             // 先讓 XRI 做預設(依 Match Position/Rotation + Snap 把 attach 放到手的位置)

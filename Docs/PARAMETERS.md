@@ -240,6 +240,16 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `stickFlickThreshold` | 0.7 | 搖桿推多遠才算一次翻頁 flick |
 | `stickReleaseThreshold` | 0.3 | 搖桿要回中到此範圍內才能再次翻頁（教學與結算共用同一套 flick） |
 
+### RayLengthSwitcher（[RayLengthSwitcher.cs](../Assets/Scripts/UI/RayLengthSwitcher.cs)，控制器 ray 長度切換）
+
+由 GameFlowController 依狀態驅動：選單狀態（教學/暫停/結算）拉長 ray 並顯示雷射線；遊玩狀態縮回抓取長度並隱藏雷射線。
+
+| 參數 | 預設值 | 說明 |
+|---|---|---|
+| `uiRayDistance` | 5 | 選單狀態的 ray 長度（公尺），要蓋過面板距離（約 1.5m） |
+| `playRayDistance` | 0 | 遊玩狀態的 ray 長度；0 = 還原 rig prefab 原值（較安全的預設） |
+| `hideRayVisualInPlay` | true | 遊玩時連雷射視覺線一起隱藏（丟披薩時手上不會垂著一條雷射）；回到選單狀態自動恢復 |
+
 ### TutorialController（[TutorialController.cs](../Assets/Scripts/UI/TutorialController.cs)，PZ_TutorialCanvas）
 
 由 GameFlowController 驅動，自己不讀輸入（避免搶 stick/trigger）。
@@ -377,3 +387,4 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-18 | PizzaJelly 加強變形強度、改為方向性壓扁：撞擊時 JellyPivot 的 Y 軸轉向撞擊法線（`Punch(normal)`），沿法線壓扁而非永遠沿盤厚，剛體感明顯降低；自動撞擊偵測改看「速度向量變化」而非純速度變慢（涵蓋方向反轉但速率相近的彈跳）；抓回手上時壓扁軸歸位。預設再加強：`jellyImpactAmount` 0.3→0.55、`jellyMaxDeform` 0.35→0.5（上限放寬到 0.8）、`jellyStiffness` 120→100、`jellyDamping` 12→9（多晃 2~3 下）；同步更新 ThrowTuning.asset |
 | 2026-07-18 | PizzaJelly 放棄「局部凹陷/方向性壓扁」：披薩是扁飛盤、撞擊法線幾乎都在水平面，盤軸方向本來就不會有明顯形變，真正的局部凹陷需逐頂點/shader 形變（fbx 需 readable、Quest 逐頂點有效能風險，CP 值不高）。`Punch()` 退回無參數、只做沿盤軸整體 squash & stretch；保留自動撞擊偵測（改看速度向量變化）。加強後的預設值（impact 0.55、maxDeform 0.5、stiffness 100、damping 9）維持不變 |
 | 2026-07-18 | Game flow 重構：**不再分實驗組/對照組**——`GameManager.condition` 降為純資料標籤（預設 Control→**Experimental**，不再影響流程），`throwbackOnTimeout` 預設 false→**true**（正式保險絲）；`bossCommentService` 改為所有玩家都用（留空則罐頭 fallback）。**GameFlowController** 開場改進 `Tutorial` 狀態（4 段教學影片），新增 `tutorialController`/`introSceneName`/`skipTutorialInEditor`/`triggerVrPath` 等欄位，移除 StartScreen 流程；結算頁**只有一個「回到開頭」按鈕**（不分 Play Again/New Player 兩種行為），一律載回 Intro 全流程重來，沒有跳過教學的快速重玩路徑。**ResultsScreenController** 固定三頁、兩顆按鈕（Share ＋ 單一 `playAgainButton`）翻到最後一頁才出現、與 LLM 解耦；`postNoteButtonDelay` **棄用**（保留欄位不再讀）。新增 **TutorialController**（4 段 VideoPlayer 教學）、**IntroSequenceController**（標題→前導 Timeline→載入遊戲）、**StickFlickReader**（教學與結算共用的搖桿翻頁）。RayLengthSwitcher 加 caster null-guard |
+| 2026-07-18 | 開始遊戲前禁抓 pizza ＋ 遊玩時關雷射線：`FrisbeeGrabInteractable` 覆寫 `IsSelectableBy`——回合未進行（教學/倒數/暫停/結算）一律擋下**新的**抓取（已握在手上的不強制放開）；判斷用既有的 `GameManager.CanThrow`。注意：_Test_* 測試場景若有 GameManager 但沒開局，pizza 會抓不起來，把 `autoStart` 打開即可。`RayLengthSwitcher` 新增 `hideRayVisualInPlay`（預設 true）：遊玩狀態把 LineVisual 子物件整個關掉，選單狀態恢復。另修結算白背景板開場就顯示的 bug（`ResultsScreenController.Start()` 改呼叫 `Hide()`） |

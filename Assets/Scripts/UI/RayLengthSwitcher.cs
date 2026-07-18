@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.XR.Interaction.Toolkit.Interactors.Casters;
+using UnityEngine.XR.Interaction.Toolkit.Interactors.Visuals;
 
 namespace Pizzala.UI
 {
@@ -28,8 +29,14 @@ namespace Pizzala.UI
         [Tooltip("Ray length during play. Left at 0 the original prefab value is restored instead, which is the safer default.")]
         public float playRayDistance = 0f;
 
+        [Tooltip("Also hide the ray's visual line during play, so no laser dangles from the hand while throwing. The line comes back whenever a menu ray is needed.")]
+        public bool hideRayVisualInPlay = true;
+
         readonly List<CurveInteractionCaster> casters = new List<CurveInteractionCaster>();
         readonly List<float> originalDistances = new List<float>();
+        // The line lives on its own child GameObject ("LineVisual") under each interactor, so
+        // toggling that object kills the laser without touching the interactor's ability to grab.
+        readonly List<CurveVisualController> visuals = new List<CurveVisualController>();
         bool cached;
 
         void CacheCasters()
@@ -37,6 +44,7 @@ namespace Pizzala.UI
             if (cached) return;
             casters.Clear();
             originalDistances.Clear();
+            visuals.Clear();
 
             foreach (var interactor in FindObjectsByType<NearFarInteractor>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             {
@@ -44,6 +52,9 @@ namespace Pizzala.UI
                 if (caster == null) continue;
                 casters.Add(caster);
                 originalDistances.Add(caster.castDistance); // remember the tuned value rather than hard-coding it
+
+                var visual = interactor.GetComponentInChildren<CurveVisualController>(true);
+                if (visual != null) visuals.Add(visual);
             }
             cached = true;
 
@@ -52,14 +63,16 @@ namespace Pizzala.UI
                                  "Menus will still show, but the ray won't reach them.");
         }
 
-        /// <summary>Stretch the ray so menus ~1.5m away are pointable.</summary>
+        /// <summary>Stretch the ray so menus ~1.5m away are pointable, and show its line.</summary>
         public void UseUiRay()
         {
             CacheCasters();
             foreach (var c in casters) if (c != null) c.castDistance = uiRayDistance;
+            SetVisuals(true);
         }
 
-        /// <summary>Back to the short grab ray so the trigger picks up pizza, not the room.</summary>
+        /// <summary>Back to the short grab ray so the trigger picks up pizza, not the room;
+        /// hides the laser line too (if hideRayVisualInPlay).</summary>
         public void UsePlayRay()
         {
             CacheCasters();
@@ -68,6 +81,13 @@ namespace Pizzala.UI
             for (int i = 0; i < casters.Count; i++)
                 if (casters[i] != null)
                     casters[i].castDistance = playRayDistance > 0f ? playRayDistance : originalDistances[i];
+            if (hideRayVisualInPlay) SetVisuals(false);
+        }
+
+        void SetVisuals(bool on)
+        {
+            foreach (var v in visuals)
+                if (v != null) v.gameObject.SetActive(on);
         }
 
         // The cast distance is a live value on a scene component, so a run that ends while a
