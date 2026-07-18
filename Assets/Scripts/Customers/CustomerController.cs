@@ -370,6 +370,8 @@ namespace Pizzala.Customers
             patienceRoutine = null;
             HideOrderUI();
             State = CustomerState.Angry; // 超時 → 生氣(耐心圈已歸零)
+            Pizzala.Audio.GameAudioController.PlayAngry(
+                faceAnchor != null ? faceAnchor.position : transform.position + Vector3.up * 1.5f);
 
             // 超時反擊:去撿一顆地上可撿的 pizza 丟回玩家臉;撿不到就直接離場。
             // 開關 = GameManager.throwbackOnTimeout。

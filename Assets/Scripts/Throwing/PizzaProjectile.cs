@@ -78,6 +78,8 @@ namespace Pizzala.Throwing
             if (GameManager.Instance != null)
                 record = GameManager.Instance.OnPizzaReleased(this, currentSampler);
 
+            Pizzala.Audio.GameAudioController.PlayPizzaThrow();
+
             // 飛行中沿路甩醬(垂直滴落 + 盤緣切線甩出)
             var spray = GetComponent<Pizzala.Dirt.SauceSpray>();
             if (spray == null) spray = gameObject.AddComponent<Pizzala.Dirt.SauceSpray>();
@@ -147,6 +149,12 @@ namespace Pizzala.Throwing
 
             var zone = col.GetComponentInParent<CustomerHitZone>();
             inFlight = false;
+
+            var hitCustomer = zone != null && zone.customer != null
+                ? zone.customer
+                : col.GetComponentInParent<CustomerController>();
+            if (hitCustomer != null)
+                Pizzala.Audio.GameAudioController.PlayCustomerHit();
 
             GetComponent<PizzaJelly>()?.Punch();
             GetComponent<PizzaCometTrail>()?.StopEmit();
