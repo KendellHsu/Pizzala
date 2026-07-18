@@ -261,7 +261,9 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `videoPlayer` | （空） | 播放 4 段影片的 VideoPlayer；留空會自動抓子物件的 VideoPlayer |
 | `videoImage` | （空） | 顯示影片的 RawImage；留空會自動抓子物件的 RawImage。程式會自動把 VideoPlayer→RenderTexture→RawImage 這條管線接好（缺 RenderTexture 就自建），設定錯也能自我修復 |
 | `pages` | （空陣列） | 4 段教學影片 VideoClip，依頁序 |
-| `startGamePrompt` | （空） | 只在最後一頁顯示的「開始遊戲」提示/按鈕 |
+| `startGamePrompt` | （空） | 只在最後一頁顯示的「按 A 開始遊戲」提示 |
+| `blinkPrompt` | true | 最後一頁讓開始提示閃爍，提醒玩家可以開始 |
+| `blinkPeriod` | 0.8 | 閃爍週期（秒）；< 0.05 視為不閃、恆亮 |
 
 ### IntroSequenceController（[IntroSequenceController.cs](../Assets/Scripts/Intro/IntroSequenceController.cs)，Intro 場景）
 

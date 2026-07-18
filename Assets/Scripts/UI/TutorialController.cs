@@ -32,11 +32,16 @@ namespace Pizzala.UI
         public VideoClip[] pages;
 
         [Header("Last-page Start Game prompt")]
-        [Tooltip("Shown only on the last page: the 'flick done, press trigger to start' button/label.")]
+        [Tooltip("Shown only on the last page: the 'press A to start' label/child text. Blinks to draw the eye if blinkPrompt is on.")]
         public GameObject startGamePrompt;
+        [Tooltip("Blink the Start Game prompt on the last page so the player notices they can start.")]
+        public bool blinkPrompt = true;
+        [Tooltip("Blink period in seconds (on for half, off for half).")]
+        public float blinkPeriod = 0.8f;
 
         int currentPage;
         RenderTexture autoTexture; // created here if none is wired, freed in OnDestroy
+        float blinkTimer;
 
         public int PageCount => pages != null ? pages.Length : 0;
         public bool IsOnLastPage => PageCount == 0 || currentPage >= PageCount - 1;
@@ -117,18 +122,39 @@ namespace Pizzala.UI
 
             if (videoPlayer != null && pages != null && page < pages.Length && pages[page] != null)
             {
+                // Prepare first, then Play on prepareCompleted. Calling Play() straight after
+                // switching clips often shows nothing (the clip isn't decoded yet) - the most
+                // common "video won't play" cause. isLooping must be set before Prepare.
                 videoPlayer.Stop();
-                videoPlayer.clip = pages[page];
                 videoPlayer.isLooping = true;
-                videoPlayer.Play();
+                videoPlayer.clip = pages[page];
+                videoPlayer.prepareCompleted -= OnPrepared; // avoid stacking handlers across pages
+                videoPlayer.prepareCompleted += OnPrepared;
+                videoPlayer.Prepare();
             }
-            else if (pages == null || page >= pages.Length || pages[page] == null)
+            else
             {
                 Debug.LogWarning($"[TutorialController] page {page} has no clip assigned - screen will be blank.");
             }
 
+            Debug.Log($"[TutorialController] ShowPage {page + 1}/{PageCount} (lastPage={IsOnLastPage})");
+
             // The Start Game prompt only exists on the final page.
             if (startGamePrompt != null) startGamePrompt.SetActive(IsOnLastPage);
+            blinkTimer = 0f; // restart the blink cycle fully-on whenever the page changes
+        }
+
+        void OnPrepared(VideoPlayer vp) => vp.Play();
+
+        void Update()
+        {
+            // Blink the last-page prompt so "you can start now" is impossible to miss. Only
+            // touches the prompt on the last page; every other page leaves it hidden.
+            if (!blinkPrompt || startGamePrompt == null || !IsOnLastPage) return;
+            if (blinkPeriod < 0.05f) { if (!startGamePrompt.activeSelf) startGamePrompt.SetActive(true); return; }
+            blinkTimer += Time.unscaledDeltaTime;
+            bool on = (blinkTimer % blinkPeriod) < (blinkPeriod * 0.5f);
+            if (startGamePrompt.activeSelf != on) startGamePrompt.SetActive(on);
         }
 
         void SetCanvasActive(bool on)

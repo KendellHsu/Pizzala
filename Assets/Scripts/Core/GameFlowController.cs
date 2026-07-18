@@ -199,8 +199,14 @@ namespace Pizzala.Core
             if (f > 0) tutorialController.NextPage();
             else if (f < 0) tutorialController.PrevPage();
 
-            if (tutorialController.IsOnLastPage && Pressed(startAction))
-                BeginStarting();
+            // A only starts the game from the last page. Log a press that lands on the wrong
+            // page so "A does nothing" is diagnosable (usually: not actually on the last page).
+            if (Pressed(startAction))
+            {
+                if (tutorialController.IsOnLastPage) BeginStarting();
+                else if (logStateChanges)
+                    Debug.Log("[GameFlow] Start pressed but not on the last tutorial page yet - flick to the end first.");
+            }
         }
 
         static bool Pressed(InputAction a) => a != null && a.WasPressedThisFrame();
