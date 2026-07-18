@@ -107,6 +107,20 @@ namespace Pizzala.UI
             HideAllPanels();
         }
 
+        // Fully clears the results screen - every panel including the background, unlike
+        // HideAllPanels() which leaves the background on for the next page. Called by
+        // GameFlowController when the player hits Play Again and we go back to the start
+        // screen, so the results don't linger behind the start menu.
+        public void Hide()
+        {
+            if (postNoteButtonsRoutine != null) { StopCoroutine(postNoteButtonsRoutine); postNoteButtonsRoutine = null; }
+            if (shareButton != null) shareButton.SetActive(false);
+            if (playAgainButton != null) playAgainButton.SetActive(false);
+            HideAllPanels();
+            if (backgroundPanel != null) backgroundPanel.SetActive(false);
+            currentSession = null;
+        }
+
         // Also called at the top of each page change - the demo loader can switch pages/
         // conditions repeatedly in one session, so every transition must start from a
         // blank slate (otherwise panels stack on top of each other and old polaroids pile up).

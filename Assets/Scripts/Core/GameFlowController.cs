@@ -292,6 +292,17 @@ namespace Pizzala.Core
             // The results screen itself is already up: GameManager.EndRound() calls Show().
         }
 
+        /// <summary>Hook the results screen's Play Again button OnClick to this. Clears the
+        /// results and returns to the start screen; the next Start runs StartRound() again,
+        /// which resets hits/misses/dirt and opens a fresh SessionLogger session - so a new
+        /// round starts from clean data without anything to reset here.</summary>
+        public void OnPlayAgainPressed()
+        {
+            if (State != GameFlowState.Results) return;
+            resultsScreen?.Hide();
+            EnterStartScreen();
+        }
+
         static void SetActive(GameObject go, bool on) { if (go != null) go.SetActive(on); }
         static void SetActive(TMP_Text t, bool on) { if (t != null) t.gameObject.SetActive(on); }
     }
