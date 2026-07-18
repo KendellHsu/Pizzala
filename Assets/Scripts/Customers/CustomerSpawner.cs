@@ -14,6 +14,8 @@
 // 槽位 = 360° 均分 sectorCount 個扇區 × N 個距離層,環繞整個空間,
 // 同一槽位同時只站一個客人,離場才釋放;再加 minSpacing 距離檢查與
 // 在場上限,三重保證人口密度不會過擠。
+// 另外會跳過落在 PickupExclusionZone(notAllowToPick=玩家禁止進入區)內的槽位,
+// 避免客人生在區內被 StepTowards 卡住出不來。
 // 客人的 TargetSector(左/中/右,方位統計用)由生成角度換算。
 // 生成的客人透過 GameManager.RegisterCustomer 進訂單池,
 // 訂單結束(滿意/生氣/超時)或閒置超過 customerLifetime 就離場讓位。
@@ -114,6 +116,9 @@ namespace Pizzala.Customers
                 var slot = freeSlots[i];
                 ComputeSpawnPose(slot.sector, slot.tier, out var position, out var rotation);
                 if (!IsFarEnoughFromEveryone(position)) continue;
+                // 不在排除區(notAllowToPick=玩家禁止進入區)內:
+                // 生在區內客人會被 StepTowards 卡住出不來,直接跳過這個槽位。
+                if (Pizzala.Throwing.PickupExclusionZone.Contains(position)) continue;
 
                 SpawnCustomer(slot.sector, slot.tier, position, rotation);
                 return;

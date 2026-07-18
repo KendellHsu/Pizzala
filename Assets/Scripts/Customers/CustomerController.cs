@@ -236,7 +236,11 @@ namespace Pizzala.Customers
             if (Vector3.Distance(transform.position, wanderTarget) < 0.05f)
             {
                 var offset = Random.insideUnitCircle * wanderRadius;
-                wanderTarget = HomePosition + new Vector3(offset.x, 0f, offset.y);
+                var candidate = HomePosition + new Vector3(offset.x, 0f, offset.y);
+                // 排除區(notAllowToPick)同時是客人禁止進入區:
+                // 抽到落在區內的點就丟掉,維持原目標(HomePosition 在區外,不會走進去)。
+                if (!Pizzala.Throwing.PickupExclusionZone.Contains(candidate))
+                    wanderTarget = candidate;
 
                 // 到點:依機率停頓一下再走,不會一直走個不停
                 if (Random.value < pauseChance)
@@ -248,11 +252,7 @@ namespace Pizzala.Customers
                 }
             }
 
-            Vector3 before = transform.position;
-            transform.position = Vector3.MoveTowards(before, wanderTarget, speed * Time.deltaTime);
-
-            Vector3 moveDir = transform.position - before;
-            moveDir.y = 0f;
+            Vector3 moveDir = StepTowards(wanderTarget, speed);
             if (moveDir.sqrMagnitude > 1e-8f)
                 transform.rotation = Quaternion.Slerp(
                     transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 8f);
@@ -261,6 +261,21 @@ namespace Pizzala.Customers
             // 移動越快走路動畫播越快(不耐煩→暴躁),避免快走時腳步打滑
             if (animator != null && !isThrowingAnim)
                 animator.speed = Mathf.Max(0.1f, speed / Mathf.Max(walkAnimBaseSpeed, 0.01f));
+        }
+
+        // 朝目標走一小步,但守住排除區(notAllowToPick=玩家禁止進入區):
+        // 若這一步會踏進任一排除區就停在原地(不踏進去),避免直線路徑穿過玩家。
+        // 回傳這一幀實際位移向量(給轉向用;沒動就回 zero)。
+        Vector3 StepTowards(Vector3 target, float speed)
+        {
+            Vector3 before = transform.position;
+            Vector3 next = Vector3.MoveTowards(before, target, speed * Time.deltaTime);
+            if (Pizzala.Throwing.PickupExclusionZone.Contains(next))
+                return Vector3.zero; // 下一步在禁區內:停在邊界外,這幀不移動
+            transform.position = next;
+            Vector3 moved = next - before;
+            moved.y = 0f;
+            return moved;
         }
 
         void FaceLookTarget()
@@ -390,18 +405,17 @@ namespace Pizzala.Customers
             IsRetaliating = true;
             var flavor = ground.flavor;
 
-            // 走向目標披薩(用暴躁速度衝過去)
-            while (ground != null)
+            // 走向目標披薩(用暴躁速度衝過去)。
+            // 保底逾時:萬一直線路徑貼著排除區邊界、StepTowards 一直卡住不前進,
+            // 也不要讓這個 while 空轉卡死客人(離場流程在等它),超時就放棄改直接離場。
+            float walkDeadline = Time.time + 6f;
+            while (ground != null && Time.time < walkDeadline)
             {
                 Vector3 target = ground.transform.position;
                 target.y = transform.position.y; // 只在水平面移動
                 if (Vector3.Distance(transform.position, target) <= pickupReach) break;
 
-                Vector3 before = transform.position;
-                transform.position = Vector3.MoveTowards(before, target, urgentSpeed * Time.deltaTime);
-
-                Vector3 dir = transform.position - before;
-                dir.y = 0f;
+                Vector3 dir = StepTowards(target, urgentSpeed); // 一樣守住排除區,不穿過玩家
                 if (dir.sqrMagnitude > 1e-8f)
                     transform.rotation = Quaternion.Slerp(
                         transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 8f);

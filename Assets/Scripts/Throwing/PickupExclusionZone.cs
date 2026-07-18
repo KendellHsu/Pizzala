@@ -4,6 +4,8 @@
 // 在 Scene 視圖把 Collider 拖大小/位置,圈住不該被超時客人撿走的範圍
 // (出餐台、玩家站位周圍的補貨圈等)。落在任一排除區內的地上披薩,
 // GroundPizzaRegistry.FindNearestPickable 會略過。
+// 同時也是「客人禁止進入區」:CustomerController.UpdateWander 抽遊走目標時,
+// 會用 Contains() 把落在區內的點丟掉,客人不會遊走進來。
 // 可擺多個;啟用/停用時自動進出清單。
 // ─────────────────────────────────────────────────────────────
 using System.Collections.Generic;
