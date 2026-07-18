@@ -61,6 +61,8 @@ namespace Pizzala.Customers
             if (spray == null) spray = gameObject.AddComponent<Pizzala.Dirt.SauceSpray>();
             spray.Activate(flavor);
 
+            GetComponent<PizzaCometTrail>()?.StartEmit();
+
             lifeRoutine = StartCoroutine(LifeRoutine());
         }
 
@@ -100,6 +102,9 @@ namespace Pizzala.Customers
             if (!hitPlayer && col.isTrigger) return;
 
             resolved = true;
+
+            GetComponent<PizzaJelly>()?.Punch();
+            GetComponent<PizzaCometTrail>()?.StopEmit();
 
             var spray = GetComponent<Pizzala.Dirt.SauceSpray>();
             if (spray != null) spray.Deactivate(); // 落地後換滑行痕跡接手

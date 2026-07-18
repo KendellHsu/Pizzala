@@ -142,6 +142,9 @@ namespace Pizzala.Throwing
             var zone = col.GetComponentInParent<CustomerHitZone>();
             inFlight = false;
 
+            GetComponent<PizzaJelly>()?.Punch();
+            GetComponent<PizzaCometTrail>()?.StopEmit();
+
             if (GameManager.Instance != null && record != null)
                 GameManager.Instance.OnPizzaLanded(this, record, zone, point, normal, Time.time - releaseTime);
 

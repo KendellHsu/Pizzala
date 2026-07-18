@@ -58,6 +58,12 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 861a668c7935ab1439295c88a6584c6d, type: 3}
       insertIndex: -1
+      addedObject: {fileID: -5035716362032246774}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 861a668c7935ab1439295c88a6584c6d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6899889311425738099}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 861a668c7935ab1439295c88a6584c6d, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1240525102327410976}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 861a668c7935ab1439295c88a6584c6d, type: 3}
       insertIndex: -1
@@ -429,3 +435,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Throwing.PizzaProjectile
   flavor: 0
+--- !u!114 &-5035716362032246774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2545735174419685507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48bf85f671c04b8ea502b65761892433, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Throwing.PizzaJelly
+  visualTransform: {fileID: 0}
+--- !u!114 &-6899889311425738099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2545735174419685507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67fb275b873e40608cef4cd205873685, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Throwing.PizzaCometTrail

@@ -98,6 +98,32 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `frisbeeCNR` | -0.0000071 | 自旋衰減力矩 CNr（自旋隨飛行慢慢變慢） |
 | `frisbeeWobbleDamping` | 3 | 晃動阻尼（1/s）：吃掉盤面翻擺（垂直盤軸角速度），效果隨自旋縮放。0=最會晃、調高=更穩 |
 
+### 披薩果凍軟身（PizzaJelly 讀取，純視覺變形，不影響物理）
+
+運作方式：Awake 時在視覺子物件外插一層對齊 root 軸的「JellyPivot」，變形只縮放 pivot 的 `localScale`（沿盤厚 squash & stretch），完全不碰 Rigidbody / Collider，因此飛盤氣動（`FrisbeeFlight`）與命中判定（`PizzaProjectile`）都不受影響。撞擊 punch 有兩條觸發路徑（0.1s 冷卻防疊加）：`PizzaProjectile.Resolve` / `ThrowbackProjectile.Resolve` 呼叫 `Punch()`，加上自動偵測（沒被抓著時單幀「速度向量變化」>1.5 m/s 視為撞擊，涵蓋落地後每次彈跳）。
+
+> 註：披薩是扁飛盤、撞擊法線幾乎都在水平面，盤軸（厚度）方向本來就不會有明顯形變。真正的「局部凹陷」需要逐頂點/shader 形變（CP 值不高故不做），這裡只做沿盤軸的整體 squash & stretch 當輕微 Q 彈點綴。
+
+| 參數 | 預設值 | 說明 |
+|---|---|---|
+| `jellyEnabled` | true | 果凍變形總開關；關掉＝回到完全剛體的視覺 |
+| `jellyStiffness` | 100 | 彈簧剛性，越大回彈越快越硬；調低更軟更誇張 |
+| `jellyDamping` | 9 | 彈簧阻尼，越大晃動衰減越快；調低會多晃 2~3 下才停 |
+| `jellyMaxDeform` | 0.5 | 壓扁軸最大變形比例上限（0~0.8），太大會穿出 collider |
+| `jellyFlightAmount` | 0.05 | 飛行中的呼吸感振幅（很小，避免視覺干擾） |
+| `jellyImpactAmount` | 0.55 | 撞擊瞬間的壓扁強度，隨撞擊速度縮放（滿速 ≈ 3.5 m/s），想要更誇張就調高 |
+
+### 慧星尾巴（PizzaCometTrail 讀取，驅動披薩根物件既有的 TrailRenderer）
+
+出手（XR selectExited）開始拖尾，固定白色（頭亮尾透明的慧星漸層）；被接住或落地時停止。純視覺，不加任何力。丟回披薩（`ThrowbackProjectile.Launch`）也會拖尾。
+
+| 參數 | 預設值 | 說明 |
+|---|---|---|
+| `cometTrailEnabled` | true | 飛行拖尾總開關 |
+| `cometTrailTime` | 0.45 | 尾巴長度（秒），越大拖越長 |
+| `cometTrailWidth` | 0.12 | 尾巴頭部最大寬度（公尺），往尾端收尖 |
+| `cometTrailMinSpeed` | 1.5 | 速度低於此值（m/s）就停止拖尾 |
+
 ### 飛盤抓取（FrisbeeGrabInteractable 讀取）
 
 | 參數 | 預設值 | 說明 |
@@ -292,4 +318,10 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-18 | 修 bug：丟回披薩被玩家周圍的撿取禁區（PickupExclusionZone）trigger 提前判定，打不到玩家頭 → 玩家臉特效不觸發。`ThrowbackProjectile` 改為只認玩家頭(命中)或實心環境(落地)，略過其他 trigger 區 |
 | 2026-07-16 | DirtManager 新增 `paintOnCharacters`、`paintSize`、`paintWrapDepth`：砸中客人改用 texture-space 染色（SaucePaintable 把醬料畫進角色貼圖 UV 空間，完全跟著蒙皮動畫），Decal 掛骨頭降為後備路徑 |
 | 2026-07-16 | CustomerSpawner 新增 `customerPrefabs`（客人 Prefab 清單，生成時均勻隨機挑一個，支援多角色混合）；原 `customerPrefab` 保留為備援。搭配新工具 `Tools/Pizzala/Build UncleB Customer Prefab` 產生第二隻角色 UncleB 客人並自動接進生成器 |
+| 2026-07-18 | 新增披薩果凍軟身視覺特效：`PizzaJelly`（純視覺 squash & stretch，只變形子視覺物件 localScale，不碰 Rigidbody/Collider，飛盤飛行與命中判定不受影響）；ThrowTuning 新增 `jellyEnabled/jellyStiffness/jellyDamping/jellyMaxDeform/jellyFlightAmount/jellyImpactAmount` 6 項。撞擊瞬間由 `PizzaProjectile.Resolve` / `ThrowbackProjectile.Resolve` 呼叫 `Punch()` |
+| 2026-07-18 | 新增飛行慧星尾巴特效：`PizzaCometTrail` 驅動披薩根物件既有的 TrailRenderer（出手拖尾、依口味套色、落地/接住即停）；ThrowTuning 新增 `cometTrailEnabled/cometTrailTime/cometTrailWidth/cometTrailMinSpeed` 4 項。`PizzaJelly` + `PizzaCometTrail` 已掛到全部 6 顆披薩 prefab（玩家 3 顆 + 丟回 3 顆） |
 | 2026-07-18 | 合併 partner-mvp 分支：`autoStart` 預設 true→false（改為等開始畫面按 B）；GameManager 新增暫停系統（`IsPaused`/`CanThrow`/`PauseRound()`/`ResumeRound()`，暫停靠 `Time.timeScale = 0`）與新欄位 `bossCommentService`、`boothScreen`（攤位即時命中數／倒數畫面） |
+| 2026-07-18 | 慧星尾巴改為固定白色（原本依口味套 `DirtManager.flavorDropletColors` 顏色）；`PizzaCometTrail.StartEmit()` 不再吃 flavor 參數 |
+| 2026-07-18 | PizzaJelly 修正看不出效果：(1) 改用對齊 root 軸的 JellyPivot 變形，不再依賴 fbx 子節點（model_LOD0）烘焙旋轉，壓的一定是盤厚；(2) 加入自動撞擊偵測（沒被抓著時單幀速度驟降 >1.5 m/s 就 punch，涵蓋每次彈跳，0.1s 冷卻防疊加）；(3) 預設加強：`jellyImpactAmount` 0.12→0.3、`jellyMaxDeform` 0.18→0.35、punch 滿速基準 6→3.5 m/s（貼合 VR 出手速度） |
+| 2026-07-18 | PizzaJelly 加強變形強度、改為方向性壓扁：撞擊時 JellyPivot 的 Y 軸轉向撞擊法線（`Punch(normal)`），沿法線壓扁而非永遠沿盤厚，剛體感明顯降低；自動撞擊偵測改看「速度向量變化」而非純速度變慢（涵蓋方向反轉但速率相近的彈跳）；抓回手上時壓扁軸歸位。預設再加強：`jellyImpactAmount` 0.3→0.55、`jellyMaxDeform` 0.35→0.5（上限放寬到 0.8）、`jellyStiffness` 120→100、`jellyDamping` 12→9（多晃 2~3 下）；同步更新 ThrowTuning.asset |
+| 2026-07-18 | PizzaJelly 放棄「局部凹陷/方向性壓扁」：披薩是扁飛盤、撞擊法線幾乎都在水平面，盤軸方向本來就不會有明顯形變，真正的局部凹陷需逐頂點/shader 形變（fbx 需 readable、Quest 逐頂點有效能風險，CP 值不高）。`Punch()` 退回無參數、只做沿盤軸整體 squash & stretch；保留自動撞擊偵測（改看速度向量變化）。加強後的預設值（impact 0.55、maxDeform 0.5、stiffness 100、damping 9）維持不變 |
