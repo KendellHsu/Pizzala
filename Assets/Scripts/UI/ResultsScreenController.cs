@@ -110,7 +110,11 @@ namespace Pizzala.UI
 
         void Start()
         {
-            HideAllPanels();
+            // Hide(), not HideAllPanels(): the latter leaves the white backgroundPanel ON
+            // (it's meant for page turns, where the backdrop stays up). At scene start the
+            // whole screen must be invisible - the backdrop included - or the player stares
+            // at a big white board through the tutorial and the entire round.
+            Hide();
         }
 
         // Fully clears the results screen - every panel including the background, unlike
