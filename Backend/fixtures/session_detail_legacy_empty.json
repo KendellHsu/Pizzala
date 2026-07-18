@@ -1,0 +1,24 @@
+{
+  "id": "20260714_220311_Control",
+  "playedAt": "2026-07-14T22:03:11.6535146+08:00",
+  "card": {
+    "image": null,
+    "hashtags": [],
+    "persona": ""
+  },
+  "bossComment": "",
+  "photos": [
+    {
+      "image": "/photos/face_220344_178.png",
+      "caption": "",
+      "gameTime": 0.0,
+      "type": "customerFace"
+    },
+    {
+      "image": "/photos/env_220612_143.png",
+      "caption": "",
+      "gameTime": 0.0,
+      "type": "environment"
+    }
+  ]
+}
