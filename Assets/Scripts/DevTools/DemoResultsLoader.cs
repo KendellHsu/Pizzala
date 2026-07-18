@@ -15,6 +15,7 @@
 // now multi-page: P1 player photo+data -> P2 photo wall -> P3 boss note for Experimental).
 // This key is a placeholder for whatever the real "next page" trigger ends up being.
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -33,7 +34,27 @@ namespace Pizzala.DevTools
         [Tooltip("Filename only - looked up under <repo root>/Data/sessions/")]
         public string sessionFileName = "session_20260716_105321_Control.json";
 
+        [Header("Auto Load (skip the 1/2/3 keys, e.g. for a scene dedicated to one condition)")]
+        public bool autoLoadOnStart = false;
+        public ExperimentCondition autoLoadCondition = ExperimentCondition.Experimental;
+
         SessionData cached;
+
+        void Start()
+        {
+            if (autoLoadOnStart) StartCoroutine(AutoLoadRoutine());
+        }
+
+        // One frame late on purpose: ResultsScreenController.Start() calls HideAllPanels()
+        // to initialise itself, and Unity doesn't guarantee whose Start() runs first - show
+        // the page in the same frame and the controller may immediately hide it again.
+        // Waiting a frame guarantees every Start() has finished before we put the page up.
+        // (The 1/2/3 keys never hit this because Update() always runs after all Starts.)
+        IEnumerator AutoLoadRoutine()
+        {
+            yield return null;
+            ShowAs(autoLoadCondition);
+        }
 
         void Update()
         {

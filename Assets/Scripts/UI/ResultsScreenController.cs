@@ -20,10 +20,15 @@
 //                            (player-face photos live on P1 instead, not in this wall)
 //   Experimental (3 pages): same P1 + P2 as Middle, plus:
 //     P3 bossNotePanel     — LLM-generated boss comment (bossCommentText) - GameManager
-//                            only calls BossCommentService for this condition
+//                            only calls BossCommentService for this condition. Once the
+//                            real text lands (SetBossComment), shareButton/playAgainButton
+//                            (children of bossNotePanel, so they're hidden/shown along with
+//                            it for free) fade in after postNoteButtonDelay seconds - what
+//                            they actually do on click isn't wired up yet.
 // backgroundPanel (white rounded backdrop) is shown for Control/P1, hidden for the photo
 // wall and boss note pages (sketch: 不用背景框).
 // ─────────────────────────────────────────────────────────────
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -83,9 +88,16 @@ namespace Pizzala.UI
         public GameObject bossNotePanel;    // torn-paper note container
         public TMP_Text bossCommentText;    // filled in later by BossCommentService
 
+        [Header("P3: Post-Note Buttons (children of bossNotePanel, appear once the note is ready)")]
+        public GameObject shareButton;
+        public GameObject playAgainButton;
+        [Tooltip("Seconds after the boss comment text arrives before the buttons appear.")]
+        public float postNoteButtonDelay = 5f;
+
         SessionData currentSession;
         int currentPage;
         int pageCount;
+        Coroutine postNoteButtonsRoutine;
 
         public bool HasNextPage => currentSession != null && currentPage + 1 < pageCount;
         public bool HasPrevPage => currentSession != null && currentPage > 0;
@@ -118,6 +130,13 @@ namespace Pizzala.UI
                 ExperimentCondition.Middle => 2,
                 _ => 3, // Experimental
             };
+            // Reset here, not in HideAllPanels() - that also runs on every ordinary page
+            // turn within the same session, which would cancel a reveal already in flight
+            // (or already shown) just from paging P1 -> P2 -> P3.
+            if (postNoteButtonsRoutine != null) { StopCoroutine(postNoteButtonsRoutine); postNoteButtonsRoutine = null; }
+            if (shareButton != null) shareButton.SetActive(false);
+            if (playAgainButton != null) playAgainButton.SetActive(false);
+
             ShowPage(0);
         }
 
@@ -162,6 +181,20 @@ namespace Pizzala.UI
         public void SetBossComment(string text)
         {
             if (bossCommentText != null) bossCommentText.text = text;
+
+            if (postNoteButtonsRoutine != null) StopCoroutine(postNoteButtonsRoutine);
+            postNoteButtonsRoutine = StartCoroutine(RevealPostNoteButtons());
+        }
+
+        // Buttons are children of bossNotePanel, so they only ever render while that page
+        // is actually showing - no need to track which page the player is on here, Unity's
+        // parent/child active-state cascading handles it for free.
+        IEnumerator RevealPostNoteButtons()
+        {
+            yield return new WaitForSeconds(postNoteButtonDelay);
+            if (shareButton != null) shareButton.SetActive(true);
+            if (playAgainButton != null) playAgainButton.SetActive(true);
+            postNoteButtonsRoutine = null;
         }
 
         // ── Control: plain performance stats, laid out as two aligned columns ──
