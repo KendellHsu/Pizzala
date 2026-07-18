@@ -226,13 +226,12 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 
 ### GameFlowController（[GameFlowController.cs](../Assets/Scripts/Core/GameFlowController.cs)，整場狀態機）
 
-流程：`Tutorial`（4 段教學影片）→ `Starting`（倒數）→ `Playing` →（`Paused`/`Resuming`）→ `Results`。場景開場進 Tutorial（從 Intro 場景進來）；Play Again 重載遊戲場景並跳過教學。
+流程：`Tutorial`（4 段教學影片）→ `Starting`（倒數）→ `Playing` →（`Paused`/`Resuming`）→ `Results`。場景開場一律進 Tutorial（從 Intro 場景進來）；結算頁只有一個「回到開頭」按鈕，一律載回 Intro（沒有跳過教學的快速重玩路徑，每局都會重看教學）。
 
 | 參數 | 預設值 | 說明 |
 |---|---|---|
 | `tutorialController` | （空） | 4 段教學影片控制器；留空 = 跳過教學直接倒數 |
-| `gameSceneName` | "BackBone" | Play Again 重載的場景（跳過教學） |
-| `introSceneName` | "Intro" | New Player 載入的場景（重跑標題＋前導＋教學） |
+| `introSceneName` | "Intro" | 結算頁按鈕載入的場景（重跑標題＋前導＋教學） |
 | `startCountdownSeconds` | 5 | 按下開始遊戲後、回合真正開始前的倒數秒數 |
 | `resumeCountdownSeconds` | 3 | 暫停恢復前的倒數秒數 |
 | `skipTutorialInEditor` | false | Editor 直開 BackBone 時跳過 4 段教學（僅編輯器，build 忽略） |
@@ -267,11 +266,11 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 
 ### ResultsScreenController（[ResultsScreenController.cs](../Assets/Scripts/UI/ResultsScreenController.cs)，結算三頁）
 
-所有玩家固定看三頁（data portrait / photo wall / boss note）。三顆按鈕（Share / Play Again / New Player）在翻到最後一頁時一起出現，與 LLM callback 解耦。
+所有玩家固定看三頁（data portrait / photo wall / boss note）。兩顆按鈕（Share ＋ 單一「回到開頭」按鈕，標籤可寫「New Player」或「Play Again」，行為相同不分兩種）在翻到最後一頁時一起出現，與 LLM callback 解耦。
 
 | 參數 | 預設值 | 說明 |
 |---|---|---|
-| `newPlayerButton` | （空） | 最後一頁的 New Player 按鈕（OnClick 接 GameFlowController.OnNewPlayerPressed） |
+| `playAgainButton` | （空） | 最後一頁唯一的「回到開頭」按鈕（OnClick 接 GameFlowController.OnNewPlayerPressed，一律載回 Intro） |
 | `minPhotoCount` / `maxPhotoCount` | 2 / 8 | 照片牆張數縮放範圍 |
 | `sizeScaleAtMin` | 1.0 | 最少張數時的尺寸倍率 |
 | `postNoteButtonDelay` | 5 | **已棄用**：按鈕改成翻到最後一頁即出現，不再依此計時。欄位僅保留避免破壞既有序列化，程式不再讀 |
@@ -377,4 +376,4 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-18 | PizzaJelly 修正看不出效果：(1) 改用對齊 root 軸的 JellyPivot 變形，不再依賴 fbx 子節點（model_LOD0）烘焙旋轉，壓的一定是盤厚；(2) 加入自動撞擊偵測（沒被抓著時單幀速度驟降 >1.5 m/s 就 punch，涵蓋每次彈跳，0.1s 冷卻防疊加）；(3) 預設加強：`jellyImpactAmount` 0.12→0.3、`jellyMaxDeform` 0.18→0.35、punch 滿速基準 6→3.5 m/s（貼合 VR 出手速度） |
 | 2026-07-18 | PizzaJelly 加強變形強度、改為方向性壓扁：撞擊時 JellyPivot 的 Y 軸轉向撞擊法線（`Punch(normal)`），沿法線壓扁而非永遠沿盤厚，剛體感明顯降低；自動撞擊偵測改看「速度向量變化」而非純速度變慢（涵蓋方向反轉但速率相近的彈跳）；抓回手上時壓扁軸歸位。預設再加強：`jellyImpactAmount` 0.3→0.55、`jellyMaxDeform` 0.35→0.5（上限放寬到 0.8）、`jellyStiffness` 120→100、`jellyDamping` 12→9（多晃 2~3 下）；同步更新 ThrowTuning.asset |
 | 2026-07-18 | PizzaJelly 放棄「局部凹陷/方向性壓扁」：披薩是扁飛盤、撞擊法線幾乎都在水平面，盤軸方向本來就不會有明顯形變，真正的局部凹陷需逐頂點/shader 形變（fbx 需 readable、Quest 逐頂點有效能風險，CP 值不高）。`Punch()` 退回無參數、只做沿盤軸整體 squash & stretch；保留自動撞擊偵測（改看速度向量變化）。加強後的預設值（impact 0.55、maxDeform 0.5、stiffness 100、damping 9）維持不變 |
-| 2026-07-18 | Game flow 重構：**不再分實驗組/對照組**——`GameManager.condition` 降為純資料標籤（預設 Control→**Experimental**，不再影響流程），`throwbackOnTimeout` 預設 false→**true**（正式保險絲）；`bossCommentService` 改為所有玩家都用（留空則罐頭 fallback）。**GameFlowController** 開場改進 `Tutorial` 狀態（4 段教學影片），新增 `tutorialController`/`gameSceneName`/`introSceneName`/`skipTutorialInEditor`/`triggerVrPath` 等欄位，移除 StartScreen 流程；Play Again 重載遊戲場景跳過教學、New Player 載 Intro 全流程。**ResultsScreenController** 固定三頁、三顆按鈕（Share/Play Again/**新增 `newPlayerButton`**）翻到最後一頁才出現、與 LLM 解耦；`postNoteButtonDelay` **棄用**（保留欄位不再讀）。新增 **TutorialController**（4 段 VideoPlayer 教學）、**IntroSequenceController**（標題→前導 Timeline→載入遊戲）、**StickFlickReader**（教學與結算共用的搖桿翻頁）。RayLengthSwitcher 加 caster null-guard |
+| 2026-07-18 | Game flow 重構：**不再分實驗組/對照組**——`GameManager.condition` 降為純資料標籤（預設 Control→**Experimental**，不再影響流程），`throwbackOnTimeout` 預設 false→**true**（正式保險絲）；`bossCommentService` 改為所有玩家都用（留空則罐頭 fallback）。**GameFlowController** 開場改進 `Tutorial` 狀態（4 段教學影片），新增 `tutorialController`/`introSceneName`/`skipTutorialInEditor`/`triggerVrPath` 等欄位，移除 StartScreen 流程；結算頁**只有一個「回到開頭」按鈕**（不分 Play Again/New Player 兩種行為），一律載回 Intro 全流程重來，沒有跳過教學的快速重玩路徑。**ResultsScreenController** 固定三頁、兩顆按鈕（Share ＋ 單一 `playAgainButton`）翻到最後一頁才出現、與 LLM 解耦；`postNoteButtonDelay` **棄用**（保留欄位不再讀）。新增 **TutorialController**（4 段 VideoPlayer 教學）、**IntroSequenceController**（標題→前導 Timeline→載入遊戲）、**StickFlickReader**（教學與結算共用的搖桿翻頁）。RayLengthSwitcher 加 caster null-guard |

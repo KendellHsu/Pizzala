@@ -89,8 +89,9 @@ namespace Pizzala.UI
 
         [Header("P3: End Buttons (children of bossNotePanel, appear on the last page)")]
         public GameObject shareButton;
+        [Tooltip("The single end-of-round button (label it \"New Player\" / \"Play Again\" - " +
+                 "same action either way, no behavioural split). OnClick -> GameFlowController.OnNewPlayerPressed.")]
         public GameObject playAgainButton;
-        public GameObject newPlayerButton;
         [Tooltip("DEPRECATED - buttons now appear the moment the player reaches the last page, " +
                  "not on a timer after the comment arrives. Field kept only to avoid breaking " +
                  "existing prefab/scene serialization; no longer read.")]
@@ -149,22 +150,20 @@ namespace Pizzala.UI
             ShowPage(0);
         }
 
-        // The Share / Play Again / New Player trio lives on the boss note (last) page and
-        // only appears once the player flicks all the way there - proof they read to the end.
+        // Share + the single end-of-round button live on the boss note (last) page and only
+        // appear once the player flicks all the way there - proof they read to the end.
         // Deliberately decoupled from the LLM callback: the buttons must show even if the
         // boss comment never lands (network dead, service missing).
         void ShowEndButtons()
         {
             if (shareButton != null) shareButton.SetActive(true);
             if (playAgainButton != null) playAgainButton.SetActive(true);
-            if (newPlayerButton != null) newPlayerButton.SetActive(true);
         }
 
         void HideEndButtons()
         {
             if (shareButton != null) shareButton.SetActive(false);
             if (playAgainButton != null) playAgainButton.SetActive(false);
-            if (newPlayerButton != null) newPlayerButton.SetActive(false);
         }
 
         // Driven by GameFlowController off the right thumbstick (and by DemoResultsLoader

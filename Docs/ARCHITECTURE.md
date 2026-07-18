@@ -76,7 +76,7 @@ graph TD
 
 1. **Intro 場景**（`Assets/Scenes/Intro.unity`，build index 0）：標題畫面按「Start Game」→ `IntroSequenceController` 播前導 Timeline（`PlayableDirector`）。Timeline 上的對話框停等點放 Signal Emitter → `OnDialoguePause()` 暫停等玩家按 trigger 續播。播完 `LoadScene(BackBone)`。
 2. **BackBone 進場 → 教學**：`GameFlowController` 開場進 `Tutorial` 狀態，`TutorialController` 用 `VideoPlayer` 播 4 段教學影片；搖桿左右翻頁（與結算共用 `StickFlickReader`），最後一頁按 trigger「開始遊戲」→ 倒數 → `StartRound()`。
-3. **結算 → 循環**：`ResultsScreenController` 三頁；翻到最後一頁出現 Share / Play Again / New Player。Play Again 重載 BackBone 跳過教學（`skipTutorialOnce`）、New Player 載回 Intro 全流程。
+3. **結算 → 循環**：`ResultsScreenController` 三頁；翻到最後一頁出現 Share ＋ 單一「回到開頭」按鈕（標「New Player」/「Play Again」皆可，行為相同，不分兩種）。按下一律載回 Intro 全流程——沒有「跳過前導直接重玩」的路徑，每一局都會重看一次教學。
 
 > **不再分實驗組/對照組**：所有玩家看完整三頁結算 + boss note；`GameManager.condition` 只當資料標籤。
 
@@ -91,4 +91,4 @@ graph TD
 ## 更新紀錄
 
 - 2026-07-16：建立文件（進度總覽、遊戲循環、模組相依、規劃中項目）。
-- 2026-07-18：Game flow 重構——加入開場串接（Intro Timeline 前導 → 教學影片 → 遊戲）、GameFlowController 新增 Tutorial 狀態、Play Again/New Player 循環；移除結算的實驗分組（所有人三頁）。
+- 2026-07-18：Game flow 重構——加入開場串接（Intro Timeline 前導 → 教學影片 → 遊戲）、GameFlowController 新增 Tutorial 狀態、結算單一「回到開頭」按鈕（不分 Play Again/New Player，一律回 Intro 重來）；移除結算的實驗分組（所有人三頁）。

@@ -3,20 +3,19 @@
 // Attach to: the "Systems" object (next to GameManager).
 //
 //   [Tutorial] --flick to page 4, trigger "Start Game"--> [Starting: 5,4,3..] --> [Playing]
-//        ^ scene loads here (from Intro) - or Play Again reloads straight into Starting
-//                                                                          |
+//        ^ scene loads here, arriving fresh from Intro every time                  |
 //                              [Paused] <-----------B---------------------+
 //                                 |                                        ^
 //                                 +--------B--> [Resuming: 3,2,1] ---------+
 //
 //              [Playing] --time up--> [Results] --flick stick--> page turn
-//              [Results] --Play Again--> reload BackBone (skip tutorial)
-//              [Results] --New Player--> load Intro (whole flow again)
+//              [Results] --end-of-round button--> load Intro (whole flow again)
 //
-// The scene now opens on [Tutorial] (4 videos), not a Start menu: the player arrives here
-// from the Intro scene after the pre-roll Timeline. Flicking the stick pages the videos;
-// the last page shows a "Start Game" button pressed with the trigger. Play Again reloads
-// BackBone with skipTutorialOnce set, dropping straight into the countdown.
+// The scene opens on [Tutorial] (4 videos), not a Start menu: the player arrives here from
+// the Intro scene after the pre-roll Timeline. Flicking the stick pages the videos; the last
+// page shows a "Start Game" button pressed with the trigger. There's a single end-of-round
+// button (labelled "New Player"/"Play Again" - same action) that always reloads Intro, so
+// every round starts clean and watches the tutorial again; no separate quick-replay path.
 //
 // Controls: trigger picks up pizza AND presses UI buttons; B pauses/resumes; the thumbstick
 // flicks through tutorial videos and results pages (one shared StickFlickReader per use).
@@ -49,11 +48,6 @@ namespace Pizzala.Core
 
     public class GameFlowController : MonoBehaviour
     {
-        // Set by OnPlayAgainPressed before reloading BackBone: the fresh GameFlowController in
-        // the reloaded scene reads it in OnEnable and skips the tutorial, dropping straight into
-        // the countdown. static so it survives the scene load (New Player clears it via Intro).
-        static bool skipTutorialOnce;
-
         [Header("References")]
         public GameManager gameManager;
         public ResultsScreenController resultsScreen;
@@ -63,9 +57,7 @@ namespace Pizzala.Core
         public RayLengthSwitcher rayLengthSwitcher;
 
         [Header("Scenes")]
-        [Tooltip("Scene reloaded by Play Again (skips the tutorial). Usually this same BackBone scene.")]
-        public string gameSceneName = "BackBone";
-        [Tooltip("Scene loaded by New Player - back to the title + pre-roll + tutorial for the next participant.")]
+        [Tooltip("Scene loaded at the end of every round - back to the title + pre-roll + tutorial for the next round/participant. There's only one end-of-round path now (no separate quick-replay), so every round watches the tutorial again.")]
         public string introSceneName = "Intro";
 
         [Header("Panels (leave empty to skip)")]
@@ -147,12 +139,10 @@ namespace Pizzala.Core
             pauseAction?.Enable();
             flick?.Enable();
 
-            // Play Again reloaded us to skip straight into the round; otherwise (arriving from
-            // Intro, or a plain scene open) run the tutorial. The editor convenience skip only
-            // applies when there's no headset-driven Intro in front of us.
-            bool skip = skipTutorialOnce || (Application.isEditor && skipTutorialInEditor);
-            skipTutorialOnce = false;
-            if (skip || tutorialController == null) BeginStarting();
+            // Every round arrives here fresh from Intro and runs the tutorial; the editor
+            // convenience skip is only for opening BackBone directly while iterating.
+            bool skip = (Application.isEditor && skipTutorialInEditor) || tutorialController == null;
+            if (skip) BeginStarting();
             else EnterTutorial();
         }
 
@@ -324,26 +314,15 @@ namespace Pizzala.Core
             // The results screen itself is already up: GameManager.EndRound() calls Show().
         }
 
-        /// <summary>Hook the results screen's Play Again button OnClick to this. Reloads the
-        /// game scene so nothing from the last round lingers - StartRound() alone only resets
-        /// counters, leaving sauce splats, dropped pizzas and dirtied customers on the floor.
-        /// skipTutorialOnce makes the reloaded scene drop straight into the countdown.</summary>
-        public void OnPlayAgainPressed()
-        {
-            if (State != GameFlowState.Results) return;
-            resultsScreen?.Hide();
-            skipTutorialOnce = true;
-            SceneManager.LoadScene(gameSceneName);
-        }
-
-        /// <summary>Hook the results screen's New Player button OnClick to this. Loads the
-        /// Intro scene so the next participant gets the whole flow again (title, pre-roll,
-        /// tutorial). Everything clears with the scene unload.</summary>
+        /// <summary>Hook the results screen's single end-of-round button OnClick to this
+        /// (labelled "New Player" / "Play Again" - same action either way, no split needed).
+        /// Loads the Intro scene so the next round always gets the whole flow again (title,
+        /// pre-roll, tutorial). Everything - sauce splats, dropped pizzas, dirtied customers,
+        /// session state - clears with the scene unload; nothing needs resetting here.</summary>
         public void OnNewPlayerPressed()
         {
             if (State != GameFlowState.Results) return;
             resultsScreen?.Hide();
-            skipTutorialOnce = false; // a new player watches the tutorial
             SceneManager.LoadScene(introSceneName);
         }
 
