@@ -322,7 +322,7 @@ MonoBehaviour:
   pauseMenuPanel: {fileID: 671535620}
   countdownText: {fileID: 1994593805}
   freezeCountdown: 0
-  skipTutorialInEditor: 1
+  skipTutorialInEditor: 0
   startCountdownSeconds: 5
   resumeCountdownSeconds: 3
   logStateChanges: 1
@@ -988,6 +988,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 687558215}
   m_CullTransparentMesh: 1
+--- !u!1 &717268733 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2692169410539905643, guid: 344d93c225220444cbe185f4d80c2baa, type: 3}
+  m_PrefabInstance: {fileID: 5464327577255556276}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &734419348
 GameObject:
   m_ObjectHideFlags: 0
@@ -1069,7 +1074,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2
+  m_Radius: 2.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &769794792
 Transform:
@@ -3195,7 +3200,7 @@ PrefabInstance:
     - target: {fileID: 4399186983352184653, guid: 344d93c225220444cbe185f4d80c2baa, type: 3}
       propertyPath: startGamePrompt
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 717268733}
     - target: {fileID: 4399186983352184653, guid: 344d93c225220444cbe185f4d80c2baa, type: 3}
       propertyPath: 'pages.Array.data[0]'
       value: 
