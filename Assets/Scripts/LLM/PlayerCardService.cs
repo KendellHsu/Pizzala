@@ -58,14 +58,22 @@ namespace Pizzala.LLM
         // refs are explicitly demoted to texture/lighting only.
         const string PromptTemplate =
             "Copy ONLY the ART STYLE of the attached images: hand-sculpted claymation / " +
-            "stop-motion clay texture, soft studio lighting, plain light dotted background, " +
-            "full body, front view, single character centered.\n" +
+            "stop-motion clay texture with visible fingerprints and lumps, soft studio " +
+            "lighting.\n" +
+            "This is a STYLIZED CARTOON CLAY CHARACTER, NOT a realistic human - exaggerate " +
+            "the features heavily, like Shaun the Sheep / Aardman claymation: oversized " +
+            "round googly eyes set wide apart, a big odd-shaped nose, a tiny or huge mouth, " +
+            "lopsided goofy proportions. It should look handmade and quirky, deliberately " +
+            "NOT photorealistic and with zero 'AI photo' polish.\n" +
             "Do NOT reuse the reference character. Their face, gender, age, hair, hat and " +
             "clothing are NOT to be copied. Invent a COMPLETELY DIFFERENT new person.\n\n" +
             "The new pizza-shop employee: {2}\n\n" +
             "They just finished a shift with this performance:\n{0}\n" +
-            "Reflect the shift on the character: {1}\n" +
-            "Clay style only, one original character, no text or logos in the image.";
+            "Reflect the shift on the character: {1}\n\n" +
+            "Framing: HALF-BODY portrait (head to waist), single character centered, facing " +
+            "front. Background must be a FLAT SOLID WHITE background, fully cut-out style, " +
+            "so it can be placed on a website - no scenery, no floor, no shadow spill, no " +
+            "text or logos.";
 
         string apiKey;
         bool apiKeyLoadAttempted;
