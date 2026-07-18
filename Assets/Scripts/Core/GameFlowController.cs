@@ -13,12 +13,13 @@
 //
 // The scene opens on [Tutorial] (4 videos), not a Start menu: the player arrives here from
 // the Intro scene after the pre-roll Timeline. Flicking the stick pages the videos; the last
-// page shows a "Start Game" button pressed with the trigger. There's a single end-of-round
+// page confirms "Start Game" with the A button (either hand). There's a single end-of-round
 // button (labelled "New Player"/"Play Again" - same action) that always reloads Intro, so
 // every round starts clean and watches the tutorial again; no separate quick-replay path.
 //
-// Controls: trigger picks up pizza AND presses UI buttons; B pauses/resumes; the thumbstick
-// flicks through tutorial videos and results pages (one shared StickFlickReader per use).
+// Controls: A (either hand) confirms Start Game on the last tutorial page; the trigger grabs
+// pizza AND presses UI buttons; B pauses/resumes; the thumbstick flicks through tutorial
+// videos and results pages (one shared StickFlickReader per use).
 //
 // Keyboard stand-ins for testing without a headset: Y = start/advance, B = pause/resume,
 // U / I = previous / next page (tutorial and results).
@@ -84,12 +85,12 @@ namespace Pizzala.Core
         // XRI Default Input Actions for movement and turning, so they'd double-fire once the
         // XR rig is in the scene. Y/U/I are only claimed by the XR Device Simulator, which
         // this project doesn't use.
-        [Header("Input - Start Game / advance (trigger)")]
-        [Tooltip("Right-hand trigger that confirms the tutorial's last-page Start Game. Same button that grabs pizza in play, but only read while the tutorial is on its last page.")]
-        public string triggerVrPath = "<XRController>{RightHand}/trigger";
-        [Tooltip("Left-hand trigger, also accepted for Start Game so either hand works. Clear to disable.")]
-        public string triggerVrPathLeft = "<XRController>{LeftHand}/trigger";
-        [Tooltip("Keyboard stand-in for the trigger (also starts from the tutorial's last page on a PC with no ray).")]
+        [Header("Input - Start Game (A button)")]
+        [Tooltip("A button (right-hand primary) that confirms the tutorial's last-page Start Game. Only read while the tutorial is on its last page, so it's free to mean something else in play.")]
+        public string triggerVrPath = "<XRController>{RightHand}/primaryButton";
+        [Tooltip("Left-hand primary (X) also accepted for Start Game so either hand works. Clear to disable.")]
+        public string triggerVrPathLeft = "<XRController>{LeftHand}/primaryButton";
+        [Tooltip("Keyboard stand-in for A (also starts from the tutorial's last page on a PC with no headset).")]
         public string startKeyboardPath = "<Keyboard>/y";
 
         [Header("Input - Pause/Resume (B)")]
