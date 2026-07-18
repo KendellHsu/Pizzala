@@ -141,15 +141,15 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 
 | 參數 | 預設值 | 說明 |
 |---|---|---|
-| `condition` | Control | 實驗條件（Control / Experimental） |
+| `condition` | Experimental | **純資料標籤**：只寫進 session JSON 檔名/欄位供分析，不再影響體驗流程（所有玩家一律看完整三頁結算 + boss note）。2026-07 起 condition 不代表體驗差異 |
 | `participantId` | "P00" | 受試者編號 |
 | `enableThrowback` | true | 玩法保險絲：關掉就完全沒有丟回 |
-| `throwbackOnTimeout` | false | 訂單超時的客人是否去撿地上 pizza 丟回玩家？撿不到（場上沒可撿的）就直接離場。關 = 超時直接離場 |
+| `throwbackOnTimeout` | true | 訂單超時的客人是否去撿地上 pizza 丟回玩家？撿不到（場上沒可撿的）就直接離場。關 = 超時直接離場 |
 | `enforceFlavor` | true | 是否檢查口味正確 |
 | `enforceThrowType` | false | 是否檢查投擲手勢類型 |
 | `autoStart` | false | 關 = 等開始畫面按 B 才開始（正式流程）；開 = 延遲後自動開始，方便沒有開始畫面時測試 |
 | `autoStartDelay` | 5 | 自動開始的延遲（秒） |
-| `bossCommentService` | （空） | Boss 評論服務（Gemini）；只有實驗組會用到，留空則跳過 |
+| `bossCommentService` | （空） | Boss 評論服務（Gemini）；**所有玩家**都會用到（留空則用罐頭 fallback 文字，不會卡在「writing...」） |
 | `boothScreen` | （空） | 攤位上即時顯示命中數／剩餘時間的螢幕；留空則跳過 |
 
 ---
@@ -223,6 +223,58 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 ---
 
 ## 6. UI 與回饋
+
+### GameFlowController（[GameFlowController.cs](../Assets/Scripts/Core/GameFlowController.cs)，整場狀態機）
+
+流程：`Tutorial`（4 段教學影片）→ `Starting`（倒數）→ `Playing` →（`Paused`/`Resuming`）→ `Results`。場景開場進 Tutorial（從 Intro 場景進來）；Play Again 重載遊戲場景並跳過教學。
+
+| 參數 | 預設值 | 說明 |
+|---|---|---|
+| `tutorialController` | （空） | 4 段教學影片控制器；留空 = 跳過教學直接倒數 |
+| `gameSceneName` | "BackBone" | Play Again 重載的場景（跳過教學） |
+| `introSceneName` | "Intro" | New Player 載入的場景（重跑標題＋前導＋教學） |
+| `startCountdownSeconds` | 5 | 按下開始遊戲後、回合真正開始前的倒數秒數 |
+| `resumeCountdownSeconds` | 3 | 暫停恢復前的倒數秒數 |
+| `skipTutorialInEditor` | false | Editor 直開 BackBone 時跳過 4 段教學（僅編輯器，build 忽略） |
+| `triggerVrPath` | `<XRController>{RightHand}/trigger` | 教學最後一頁「開始遊戲」的 trigger（只在最後一頁讀，不與抓 pizza 衝突） |
+| `startKeyboardPath` | `<Keyboard>/y` | trigger 的鍵盤替身 |
+| `stickFlickThreshold` | 0.7 | 搖桿推多遠才算一次翻頁 flick |
+| `stickReleaseThreshold` | 0.3 | 搖桿要回中到此範圍內才能再次翻頁（教學與結算共用同一套 flick） |
+
+### TutorialController（[TutorialController.cs](../Assets/Scripts/UI/TutorialController.cs)，PZ_TutorialCanvas）
+
+由 GameFlowController 驅動，自己不讀輸入（避免搶 stick/trigger）。
+
+| 參數 | 預設值 | 說明 |
+|---|---|---|
+| `canvasRoot` | （空） | 整個教學 canvas；留空則切換本物件 |
+| `videoPlayer` | （空） | 播放 4 段影片的 VideoPlayer |
+| `pages` | （空陣列） | 4 段教學影片 VideoClip，依頁序 |
+| `startGamePrompt` | （空） | 只在最後一頁顯示的「開始遊戲」提示/按鈕 |
+
+### IntroSequenceController（[IntroSequenceController.cs](../Assets/Scripts/Intro/IntroSequenceController.cs)，Intro 場景）
+
+標題 → 前導 Timeline → 載入遊戲。對話框停等點放 Signal Emitter 呼叫 `OnDialoguePause()`，trigger 續播（只在暫停等待時讀）。
+
+| 參數 | 預設值 | 說明 |
+|---|---|---|
+| `director` | （空） | 前導動畫的 PlayableDirector |
+| `continueHint` | （空） | Timeline 暫停等待時顯示的「按 trigger 繼續」提示 |
+| `titlePanel` | （空） | 標題畫面；按 Start Game 後隱藏 |
+| `gameSceneName` | "BackBone" | 前導播完載入的遊戲場景 |
+| `triggerVrPath` | `<XRController>{RightHand}/trigger` | 續播/開始 trigger |
+| `triggerKeyboardPath` | `<Keyboard>/y` | trigger 的鍵盤替身 |
+
+### ResultsScreenController（[ResultsScreenController.cs](../Assets/Scripts/UI/ResultsScreenController.cs)，結算三頁）
+
+所有玩家固定看三頁（data portrait / photo wall / boss note）。三顆按鈕（Share / Play Again / New Player）在翻到最後一頁時一起出現，與 LLM callback 解耦。
+
+| 參數 | 預設值 | 說明 |
+|---|---|---|
+| `newPlayerButton` | （空） | 最後一頁的 New Player 按鈕（OnClick 接 GameFlowController.OnNewPlayerPressed） |
+| `minPhotoCount` / `maxPhotoCount` | 2 / 8 | 照片牆張數縮放範圍 |
+| `sizeScaleAtMin` | 1.0 | 最少張數時的尺寸倍率 |
+| `postNoteButtonDelay` | 5 | **已棄用**：按鈕改成翻到最後一頁即出現，不再依此計時。欄位僅保留避免破壞既有序列化，程式不再讀 |
 
 ### FaceSplatOverlay（[FaceSplatOverlay.cs](../Assets/Scripts/UI/FaceSplatOverlay.cs)，玩家被砸臉特效）
 
@@ -325,3 +377,4 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-18 | PizzaJelly 修正看不出效果：(1) 改用對齊 root 軸的 JellyPivot 變形，不再依賴 fbx 子節點（model_LOD0）烘焙旋轉，壓的一定是盤厚；(2) 加入自動撞擊偵測（沒被抓著時單幀速度驟降 >1.5 m/s 就 punch，涵蓋每次彈跳，0.1s 冷卻防疊加）；(3) 預設加強：`jellyImpactAmount` 0.12→0.3、`jellyMaxDeform` 0.18→0.35、punch 滿速基準 6→3.5 m/s（貼合 VR 出手速度） |
 | 2026-07-18 | PizzaJelly 加強變形強度、改為方向性壓扁：撞擊時 JellyPivot 的 Y 軸轉向撞擊法線（`Punch(normal)`），沿法線壓扁而非永遠沿盤厚，剛體感明顯降低；自動撞擊偵測改看「速度向量變化」而非純速度變慢（涵蓋方向反轉但速率相近的彈跳）；抓回手上時壓扁軸歸位。預設再加強：`jellyImpactAmount` 0.3→0.55、`jellyMaxDeform` 0.35→0.5（上限放寬到 0.8）、`jellyStiffness` 120→100、`jellyDamping` 12→9（多晃 2~3 下）；同步更新 ThrowTuning.asset |
 | 2026-07-18 | PizzaJelly 放棄「局部凹陷/方向性壓扁」：披薩是扁飛盤、撞擊法線幾乎都在水平面，盤軸方向本來就不會有明顯形變，真正的局部凹陷需逐頂點/shader 形變（fbx 需 readable、Quest 逐頂點有效能風險，CP 值不高）。`Punch()` 退回無參數、只做沿盤軸整體 squash & stretch；保留自動撞擊偵測（改看速度向量變化）。加強後的預設值（impact 0.55、maxDeform 0.5、stiffness 100、damping 9）維持不變 |
+| 2026-07-18 | Game flow 重構：**不再分實驗組/對照組**——`GameManager.condition` 降為純資料標籤（預設 Control→**Experimental**，不再影響流程），`throwbackOnTimeout` 預設 false→**true**（正式保險絲）；`bossCommentService` 改為所有玩家都用（留空則罐頭 fallback）。**GameFlowController** 開場改進 `Tutorial` 狀態（4 段教學影片），新增 `tutorialController`/`gameSceneName`/`introSceneName`/`skipTutorialInEditor`/`triggerVrPath` 等欄位，移除 StartScreen 流程；Play Again 重載遊戲場景跳過教學、New Player 載 Intro 全流程。**ResultsScreenController** 固定三頁、三顆按鈕（Share/Play Again/**新增 `newPlayerButton`**）翻到最後一頁才出現、與 LLM 解耦；`postNoteButtonDelay` **棄用**（保留欄位不再讀）。新增 **TutorialController**（4 段 VideoPlayer 教學）、**IntroSequenceController**（標題→前導 Timeline→載入遊戲）、**StickFlickReader**（教學與結算共用的搖桿翻頁）。RayLengthSwitcher 加 caster null-guard |

@@ -238,6 +238,50 @@ PZ_SnapshotCamera(Camera + SnapshotCamera 腳本)
 
 ---
 
+## 10. PZ_DialogueBox(前導動畫對話框)★ 美術只需填字 + 換外框
+
+前導動畫（Intro 場景的 Timeline）過程中，需要停下來給玩家看說明的地方就放這個對話框。**美術/企劃只做兩件事**：填文字、換外框圖，再把 prefab 放進 Timeline，在停等點放一個 Signal。程式（`IntroSequenceController`）負責暫停 Timeline、等玩家按 trigger 續播——**美術不用碰任何腳本**。
+
+```
+PZ_DialogueBox(World Space Canvas)
+ ├─ Frame (Image)      ← 對話框外框圖(美術換 sprite)
+ └─ Text (TMP_Text)    ← 對話內容(美術/企劃填字)
+```
+
+**做法**
+1. 建一個 World Space Canvas 命名 `PZ_DialogueBox`，擺在玩家視線前方（約 1.5~2m）。
+2. 放外框 `Image` + 內文 `TMP_Text`；字型/配色沿用專案 UI 風格。
+3. 存成 prefab 放 `Assets/Prefabs/UI/`。
+4. **放進 Timeline**：在前導 Timeline 上用 Activation Track 控制這個對話框何時出現/消失；要「停下來等玩家」的那一刻，在 Timeline 加一個 **Signal Emitter**，Signal Receiver 指到 `IntroSequenceController.OnDialoguePause`。玩家按 trigger 後程式自動 `Resume()` 續播。
+
+**驗收目標**
+- [ ] 前導動畫播到對話框出現時會**停住**，畫面有「按 trigger 繼續」提示（`continueHint`）
+- [ ] 按 trigger（或鍵盤 Y）後續播到下一段
+- [ ] 一路播到 Timeline 結束後自動載入 BackBone 場景
+- [ ] 按標題「Start Game」那一下的 trigger **不會**誤觸跳過第一段對話
+
+---
+
+## 11. PZ_TutorialCanvas(教學影片畫面)
+
+BackBone 一進場先播的 4 段操作教學影片。程式 `TutorialController` 驅動，自己不讀輸入（翻頁/開始由 `GameFlowController` 統一處理）。
+
+```
+PZ_TutorialCanvas(World Space Canvas + TutorialController)
+ ├─ VideoImage (RawImage)   ← VideoPlayer 的 targetTexture
+ ├─ VideoPlayer             ← 4 段 VideoClip(填進 TutorialController.pages)
+ └─ StartGamePrompt         ← 只在最後一頁顯示的「開始遊戲」提示/按鈕
+```
+
+**做法**：World Space Canvas，`VideoPlayer` 輸出到 RenderTexture、由 `RawImage` 顯示；4 段影片放 `Assets/Video/` 並依頁序填進 `TutorialController.pages`。`StartGamePrompt` 拖進 `startGamePrompt` 欄位。把 `TutorialController` 拖進 `GameFlowController.tutorialController`。
+
+**驗收目標**
+- [ ] 進場自動播第 1 段，搖桿左右切上/下一段（不繞回）
+- [ ] 翻到第 4 段才出現「開始遊戲」提示，按 trigger 進遊戲（倒數後開局）
+- [ ] Canvas 用 `TrackedDeviceGraphicRaycaster`（若有可點按鈕），ray 點得到
+
+---
+
 ## 整合驗收(全部 Prefab 完成後的端到端測試)
 
 依序執行,全過才算 MVP 達標:
