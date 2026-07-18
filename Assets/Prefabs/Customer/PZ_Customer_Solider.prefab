@@ -8,6 +8,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1909294676615433293, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
+      propertyPath: m_Height
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1909294676615433293, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
+      propertyPath: m_Radius
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1909294676615433293, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
+      propertyPath: m_Center.y
+      value: 0.85
+      objectReference: {fileID: 0}
     - target: {fileID: 2520638019367460530, guid: c76a1a89b784e2e4d8e6211af6f8b8a2, type: 3}
       propertyPath: pizzaBox
       value: 
