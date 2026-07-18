@@ -235,8 +235,8 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `startCountdownSeconds` | 5 | 按下開始遊戲後、回合真正開始前的倒數秒數 |
 | `resumeCountdownSeconds` | 3 | 暫停恢復前的倒數秒數 |
 | `skipTutorialInEditor` | false | Editor 直開 BackBone 時跳過 4 段教學（僅編輯器，build 忽略） |
-| `triggerVrPath` | `<XRController>{RightHand}/primaryButton` | 教學最後一頁「開始遊戲」的右手 A 鍵（只在最後一頁讀） |
-| `triggerVrPathLeft` | `<XRController>{LeftHand}/primaryButton` | 左手 X 鍵也接受（兩手皆可開始）；清空可停用 |
+| `triggerVrPath` | `<XRController>{RightHand}/trigger` | 教學最後一頁「開始遊戲」的右手 trigger（只在最後一頁讀，不與遊戲中抓 pizza 衝突） |
+| `triggerVrPathLeft` | `<XRController>{LeftHand}/trigger` | 左手 trigger 也接受（兩手皆可開始）；清空可停用 |
 | `startKeyboardPath` | `<Keyboard>/y` | 開始鍵的鍵盤替身 |
 | `stickFlickThreshold` | 0.7 | 搖桿推多遠才算一次翻頁 flick |
 | `stickReleaseThreshold` | 0.3 | 搖桿要回中到此範圍內才能再次翻頁（教學與結算共用同一套 flick） |
