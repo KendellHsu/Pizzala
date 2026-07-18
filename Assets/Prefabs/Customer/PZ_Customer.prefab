@@ -750,12 +750,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinnedSauceMeshGenerator
   minimumRadius: 0.05
-  maximumRadius: 0.1
+  maximumRadius: 0.15
   thickness: 0.012
   edgeThickness: 0.006
   surfaceOffset: 0.003
   rings: 4
   segments: 20
+  useImpactDrivenRadius: 1
+  minimumImpactSpeed: 1.5
+  maximumImpactSpeed: 9
+  releaseSpeedInfluence: 0.2
+  maximumReleaseSpeed: 9
+  radiusRandomVariation: 0.08
   outlineIrregularity: 0.14
   ellipseVariation: 0.1
   roundedLobeCount: 3
@@ -785,17 +791,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SauceToppingSpawner
   toppingProfiles:
-  - theme: 0
-    toppingPrefabs: []
+  - theme: 1
+    toppingPrefabs:
+    - {fileID: 2308335721455282752, guid: 16e81a8bd6c04f85b4f17a2ab5483f5e, type: 3}
+    - {fileID: 2308335721455282762, guid: 7c21fbdfa9e3442e83618395ac811d65, type: 3}
+    - {fileID: 2308335721455282814, guid: ae40551a0dd8442b81eebdabfcb403d4, type: 3}
+    - {fileID: 2308335721455282792, guid: 4ee057ae9bfa4ccdb776945ec8977dc8, type: 3}
+    - {fileID: 2308335721455282706, guid: e0f1e5d5dffc4b80ad59ac6dce4d176a, type: 3}
+    - {fileID: 2308335721455282804, guid: 2f7cb80ddab74a5da4bffaf70022a425, type: 3}
     minimumCount: 3
     maximumCount: 6
     minimumScale: 0.65
     maximumScale: 1.15
     surfaceOffset: 0.008
     usableSauceRadius: 0.82
-    placeholderKinds: 0000000001000000
-  - theme: 1
-    toppingPrefabs: []
+    placeholderKinds: 00000000
+  - theme: 0
+    toppingPrefabs:
+    - {fileID: 7386750647209702896, guid: 5aaa72857c0041a98d7e7c7a1df5bc23, type: 3}
+    - {fileID: 7386750647209702906, guid: 82ca433db6744c04a173dff8a570bcfe, type: 3}
+    - {fileID: 7386750647209702884, guid: 5f8aa3d677d04c448607e8f465f0de36, type: 3}
     minimumCount: 3
     maximumCount: 6
     minimumScale: 0.65
@@ -804,7 +819,10 @@ MonoBehaviour:
     usableSauceRadius: 0.82
     placeholderKinds: 020000000300000004000000
   - theme: 2
-    toppingPrefabs: []
+    toppingPrefabs:
+    - {fileID: 1440175739763480128, guid: 47fe759e93c94203a3efed400d1f3292, type: 3}
+    - {fileID: 1440175739763480138, guid: 1fb578bdd51e466fa4677dac8668728b, type: 3}
+    - {fileID: 1440175739763480180, guid: a8839341e6684d49bb3efdb2043e1f20, type: 3}
     minimumCount: 3
     maximumCount: 6
     minimumScale: 0.65
@@ -826,8 +844,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Customers.CustomerSurfaceSauce
   createOnFace: 1
   createOnBody: 1
-  margheritaSauceMaterial: {fileID: 2100000, guid: df4898b4543dd794e9837c720839fd21, type: 2}
-  pepperoniSauceMaterial: {fileID: 2100000, guid: 0a23d6d38a520924a8cc6cb6c9499550, type: 2}
+  margheritaSauceMaterial: {fileID: 2100000, guid: 0a23d6d38a520924a8cc6cb6c9499550, type: 2}
+  pepperoniSauceMaterial: {fileID: 2100000, guid: df4898b4543dd794e9837c720839fd21, type: 2}
   cosmicPinkMarshmallowSauceMaterial: {fileID: 2100000, guid: 0a1096b71c0a7454780755614e954e56, type: 2}
 --- !u!1 &8258847632833827711
 GameObject:
@@ -846,7 +864,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6089317645360186358
 Transform:
   m_ObjectHideFlags: 0
