@@ -44,6 +44,10 @@ namespace Pizzala.Customers
         public SpriteRenderer flavorIcon;
         public Sprite[] flavorSprites; // 順序 = PizzaFlavor 列舉順序
 
+        [Header("情緒圖示")]
+        public Sprite smileSprite;
+        public Sprite angrySprite;
+
         [Tooltip("頭上耐心倒數圈:UI Image(Image Type=Filled、Fill Method=Vertical、Origin=Bottom)," +
                  "fillAmount 隨剩餘耐心從 1 降到 0(水位下降)。留空則不顯示倒數")]
         public Image flavorCountDown;
@@ -165,7 +169,7 @@ namespace Pizzala.Customers
 
         void Start()
         {
-            if (flavorIcon != null) flavorIcon.enabled = false;
+            HideHeadIcon();
             if (flavorCountDown != null) flavorCountDown.enabled = false;
             if (pizzaBox != null) pizzaBox.SetActive(false); // 點餐前不出現盒子
             HomePosition = transform.position;
@@ -357,11 +361,7 @@ namespace Pizzala.Customers
             orderPatience = patienceSeconds;
             State = CustomerState.Waiting;
 
-            if (flavorIcon != null && flavorSprites != null && (int)flavor < flavorSprites.Length)
-            {
-                flavorIcon.sprite = flavorSprites[(int)flavor];
-                flavorIcon.enabled = true;
-            }
+            ShowOrderIcon(flavor);
 
             if (flavorCountDown != null)
             {
@@ -385,6 +385,7 @@ namespace Pizzala.Customers
             patienceRoutine = null;
             HideOrderUI();
             State = CustomerState.Angry; // 超時 → 生氣(耐心圈已歸零)
+            ShowEmotionIcon(angrySprite);
 
             // 超時反擊:去撿一顆地上可撿的 pizza 丟回玩家臉;撿不到就直接離場。
             // 開關 = GameManager.throwbackOnTimeout。
@@ -495,7 +496,50 @@ namespace Pizzala.Customers
         {
             ClearOrder();
             State = satisfied ? CustomerState.Served : CustomerState.Angry;
+            ShowEmotionIcon(satisfied ? smileSprite : angrySprite);
             OnOrderResolved?.Invoke(this, satisfied);
+        }
+
+        // 頭頂圖示統一由這三個方法管理，避免各狀態直接操作 flavorIcon。
+        void ShowOrderIcon(PizzaFlavor flavor)
+        {
+            int index = (int)flavor;
+            if (flavorIcon == null || flavorSprites == null ||
+                index < 0 || index >= flavorSprites.Length || flavorSprites[index] == null)
+            {
+                HideHeadIcon();
+                return;
+            }
+
+            flavorIcon.sprite = flavorSprites[index];
+            flavorIcon.enabled = true;
+        }
+
+        void ShowEmotionIcon(Sprite sprite)
+        {
+            if (flavorCountDown != null) flavorCountDown.enabled = false;
+
+            if (flavorIcon == null || sprite == null)
+            {
+                HideHeadIcon();
+                return;
+            }
+
+            flavorIcon.sprite = sprite;
+            flavorIcon.enabled = true;
+        }
+
+        void HideHeadIcon()
+        {
+            if (flavorIcon == null) return;
+            flavorIcon.enabled = false;
+            flavorIcon.sprite = null;
+        }
+
+        // 送餐錯誤由 GameManager 判定，實際顯示仍集中在 CustomerController。
+        public void ShowAngryEmotion()
+        {
+            ShowEmotionIcon(angrySprite);
         }
 
         void ClearOrder()
@@ -509,7 +553,7 @@ namespace Pizzala.Customers
         // 又不必呼叫 ClearOrder(那會 StopCoroutine 把自己這條協程砍掉)。
         void HideOrderUI()
         {
-            if (flavorIcon != null) flavorIcon.enabled = false;
+            HideHeadIcon();
             if (flavorCountDown != null) flavorCountDown.enabled = false;
 
             // 訂單結束就收盒,菜單和盒子一起消失(避免「沒菜單卻有盒子」)。

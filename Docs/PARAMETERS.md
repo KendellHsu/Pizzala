@@ -340,6 +340,8 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `customerId` | — | 客人編號 |
 | `requiredThrowType` | Unknown | 進階玩法：指定投擲手勢；Unknown = 不限 |
 | `canWander` | true | 是否允許情緒遊走 |
+| `smileSprite` | （smile 情緒圖） | 正確送餐後顯示於原本的頭頂口味圖示位置，直到客人離場 |
+| `angrySprite` | （angry 情緒圖） | 送餐錯誤或等待逾時後顯示於原本的頭頂口味圖示位置，直到狀態再次改變或客人離場 |
 | `flavorCountDown` | （倒數圈 Image） | 頭上耐心倒數圈，UI Image（Filled／Vertical／Bottom）；`fillAmount` 隨剩餘耐心 1→0（水位下降）。留空 = 不顯示 |
 | `pizzaBox` | （盒子物件） | Pizza 盒物件（含模型與 HandZone）；點餐前隱藏、接單時才出現。留空 = 一直顯示 |
 | `pizzaBoxAnimation` | （盒子 Animation） | Pizza 盒 Animation 元件（舊版動畫）；接住正確口味時播關盒 clip。留空 = 不播關盒 |
@@ -381,6 +383,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-16 | 修正邊緣抓取失效：`selectEntered` 監聽晚於 XRGeneralGrabTransformer 快取 attach，改用子類別 `FrisbeeGrabInteractable`（覆寫 `InitializeDynamicAttachPose`，在快取前設定盤緣握點+對齊）；三顆 prefab 的 XRGrabInteractable 換成它，移除 FrisbeeEdgeGrab |
 | 2026-07-18 | 修 bug：丟回披薩（`PZ_ThrowbackPizza_*`）抓不到邊緣 — 三顆的 XRGrabInteractable 換成 `FrisbeeGrabInteractable` 並開啟 Use Dynamic Attach |
 | 2026-07-18 | 統一 Armature 骨架：美術改用單一 `<角色>_animation.fbx`（內含 standing/walking/throwing 三 take）。CustomerController 動畫欄位 **移除** `idle/walk/throwAnimatorController` 三欄，**改為單一** `animatorController`（內含 Idle/Walk/Throw 三 state；走動 `SetBool("Walking")`、丟回 `SetTrigger("Throw")`，Throw 播完自動回 Idle）。新增 Editor 工具 `Tools/Pizzala/Setup NPC Animations`（切 clip＋產生每角色 controller）與 `Tools/Pizzala/Build NPC Customer Prefabs`（掃 NPC 資料夾產生 6 個 PZ_Customer_* variant 並接進 CustomerSpawner）。移除過時的 UncleBCustomerBuilder |
+| 2026-07-19 | CustomerController 新增 `smileSprite`／`angrySprite`，沿用頭頂 `flavorIcon` 顯示情緒。正確送餐顯示 smile；口味或投擲方式錯誤、等待逾時顯示 angry；情緒顯示時隱藏倒數圈。所有角色 Variant 從共用 PZ_Customer Prefab 繼承 Sprite 指派 |
 | 2026-07-18 | 修 bug：丟回披薩被玩家周圍的撿取禁區（PickupExclusionZone）trigger 提前判定，打不到玩家頭 → 玩家臉特效不觸發。`ThrowbackProjectile` 改為只認玩家頭(命中)或實心環境(落地)，略過其他 trigger 區 |
 | 2026-07-16 | DirtManager 新增 `paintOnCharacters`、`paintSize`、`paintWrapDepth`：砸中客人改用 texture-space 染色（SaucePaintable 把醬料畫進角色貼圖 UV 空間，完全跟著蒙皮動畫），Decal 掛骨頭降為後備路徑 |
 | 2026-07-16 | CustomerSpawner 新增 `customerPrefabs`（客人 Prefab 清單，生成時均勻隨機挑一個，支援多角色混合）；原 `customerPrefab` 保留為備援。搭配新工具 `Tools/Pizzala/Build UncleB Customer Prefab` 產生第二隻角色 UncleB 客人並自動接進生成器 |

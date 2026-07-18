@@ -360,9 +360,10 @@ namespace Pizzala.Core
             }
             else
             {
-                // 丟錯口味:不解決訂單、客人不離場,繼續等正確口味(倒數照跑)。
+                // 送餐條件錯誤:立刻顯示 angry，但不解決訂單，客人繼續等正確餐。
                 // 只把錯的那顆呈現在盒中,再原樣丟回;盒中那顆會在丟回發射瞬間清掉。
                 record.outcome = ThrowOutcome.WrongFlavor;
+                customer.ShowAngryEmotion();
                 customer.ShowPizzaInBox(pizza.flavor);
                 Destroy(pizza.gameObject, 0.5f);        // 消除丟中的那顆
                 TryThrowback(customer, pizza.flavor);   // 原樣丟回來(客人續等餐)
