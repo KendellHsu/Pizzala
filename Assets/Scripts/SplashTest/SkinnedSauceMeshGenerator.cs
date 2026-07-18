@@ -27,6 +27,16 @@ public class SkinnedSauceMeshGenerator : MonoBehaviour
     [Tooltip("Small variation kept after physical sizing. 0.08 means plus/minus 8% across the allowed radius range.")]
     [SerializeField, Range(0f, 0.3f)] float radiusRandomVariation = 0.08f;
 
+    [Header("Performance")]
+    [Tooltip("同時存在的醬料片上限（跨全部客人）。超過就回收最舊的一片（連同其配料）。<= 0 表示不限制。")]
+    [SerializeField, Min(0)] int maxActiveSauceSheets = 12;
+
+    // 跨所有客人的醬料片 FIFO 清單，用來設上限、回收最舊的。
+    static readonly Queue<GameObject> ActiveSauceSheets = new Queue<GameObject>();
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void ResetStaticState() => ActiveSauceSheets.Clear();
+
     [Header("Organic Outline")]
     [SerializeField, Range(0f, 0.35f)] float outlineIrregularity = 0.14f;
     [SerializeField, Range(0f, 0.3f)] float ellipseVariation = 0.10f;
@@ -321,8 +331,12 @@ public class SkinnedSauceMeshGenerator : MonoBehaviour
             renderer.sharedMaterial = overrideMaterial != null ? overrideMaterial : GetMaterial();
             renderer.bones = source.bones;
             renderer.rootBone = source.rootBone;
-            renderer.updateWhenOffscreen = true;
+            // 在畫面外就別每幀重新蒙皮；本地 bounds 由 RecalculateBounds 算好，
+            // 綁在客人骨架上跟著動，靠 Unity 的可見性剔除即可。
+            renderer.updateWhenOffscreen = false;
         }
+
+        RegisterAndEnforceCap(sauceObject);
 
         Debug.Log($"[SplashTest] Created instant shrink-wrap sauce. Radius: {radius:F3} m, vertices: {bindVertices.Count}, iterations: {wrapIterations}.");
         if (toppingSpawner == null) toppingSpawner = GetComponent<SauceToppingSpawner>();
@@ -339,6 +353,21 @@ public class SkinnedSauceMeshGenerator : MonoBehaviour
                 seed);
         }
         return sauceObject;
+    }
+
+    // 登記新醬料片；超過上限就銷毀最舊的（連帶其 GeneratedSauceToppingOwner
+    // 會在 OnDestroy 清掉它的配料）。跨所有客人共用一個佇列。
+    void RegisterAndEnforceCap(GameObject sauceObject)
+    {
+        if (sauceObject == null) return;
+        ActiveSauceSheets.Enqueue(sauceObject);
+
+        if (maxActiveSauceSheets <= 0) return;
+        while (ActiveSauceSheets.Count > maxActiveSauceSheets)
+        {
+            GameObject oldest = ActiveSauceSheets.Dequeue();
+            if (oldest != null) Destroy(oldest);
+        }
     }
 
     float CalculateRadius(System.Random random, float impactSpeed, float releaseSpeed)
