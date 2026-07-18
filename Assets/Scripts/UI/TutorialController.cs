@@ -86,6 +86,7 @@ namespace Pizzala.UI
         {
             EnsureVideoPipeline(); // in case it wasn't ready at Awake (e.g. clips assigned late)
             SetCanvasActive(true);
+            if (videoImage != null) videoImage.gameObject.SetActive(true); // HideCanvas may have hidden it last round
             currentPage = 0;
             ShowPage(0);
 
@@ -100,7 +101,15 @@ namespace Pizzala.UI
                       $"videoImage={(videoImage != null ? videoImage.name : "NULL")} pages={PageCount}");
         }
 
-        public void HideCanvas() => SetCanvasActive(false);
+        // Hides the tutorial CONTENT (video + prompt) and stops playback, but leaves the
+        // canvas root active - the round countdown text is parented under this canvas and
+        // has to stay visible after Start Game, showing where the videos just were.
+        public void HideCanvas()
+        {
+            if (videoPlayer != null) videoPlayer.Stop();
+            if (videoImage != null) videoImage.gameObject.SetActive(false);
+            if (startGamePrompt != null) startGamePrompt.SetActive(false);
+        }
 
         // Both no-op at the ends (not a carousel) - the last page is the gate to Start Game,
         // so wrapping around would let the player skip past the "you've seen it all" point.

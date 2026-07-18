@@ -62,9 +62,8 @@ namespace Pizzala.Core
         public string introSceneName = "Intro";
 
         [Header("Panels (leave empty to skip)")]
-        public GameObject startScreenPanel;
         public GameObject pauseMenuPanel;
-        [Tooltip("Shows the 5..1 pre-round count and the 3..1 resume count.")]
+        [Tooltip("Shows the 5..1 pre-round count and the 3..1 resume count. Put it under the tutorial canvas so the count appears where the videos were, right after Start Game.")]
         public TMP_Text countdownText;
 
         [Header("Dev")]
@@ -224,7 +223,6 @@ namespace Pizzala.Core
         void EnterTutorial()
         {
             SetState(GameFlowState.Tutorial, "showing the tutorial videos");
-            SetActive(startScreenPanel, false);
             SetActive(pauseMenuPanel, false);
             SetActive(countdownText, false);
             rayLengthSwitcher?.UseUiRay(); // the Start Game button (last page) needs pointing at
@@ -244,8 +242,7 @@ namespace Pizzala.Core
         {
             SetState(GameFlowState.Starting, $"Start Game pressed - counting {startCountdownSeconds}s");
             countdownRemaining = startCountdownSeconds;
-            SetActive(startScreenPanel, false); // the number replaces the menu rather than stacking on it
-            tutorialController?.HideCanvas();    // clear the videos before play begins
+            tutorialController?.HideCanvas();    // clear the videos (but keep the canvas, the count sits on it)
             SetActive(countdownText, true);
             UpdateCountdownText();
             rayLengthSwitcher?.UsePlayRay(); // back to grab length before they can reach for a pizza
@@ -254,7 +251,6 @@ namespace Pizzala.Core
         void BeginPlaying()
         {
             SetState(GameFlowState.Playing, "countdown finished");
-            SetActive(startScreenPanel, false);
             SetActive(pauseMenuPanel, false);
             SetActive(countdownText, false);
             if (gameManager != null) gameManager.StartRound();
@@ -318,7 +314,6 @@ namespace Pizzala.Core
         {
             SetState(GameFlowState.Results, "round is no longer active");
             rayLengthSwitcher?.UseUiRay(); // the share button lives here and needs pointing at
-            SetActive(startScreenPanel, false);
             SetActive(pauseMenuPanel, false);
             SetActive(countdownText, false);
             // The results screen itself is already up: GameManager.EndRound() calls Show().
