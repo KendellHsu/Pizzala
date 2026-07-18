@@ -1,6 +1,7 @@
 // ─────────────────────────────────────────────────────────────
-// BossCommentService.cs — calls Gemini to write the boss's post-shift note
-// (experiment group only). Attach to the same object as GameManager.
+// BossCommentService.cs — calls Gemini to write the boss's post-shift note.
+// (Every player now sees the boss note page - condition no longer gates this.)
+// Attach to the same object as GameManager.
 //
 // API key: read at runtime from Assets/StreamingAssets/gemini_api_key.txt
 // (gitignored - each machine supplies its own, get a free one at
@@ -179,6 +180,10 @@ namespace Pizzala.LLM
             "You're getting the rhythm of this place. A few wild throws, sure, but everyone starts somewhere. Good shift.",
             "Decent night. The ovens are cooling, the till's counted, and nobody quit - I call that a win. See you next shift.",
         };
+
+        // Public entry so GameManager's else branch (service present but we still want a
+        // guaranteed note without a network round-trip) can borrow the same canned pool.
+        public static string GetFallbackComment(SessionSummary s) => FallbackComment(s);
 
         static string FallbackComment(SessionSummary s)
         {

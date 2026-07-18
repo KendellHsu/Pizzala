@@ -2,7 +2,8 @@
 // GameManager.cs — 回合流程總指揮(訂單、判定、丟回、結算)
 // 掛載:"Systems" 物件。
 // Inspector 必填:
-//   condition   — Control(對照組)/ Experimental(實驗組)★實驗分組開關
+//   condition   — 純資料標籤(進 JSON 檔名/欄位供分析),已不再影響體驗流程;
+//                 所有玩家一律看完整結算三頁 + boss note
 //   tuning      — ThrowTuning 資產
 //   customers   — 場上所有客人
 //   snapshotCamera / overviewCameraPoint / faceSplatOverlay /
@@ -31,14 +32,16 @@ namespace Pizzala.Core
         public static GameManager Instance { get; private set; }
 
         [Header("實驗設定")]
-        public ExperimentCondition condition = ExperimentCondition.Control;
+        [Tooltip("純資料標籤,只寫進 session JSON 的檔名/欄位供分析,不再影響體驗流程。" +
+                 "所有玩家一律看完整三頁結算 + boss note。2026-07 起 condition 不代表體驗差異。")]
+        public ExperimentCondition condition = ExperimentCondition.Experimental;
         public string participantId = "P00";
 
         [Header("玩法開關(保險絲)")]
         public bool enableThrowback = true;
 
         [Tooltip("訂單超時的客人是否去撿地上 pizza 丟回玩家?撿不到(場上沒可撿的)就直接離場。關=超時直接離場")]
-        public bool throwbackOnTimeout = false;
+        public bool throwbackOnTimeout = true;
 
         public bool enforceFlavor = true;
         public bool enforceThrowType = false;
@@ -475,10 +478,20 @@ namespace Pizzala.Core
             if (!RoundActive) return;
             RoundActive = false;
             ResumeRound(); // ending while paused would leave timeScale at 0 and freeze the results screen
+
+            // Sweep in-flight throwbacks before we stop coroutines: an unresolved one would
+            // otherwise keep flying and splat the player mid-results. And clear every
+            // customer's IsThrowingBack - StopAllCoroutines() can cut ThrowbackRoutine
+            // between setting the flag and clearing it, freezing that customer for good.
+            foreach (var tb in FindObjectsByType<ThrowbackProjectile>(FindObjectsSortMode.None))
+                if (tb != null) Destroy(tb.gameObject);
+            foreach (var c in activeCustomers)
+                if (c != null) c.IsThrowingBack = false;
+
             StopAllCoroutines();
             if (activityTracker != null) activityTracker.End();
 
-            // 環境髒亂總覽照(實驗組素材)
+            // 環境髒亂總覽照
             if (snapshotCamera != null && overviewCameraPoint != null)
                 SessionLogger.Instance.AddEnvironmentPhoto(snapshotCamera.CaptureFrom(overviewCameraPoint), "Store overview");
 
@@ -493,22 +506,32 @@ namespace Pizzala.Core
                 act != null ? act.TurnDegreesTotal : 0f);
 
             var session = SessionLogger.Instance.Session;
-            if (resultsScreen != null) resultsScreen.Show(session); // starts on page 1; NextPage() reaches the boss note page
+            if (resultsScreen != null) resultsScreen.Show(session); // starts on page 1; the stick flicks through to the boss note page
 
-            if (bossCommentService != null && session.condition == ExperimentCondition.Experimental)
+            // Save NOW, unconditionally, so the round's data is on disk the instant it ends.
+            // The boss comment can land seconds later (network) - by then the player may have
+            // hit Play Again, which calls BeginSession() and swaps SessionLogger.Session out
+            // from under us. So the callback re-saves THIS captured session explicitly.
+            SessionLogger.Instance.SaveToDisk(session);
+
+            // Every player now gets a boss note (condition no longer gates it). With the
+            // service present we ask the LLM; without it we still fill a canned line so the
+            // note page is never stuck on the "writing..." placeholder.
+            if (bossCommentService != null)
             {
-                // Async - don't block EndRound() on the network call. Save happens once the
-                // comment (or its fallback) is in hand, so the logged JSON always has it.
                 bossCommentService.GetComment(session.summary, comment =>
                 {
                     session.bossComment = comment;
                     if (resultsScreen != null) resultsScreen.SetBossComment(comment);
-                    SessionLogger.Instance.SaveToDisk();
+                    SessionLogger.Instance.SaveToDisk(session); // re-save the captured session, not whatever Session now points to
                 });
             }
             else
             {
-                SessionLogger.Instance.SaveToDisk();
+                string comment = BossCommentService.GetFallbackComment(session.summary);
+                session.bossComment = comment;
+                if (resultsScreen != null) resultsScreen.SetBossComment(comment);
+                SessionLogger.Instance.SaveToDisk(session);
             }
         }
 
