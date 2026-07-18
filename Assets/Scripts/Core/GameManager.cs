@@ -116,6 +116,7 @@ namespace Pizzala.Core
                 nextCustomerId = Mathf.Max(nextCustomerId, c.customerId + 1);
                 AttachCustomer(c);
             }
+            if (boothScreen != null) boothScreen.Hide(); // off during title/tutorial; shown at StartRound
             if (autoStart) StartCoroutine(AutoStartRoutine());
         }
 
@@ -156,6 +157,7 @@ namespace Pizzala.Core
             if (DirtManager.Instance != null) DirtManager.Instance.ResetCount();
             SessionLogger.Instance.BeginSession(condition, participantId);
             if (activityTracker != null) activityTracker.Begin();
+            if (boothScreen != null) boothScreen.Show(); // booth appears only once play actually starts
             RoundActive = true;
             StartCoroutine(RoundLoop());
         }
@@ -478,6 +480,7 @@ namespace Pizzala.Core
             if (!RoundActive) return;
             RoundActive = false;
             ResumeRound(); // ending while paused would leave timeScale at 0 and freeze the results screen
+            if (boothScreen != null) boothScreen.Hide(); // clear the booth before the results screen comes up
 
             // Sweep in-flight throwbacks before we stop coroutines: an unresolved one would
             // otherwise keep flying and splat the player mid-results. And clear every

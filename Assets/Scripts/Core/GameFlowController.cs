@@ -85,8 +85,10 @@ namespace Pizzala.Core
         // XR rig is in the scene. Y/U/I are only claimed by the XR Device Simulator, which
         // this project doesn't use.
         [Header("Input - Start Game / advance (trigger)")]
-        [Tooltip("Trigger that confirms the tutorial's last-page Start Game button. Same button that grabs pizza in play, but only read while the tutorial is on its last page.")]
+        [Tooltip("Right-hand trigger that confirms the tutorial's last-page Start Game. Same button that grabs pizza in play, but only read while the tutorial is on its last page.")]
         public string triggerVrPath = "<XRController>{RightHand}/trigger";
+        [Tooltip("Left-hand trigger, also accepted for Start Game so either hand works. Clear to disable.")]
+        public string triggerVrPathLeft = "<XRController>{LeftHand}/trigger";
         [Tooltip("Keyboard stand-in for the trigger (also starts from the tutorial's last page on a PC with no ray).")]
         public string startKeyboardPath = "<Keyboard>/y";
 
@@ -124,6 +126,7 @@ namespace Pizzala.Core
             // read it while the tutorial is on its last page, so it can still double as the
             // pizza-grab trigger during play without conflict.
             startAction = new InputAction("StartGame", InputActionType.Button, triggerVrPath);
+            if (!string.IsNullOrEmpty(triggerVrPathLeft)) startAction.AddBinding(triggerVrPathLeft);
             if (!string.IsNullOrEmpty(startKeyboardPath)) startAction.AddBinding(startKeyboardPath);
 
             pauseAction = new InputAction("Pause", InputActionType.Button, pauseVrPath);

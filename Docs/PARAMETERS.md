@@ -235,7 +235,8 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `startCountdownSeconds` | 5 | 按下開始遊戲後、回合真正開始前的倒數秒數 |
 | `resumeCountdownSeconds` | 3 | 暫停恢復前的倒數秒數 |
 | `skipTutorialInEditor` | false | Editor 直開 BackBone 時跳過 4 段教學（僅編輯器，build 忽略） |
-| `triggerVrPath` | `<XRController>{RightHand}/trigger` | 教學最後一頁「開始遊戲」的 trigger（只在最後一頁讀，不與抓 pizza 衝突） |
+| `triggerVrPath` | `<XRController>{RightHand}/trigger` | 教學最後一頁「開始遊戲」的右手 trigger（只在最後一頁讀，不與抓 pizza 衝突） |
+| `triggerVrPathLeft` | `<XRController>{LeftHand}/trigger` | 左手 trigger 也接受（兩手皆可開始）；清空可停用 |
 | `startKeyboardPath` | `<Keyboard>/y` | trigger 的鍵盤替身 |
 | `stickFlickThreshold` | 0.7 | 搖桿推多遠才算一次翻頁 flick |
 | `stickReleaseThreshold` | 0.3 | 搖桿要回中到此範圍內才能再次翻頁（教學與結算共用同一套 flick） |
@@ -257,7 +258,8 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 參數 | 預設值 | 說明 |
 |---|---|---|
 | `canvasRoot` | （空） | 整個教學 canvas；留空則切換本物件 |
-| `videoPlayer` | （空） | 播放 4 段影片的 VideoPlayer |
+| `videoPlayer` | （空） | 播放 4 段影片的 VideoPlayer；留空會自動抓子物件的 VideoPlayer |
+| `videoImage` | （空） | 顯示影片的 RawImage；留空會自動抓子物件的 RawImage。程式會自動把 VideoPlayer→RenderTexture→RawImage 這條管線接好（缺 RenderTexture 就自建），設定錯也能自我修復 |
 | `pages` | （空陣列） | 4 段教學影片 VideoClip，依頁序 |
 | `startGamePrompt` | （空） | 只在最後一頁顯示的「開始遊戲」提示/按鈕 |
 
@@ -388,3 +390,5 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-18 | PizzaJelly 放棄「局部凹陷/方向性壓扁」：披薩是扁飛盤、撞擊法線幾乎都在水平面，盤軸方向本來就不會有明顯形變，真正的局部凹陷需逐頂點/shader 形變（fbx 需 readable、Quest 逐頂點有效能風險，CP 值不高）。`Punch()` 退回無參數、只做沿盤軸整體 squash & stretch；保留自動撞擊偵測（改看速度向量變化）。加強後的預設值（impact 0.55、maxDeform 0.5、stiffness 100、damping 9）維持不變 |
 | 2026-07-18 | Game flow 重構：**不再分實驗組/對照組**——`GameManager.condition` 降為純資料標籤（預設 Control→**Experimental**，不再影響流程），`throwbackOnTimeout` 預設 false→**true**（正式保險絲）；`bossCommentService` 改為所有玩家都用（留空則罐頭 fallback）。**GameFlowController** 開場改進 `Tutorial` 狀態（4 段教學影片），新增 `tutorialController`/`introSceneName`/`skipTutorialInEditor`/`triggerVrPath` 等欄位，移除 StartScreen 流程；結算頁**只有一個「回到開頭」按鈕**（不分 Play Again/New Player 兩種行為），一律載回 Intro 全流程重來，沒有跳過教學的快速重玩路徑。**ResultsScreenController** 固定三頁、兩顆按鈕（Share ＋ 單一 `playAgainButton`）翻到最後一頁才出現、與 LLM 解耦；`postNoteButtonDelay` **棄用**（保留欄位不再讀）。新增 **TutorialController**（4 段 VideoPlayer 教學）、**IntroSequenceController**（標題→前導 Timeline→載入遊戲）、**StickFlickReader**（教學與結算共用的搖桿翻頁）。RayLengthSwitcher 加 caster null-guard |
 | 2026-07-18 | 開始遊戲前禁抓 pizza ＋ 遊玩時關雷射線：`FrisbeeGrabInteractable` 覆寫 `IsSelectableBy`——回合未進行（教學/倒數/暫停/結算）一律擋下**新的**抓取（已握在手上的不強制放開）；判斷用既有的 `GameManager.CanThrow`。注意：_Test_* 測試場景若有 GameManager 但沒開局，pizza 會抓不起來，把 `autoStart` 打開即可。`RayLengthSwitcher` 新增 `hideRayVisualInPlay`（預設 true）：遊玩狀態把 LineVisual 子物件整個關掉，選單狀態恢復。另修結算白背景板開場就顯示的 bug（`ResultsScreenController.Start()` 改呼叫 `Hide()`） |
+| 2026-07-18 | 合併 partner-mvp 的新 Results 介面：`ResultsScreenController` 新增 `homeButton`（回首頁美術鍵，與 `playAgainButton` 同動作＝回 Intro）與 `ShowPhotoWallOnly()`（photo box 展示用）；三顆按鈕（home/share/playAgain）一起在最後一頁顯示。boss note 改兩行式（hashtag ＋ 短評）prompt/fallback。新增 PhotoBoxSequence/PhotoBoxTrigger 與 Boards 紀念館場景 |
+| 2026-07-18 | 流程驗證修 3 bug：(1) `TutorialController` 影片不播——`Awake`/`Begin` 自動接好 VideoPlayer→RenderTexture→RawImage 管線（缺件自建＋印警告），新增 `videoImage` 欄位；(2) booth 應開局才出現——`GameManager` 於 `Start()`/`EndRound()` 隱藏、`StartRound()` 顯示 booth（`BoothStatusScreen` 加 `Show()`/`Hide()`）；(3) 開始遊戲 trigger——`GameFlowController` 新增 `triggerVrPathLeft`，左右手 trigger 都能在教學最後一頁確認開始 |

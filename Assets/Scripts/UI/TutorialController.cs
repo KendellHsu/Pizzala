@@ -26,6 +26,8 @@ namespace Pizzala.UI
 
         [Header("Playback")]
         public VideoPlayer videoPlayer;
+        [Tooltip("Where the video shows up. If set, the controller wires the VideoPlayer to render into it - you don't have to set up a RenderTexture by hand.")]
+        public RawImage videoImage;
         [Tooltip("The 4 how-to-play clips, in page order.")]
         public VideoClip[] pages;
 
@@ -34,13 +36,50 @@ namespace Pizzala.UI
         public GameObject startGamePrompt;
 
         int currentPage;
+        RenderTexture autoTexture; // created here if none is wired, freed in OnDestroy
 
         public int PageCount => pages != null ? pages.Length : 0;
         public bool IsOnLastPage => PageCount == 0 || currentPage >= PageCount - 1;
 
+        void Awake() => EnsureVideoPipeline();
+
+        // The #1 reason the tutorial shows nothing is a half-wired VideoPlayer: no RenderTexture,
+        // or the RawImage pointing at a different texture. Rather than make that a manual setup
+        // step everyone gets wrong, force the whole chain here: VideoPlayer -> RenderTexture ->
+        // RawImage. Any piece already set by hand is respected; only the missing links are built.
+        void EnsureVideoPipeline()
+        {
+            if (videoPlayer == null) videoPlayer = GetComponentInChildren<VideoPlayer>(true);
+            if (videoPlayer == null)
+            {
+                Debug.LogError("[TutorialController] No VideoPlayer found - the tutorial can't play. " +
+                               "Add a VideoPlayer under the canvas and assign it.");
+                return;
+            }
+
+            videoPlayer.renderMode = VideoRenderMode.RenderTexture;
+            videoPlayer.playOnAwake = false;
+            videoPlayer.waitForFirstFrame = true;
+
+            if (videoPlayer.targetTexture == null)
+            {
+                // 1080p is plenty for a UI panel; matches the RawImage regardless of its rect.
+                autoTexture = new RenderTexture(1920, 1080, 0);
+                videoPlayer.targetTexture = autoTexture;
+            }
+
+            if (videoImage == null) videoImage = GetComponentInChildren<RawImage>(true);
+            if (videoImage != null) videoImage.texture = videoPlayer.targetTexture;
+            else Debug.LogWarning("[TutorialController] No RawImage to show the video on - assign videoImage.");
+
+            if (pages == null || pages.Length == 0)
+                Debug.LogWarning("[TutorialController] pages is empty - assign the 4 tutorial VideoClips.");
+        }
+
         // Reset to page 1 and show the canvas. Called by GameFlowController on entering Tutorial.
         public void Begin()
         {
+            EnsureVideoPipeline(); // in case it wasn't ready at Awake (e.g. clips assigned late)
             SetCanvasActive(true);
             currentPage = 0;
             ShowPage(0);
@@ -73,6 +112,10 @@ namespace Pizzala.UI
                 videoPlayer.isLooping = true;
                 videoPlayer.Play();
             }
+            else if (pages == null || page >= pages.Length || pages[page] == null)
+            {
+                Debug.LogWarning($"[TutorialController] page {page} has no clip assigned - screen will be blank.");
+            }
 
             // The Start Game prompt only exists on the final page.
             if (startGamePrompt != null) startGamePrompt.SetActive(IsOnLastPage);
@@ -83,6 +126,11 @@ namespace Pizzala.UI
             var go = canvasRoot != null ? canvasRoot : gameObject;
             go.SetActive(on);
             if (!on && videoPlayer != null) videoPlayer.Stop();
+        }
+
+        void OnDestroy()
+        {
+            if (autoTexture != null) { autoTexture.Release(); Destroy(autoTexture); }
         }
     }
 }
