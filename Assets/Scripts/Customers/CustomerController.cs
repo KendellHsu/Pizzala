@@ -126,9 +126,36 @@ namespace Pizzala.Customers
         void Awake()
         {
             animator = GetComponentInChildren<Animator>();
+            if (animator != null)
+            {
+                // 位移完全由本腳本的 MoveTowards 驅動;Root Motion 開著會跟它打架(原地踏步/抖動)。
+                // 各角色 FBX 匯入的 Animator 預設值不一,這裡統一強制關閉,不依賴 prefab 手動設定。
+                animator.applyRootMotion = false;
+            }
             if (idleAnimatorController == null && animator != null)
                 idleAnimatorController = animator.runtimeAnimatorController;
             modelRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+
+            // 診斷:確認每隻客人開場抓到的 animator 與 idle 控制器狀態
+            if (animator != null) StartCoroutine(DiagAnimator());
+        }
+
+        System.Collections.IEnumerator DiagAnimator()
+        {
+            yield return null; // 等 animator 初始化一幀
+            var st0 = animator.GetCurrentAnimatorStateInfo(0);
+            float t0 = st0.normalizedTime;
+            int clips = animator.runtimeAnimatorController != null
+                ? animator.runtimeAnimatorController.animationClips.Length : -1;
+            yield return new WaitForSeconds(0.5f); // 過半秒再看動畫時間有沒有推進
+            var st1 = animator.GetCurrentAnimatorStateInfo(0);
+            Debug.Log($"[Diag] {name}:" +
+                      $" enabled={animator.enabled} speed={animator.speed}" +
+                      $" cullingMode={animator.cullingMode} updateMode={animator.updateMode}" +
+                      $" hasController={(animator.runtimeAnimatorController != null)} clipCount={clips}" +
+                      $" normTime {t0:F3}→{st1.normalizedTime:F3} (有推進表示動畫在播)" +
+                      $" avatarValid={(animator.avatar != null && animator.avatar.isValid)}" +
+                      $" isHuman={(animator.avatar != null && animator.avatar.isHuman)}");
         }
 
         void Start()
