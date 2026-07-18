@@ -37,29 +37,36 @@ namespace Pizzala.LLM
         // note should never mock that number itself. Jokes land on specific incidents
         // (face hits, mess count) instead, which is why the summary block below leads
         // with those rather than accuracy.
+        // Line 3 (persona) is stripped before the note is shown in-game - it exists purely
+        // for the history website's player card, riding along on the same call for free.
         const string PromptTemplate =
             "You are the boss of a pizza shop. An employee (the player) just finished a shift. " +
             "Here is tonight's performance data:\n\n{0}\n\n" +
             "Write the short note the boss leaves for them after the shift, in English.\n" +
-            "Format - exactly two lines:\n" +
+            "Format - exactly three lines:\n" +
             "Line 1: two playful hashtags that sum up the shift, each a simple adjective or a " +
             "1-3 word phrase (e.g. #SaucyChaos #BigEffort).\n" +
             "Line 2: the note itself, 25-40 words.\n" +
+            "Line 3: a 2-4 word player persona title, like a playful character class based on " +
+            "how they played (e.g. Sauce Tornado, Zen Delivery Master). No hashtag, no quotes.\n" +
             "Tone: mostly encouraging, with one funny roast about a specific mishap (like " +
             "hitting a customer in the face or making a mess) - not about the accuracy number, " +
             "since accurate throws are genuinely hard and most people miss a lot; that's normal, " +
             "not a personal failing. End positive so they want another shift. Handwritten-note " +
-            "style, no lists. Output only those two lines, no titles or explanations.";
+            "style, no lists. Output only those three lines, no titles or explanations.";
 
         string apiKey;
         bool apiKeyLoadAttempted;
 
-        public void GetComment(SessionSummary summary, Action<string> onComplete)
+        // onComplete(comment, persona): comment = hashtags line + note line (what the
+        // in-game sticky note shows); persona = the website-only class title, already
+        // split off so no caller ever accidentally renders it.
+        public void GetComment(SessionSummary summary, Action<string, string> onComplete)
         {
             StartCoroutine(GetCommentRoutine(summary, onComplete));
         }
 
-        IEnumerator GetCommentRoutine(SessionSummary summary, Action<string> onComplete)
+        IEnumerator GetCommentRoutine(SessionSummary summary, Action<string, string> onComplete)
         {
             if (!apiKeyLoadAttempted)
                 yield return LoadApiKey();
@@ -67,7 +74,7 @@ namespace Pizzala.LLM
             if (string.IsNullOrEmpty(apiKey))
             {
                 Debug.LogWarning("[BossCommentService] No API key found at StreamingAssets/" + ApiKeyFileName + " - using fallback comment.");
-                onComplete?.Invoke(FallbackComment(summary));
+                Deliver(FallbackComment(summary), summary, onComplete);
                 yield break;
             }
 
@@ -93,7 +100,8 @@ namespace Pizzala.LLM
                     if (req.result == UnityWebRequest.Result.Success)
                     {
                         string text = ExtractText(req.downloadHandler.text);
-                        onComplete?.Invoke(string.IsNullOrEmpty(text) ? FallbackComment(summary) : text.Trim());
+                        Deliver(string.IsNullOrEmpty(text) ? FallbackComment(summary) : text.Trim(),
+                                summary, onComplete);
                         yield break;
                     }
 
@@ -102,7 +110,32 @@ namespace Pizzala.LLM
                 }
             }
 
-            onComplete?.Invoke(FallbackComment(summary));
+            Deliver(FallbackComment(summary), summary, onComplete);
+        }
+
+        // Splits the raw three-line response into (note for the game, persona for the web).
+        // Tolerant of the LLM misbehaving: 3+ lines -> last line is the persona (even if
+        // the note wrapped onto extra lines); 2 or fewer (incl. every canned fallback) ->
+        // whole text is the note and the persona comes from the canned pools instead.
+        static void Deliver(string raw, SessionSummary summary, Action<string, string> onComplete)
+        {
+            var lines = new System.Collections.Generic.List<string>();
+            foreach (var l in raw.Split('\n'))
+                if (!string.IsNullOrWhiteSpace(l)) lines.Add(l.Trim());
+
+            string comment, persona;
+            if (lines.Count >= 3)
+            {
+                persona = lines[lines.Count - 1].TrimStart('#').Trim();
+                lines.RemoveAt(lines.Count - 1);
+                comment = string.Join("\n", lines);
+            }
+            else
+            {
+                comment = string.Join("\n", lines);
+                persona = FallbackPersona(summary);
+            }
+            onComplete?.Invoke(comment, persona);
         }
 
         IEnumerator LoadApiKey()
@@ -190,6 +223,20 @@ namespace Pizzala.LLM
             string[] pool = s.dirtCount > 10 ? MessyComments
                           : s.playerFaceHits > 0 ? FaceHitComments
                           : DefaultComments;
+            return pool[UnityEngine.Random.Range(0, pool.Length)];
+        }
+
+        // Canned personas, same buckets as the comments. Used whenever the LLM response
+        // didn't include a line 3 (or the whole call fell back).
+        static readonly string[] MessyPersonas = { "Sauce Tornado", "Abstract Artist", "Splat Machine", "Chaos Chef" };
+        static readonly string[] FaceHitPersonas = { "Sauce Magnet", "Fearless Frontliner", "Human Dartboard" };
+        static readonly string[] DefaultPersonas = { "Steady Hand", "Night Shift Regular", "Rising Rookie", "Honest Worker" };
+
+        static string FallbackPersona(SessionSummary s)
+        {
+            string[] pool = s.dirtCount > 10 ? MessyPersonas
+                          : s.playerFaceHits > 0 ? FaceHitPersonas
+                          : DefaultPersonas;
             return pool[UnityEngine.Random.Range(0, pool.Length)];
         }
     }

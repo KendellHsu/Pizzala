@@ -139,5 +139,9 @@ namespace Pizzala.Data
 
         public SessionSummary summary = new SessionSummary();
         public string bossComment = ""; // LLM-generated note shown to the experimental group, logged for analysis
+
+        // Website-only fields (the history site reads these; the game never displays them).
+        public string playerPersona = "";   // LLM "player class" title (e.g. Sauce Tornado), from the same call as bossComment
+        public string playerCardImage = ""; // file name (under photos/) of the generated clay-style player card
     }
 }
