@@ -63,6 +63,9 @@ namespace Pizzala.DevTools
             if (Keyboard.current.digit2Key.wasPressedThisFrame) ShowAs(ExperimentCondition.Middle);
             if (Keyboard.current.digit3Key.wasPressedThisFrame) ShowAs(ExperimentCondition.Experimental);
             if (Keyboard.current.spaceKey.wasPressedThisFrame) resultsScreen?.NextPage();
+            // PC stand-in for ray-clicking the photo box (PhotoBoxTrigger needs an XR
+            // interactor, which plain-mouse editor testing doesn't have).
+            if (Keyboard.current.pKey.wasPressedThisFrame) ShowRecordedPhotos();
         }
 
         // Hooked up to a clickable prop in the world (see PhotoBoxTrigger) - loads the same

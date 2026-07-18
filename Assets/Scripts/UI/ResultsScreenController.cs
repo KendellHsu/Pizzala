@@ -193,6 +193,11 @@ namespace Pizzala.UI
         {
             if (bossCommentText != null) bossCommentText.text = text;
 
+            // The comment arrives async - if the whole canvas got deactivated in the
+            // meantime (e.g. the photo-box scene keeps it hidden until clicked),
+            // StartCoroutine would throw. Text is already set above; skip the reveal.
+            if (!isActiveAndEnabled) return;
+
             if (postNoteButtonsRoutine != null) StopCoroutine(postNoteButtonsRoutine);
             postNoteButtonsRoutine = StartCoroutine(RevealPostNoteButtons());
         }
