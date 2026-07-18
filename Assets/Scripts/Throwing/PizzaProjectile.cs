@@ -160,7 +160,16 @@ namespace Pizzala.Throwing
                 if (customerSurfaceSauce != null && customerSurfaceSauce.Handles(zone))
                 {
                     useCustomerSurfaceSauce = true;
-                    if (!customerSurfaceSauce.TryCreate(zone, point, impactVelocity, normal, flavor))
+                    float releaseSpeed = record != null && record.features != null
+                        ? record.features.releaseSpeed
+                        : 0f;
+                    if (!customerSurfaceSauce.TryCreate(
+                            zone,
+                            point,
+                            impactVelocity,
+                            normal,
+                            flavor,
+                            releaseSpeed))
                         Debug.LogWarning($"[SurfaceSauce] Could not create 3D sauce on {zone.customer.name}.");
                 }
             }

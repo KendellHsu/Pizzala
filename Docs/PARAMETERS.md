@@ -212,6 +212,23 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `dropletHitMask` | ~0（全部） | 液滴落地判定的圖層 |
 | `flavorDropletColors` | 芥末黃 / 深紅 / 粉紅 | 液滴顏色，依 PizzaFlavor 列舉順序（0=Margherita 芥末黃、1=Pepperoni 深紅、2=CosmicPinkMarshmallow 粉紅）；慧星尾巴也共用這份顏色 |
 
+### 客人身上 3D 醬料（SplashTest 系統，掛在客人 Prefab）
+
+砸中客人時直接沿蒙皮表面長出一片 3D 醬料網格（跟著動畫走），並在上面撒對應口味的 3D 配料，取代客人身上原本容易穿模的 Decal（環境仍用 DirtManager 的 Decal/染色）。
+
+#### SkinnedSauceMeshGenerator（[SkinnedSauceMeshGenerator.cs](../Assets/Scripts/SplashTest/SkinnedSauceMeshGenerator.cs)）
+
+| 參數 | 預設值 | 說明 |
+|---|---|---|
+| `minimumRadius` | 0.05 | 醬料片最小半徑（m） |
+| `maximumRadius` | 0.15 | 醬料片最大半徑（m） |
+| `useImpactDrivenRadius` | true | 開啟後由撞擊速度決定醬料大小（仍夾在 min/max 之間）；關閉則回到純隨機 |
+| `minimumImpactSpeed` | 1.5 | 對應到最小半徑的撞擊速度（m/s） |
+| `maximumImpactSpeed` | 9 | 對應到最大半徑的撞擊速度（m/s） |
+| `releaseSpeedInfluence` | 0.2 | 出手速度對結果的影響權重（0~1）；撞擊速度仍為主要輸入 |
+| `maximumReleaseSpeed` | 9 | 使用出手速度時對應到最大半徑的出手速度（m/s） |
+| `radiusRandomVariation` | 0.08 | 物理決定大小後保留的隨機變化量（±8%） |
+
 ### SauceTrail（[SauceTrail.cs](../Assets/Scripts/Dirt/SauceTrail.cs)，披薩滑行留痕）
 
 | 參數 | 預設值 | 說明 |
@@ -401,3 +418,4 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-19 | 飛盤手感微調：`frisbeeSpinToFly` 6→5（自旋門檻放低）、`frisbeeAeroScale` 3→3.5（升力倍率提高、飛得遠）、`frisbeeCM0` -0.08→-0.05（降低天生低頭、弧度平緩）、`frisbeeCMA` 0.43→0.35（降低俯仰靈敏度）、`frisbeeWobbleDamping` 3→4（章動阻尼增加、飛盤更穩定） |
 | 2026-07-19 | 修 Margherita 改黃披薩後髒污特效仍紅的 bug：Decal 材質 `M_Decal_M_SauceSplat_Margherita_01~03` 的 Base Map 改指 `Mustard_splats_01~03`（原本仍是紅色 `Margherita_splats`）；來源已刪的 04/05 decal 材質+prefab 一併移除，DirtManager `flavorSplats[0]` 只留 3 個黃色 decal。`flavorDropletColors[0]`（液滴/噴濺/滑痕液滴）番茄紅 `{0.75,0.12,0.05}` → 芥末黃 `{0.85,0.62,0.08}`，同步更新 DirtManager.cs 程式碼預設與三個場景（BackBone / BackBoneCopy / BackBone_BoothTest） |
 | 2026-07-19 | 慧星尾巴**恢復依口味著色**（撤銷同日下方 07-18「改為固定白色」那條）：`PizzaCometTrail` 從同物件的 `PizzaProjectile`/`ThrowbackProjectile` 讀 `flavor`，顏色取自 `DirtManager.flavorDropletColors`（和液滴/髒污同一份來源，Margherita 即芥末黃）；無口味或無 DirtManager（單獨測試）退回白色。無新增序列化欄位 |
+| 2026-07-19 | 合併 `customer_splash`：砸中客人改長 **3D 醬料網格**（沿蒙皮表面、跟著動畫走）並撒對應口味 3D 配料（Margherita 葉子／Pepperoni 香腸／Cosmic 藍莓辣椒菇），移除客人身上原本容易穿模的 Decal（**環境仍用 DirtManager 的 Decal/染色不變**）。`SkinnedSauceMeshGenerator` 新增依撞擊速度決定醬料大小的欄位：`useImpactDrivenRadius`(true)、`minimumImpactSpeed`(1.5)、`maximumImpactSpeed`(9)、`releaseSpeedInfluence`(0.2)、`maximumReleaseSpeed`(9)、`radiusRandomVariation`(0.08)，`maximumRadius` 0.1→0.15；`releaseSpeed` 一路由 `PizzaProjectile`→`CustomerSurfaceSauce`→`SkinnedSurfaceProbe`→`SkinnedSauceMeshGenerator` 傳入。另修蒙皮 triangle index 越界（baked mesh 與原 mesh 拓樸不一致時 remap 到有效三角形，失敗才放棄）。客人 prefab（PZ_Customer 及 Soldier/UncleB/bathrobeDad variant）補上 BodyZone 膠囊碰撞尺寸。`MAT_Sauce_Red` 更名 `MAT_Sauce_Yellow`（GUID 不變）、客人 Margherita/Pepperoni 醬料材質對調 |
