@@ -41,13 +41,16 @@ namespace Pizzala.LLM
         const string PromptTemplate =
             "You are the boss of a pizza shop. An employee (the player) just finished a shift. " +
             "Here is tonight's performance data:\n\n{0}\n\n" +
-            "Write a short note the boss leaves for them after the shift, in English, 40-60 words.\n" +
-            "Tone: mostly encouraging, with one or two funny roasts about specific mishaps (like " +
+            "Write the short note the boss leaves for them after the shift, in English.\n" +
+            "Format - exactly two lines:\n" +
+            "Line 1: two playful hashtags that sum up the shift, each a simple adjective or a " +
+            "1-3 word phrase (e.g. #SaucyChaos #BigEffort).\n" +
+            "Line 2: the note itself, 25-40 words.\n" +
+            "Tone: mostly encouraging, with one funny roast about a specific mishap (like " +
             "hitting a customer in the face or making a mess) - not about the accuracy number, " +
             "since accurate throws are genuinely hard and most people miss a lot; that's normal, " +
-            "not a personal failing. End on a positive note that makes them want to come back for " +
-            "another shift. Write it like a real handwritten note, not a bulleted list. " +
-            "Output only the note text, no titles or explanations.";
+            "not a personal failing. End positive so they want another shift. Handwritten-note " +
+            "style, no lists. Output only those two lines, no titles or explanations.";
 
         string apiKey;
         bool apiKeyLoadAttempted;
@@ -158,27 +161,29 @@ namespace Pizzala.LLM
         // but each picks randomly from a pool so back-to-back rounds don't read the exact
         // same note - the fallback fires often enough (free-tier Gemini flakiness) that
         // repeat players would notice a single canned line.
+        // Same two-line shape as the LLM output (hashtags, then the note) so the fallback
+        // is indistinguishable from a real response on the note UI.
         static readonly string[] MessyComments =
         {
-            "Rough one tonight, but you showed up and threw pizza - that's the job. Clean up before your next shift and I'll see you then.",
-            "The shop looks like a sauce crime scene. Mop's in the back. Still - good hustle out there tonight. See you tomorrow.",
-            "I counted the splats. All of them. We'll talk about your aim later - for now, get some rest. You earned it, mess and all.",
-            "Health inspector called. I told them it was 'abstract art'. Let's aim for the customers' HANDS next shift, yeah? You've got this.",
+            "#SauceStorm #StillStanding\nRough one, but you showed up and threw pizza - that's the job. Clean up before your next shift.",
+            "#AbstractArt #GoodHustle\nThe shop looks like a sauce crime scene. Mop's in the back. Still, good hustle - see you tomorrow.",
+            "#SplatCount #RestUp\nI counted the splats. All of them. We'll talk aim later - for now, rest up. You earned it.",
+            "#HealthHazard #ComebackKid\nThe inspector called; I said it was 'abstract art'. Aim for their HANDS next shift. You've got this.",
         };
 
         static readonly string[] FaceHitComments =
         {
-            "Saw you take one right in the face tonight. Occupational hazard. You wear the sauce well - see you next shift.",
-            "Rule one of pizza: sometimes it comes back. You found that out the hard way tonight. Good spirit though - come back for round two.",
-            "That customer had quite an arm, huh? Keep your head moving out there. Otherwise, decent shift - see you tomorrow.",
+            "#SauceFace #BattleScars\nTook one right in the face tonight. Occupational hazard. You wear it well - see you next shift.",
+            "#PizzaKarma #RoundTwo\nRule one of pizza: sometimes it comes back. You learned that the hard way. Come back for round two.",
+            "#QuickReflexes #AlmostDodged\nThat customer had quite an arm, huh? Keep your head moving. Otherwise, decent shift - see you tomorrow.",
         };
 
         static readonly string[] DefaultComments =
         {
-            "Solid effort out there tonight. Keep at it - you'll get the hang of it. See you next shift.",
-            "Not bad at all for a night's work. The regulars were smiling - that's what counts. Same time tomorrow?",
-            "You're getting the rhythm of this place. A few wild throws, sure, but everyone starts somewhere. Good shift.",
-            "Decent night. The ovens are cooling, the till's counted, and nobody quit - I call that a win. See you next shift.",
+            "#SolidEffort #KeepAtIt\nGood work out there tonight. You'll get the hang of it. See you next shift.",
+            "#NightsWork #HappyRegulars\nNot bad at all. The regulars were smiling - that's what counts. Same time tomorrow?",
+            "#FindingRhythm #GoodShift\nYou're getting the rhythm of this place. A few wild throws, sure, but everyone starts somewhere.",
+            "#TillCounted #CallItAWin\nOvens cooling, till counted, nobody quit - I call that a win. See you next shift.",
         };
 
         // Public entry so GameManager's else branch (service present but we still want a

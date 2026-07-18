@@ -88,6 +88,8 @@ namespace Pizzala.UI
         public TMP_Text bossCommentText;    // filled in later by BossCommentService
 
         [Header("P3: End Buttons (children of bossNotePanel, appear on the last page)")]
+        [Tooltip("Back-to-home art button (left of Share). Same action as playAgainButton - every end-of-round path returns to Intro, so hook both to GameFlowController.OnNewPlayerPressed.")]
+        public GameObject homeButton;
         public GameObject shareButton;
         [Tooltip("The single end-of-round button (label it \"New Player\" / \"Play Again\" - " +
                  "same action either way, no behavioural split). OnClick -> GameFlowController.OnNewPlayerPressed.")]
@@ -104,6 +106,18 @@ namespace Pizzala.UI
         // Nothing Unity-owned frees these, so across repeated Play Again rounds they pile up
         // in memory on the Quest - Hide() destroys them all. Tracked here so we never leak.
         readonly List<Texture2D> loadedTextures = new List<Texture2D>();
+
+        // Jumps straight to the photo wall for a given session, skipping the paged report -
+        // for standalone display contexts (a clickable prop showing one past session's
+        // photos, e.g. the memorial-hall pizza box) that aren't part of the results flow.
+        // The end buttons stay hidden: they're children of bossNotePanel, which
+        // HideAllPanels() turns off.
+        public void ShowPhotoWallOnly(SessionData session)
+        {
+            currentSession = session;
+            HideAllPanels();
+            ShowPhotoWall(session);
+        }
 
         public bool HasNextPage => currentSession != null && currentPage + 1 < pageCount;
         public bool HasPrevPage => currentSession != null && currentPage > 0;
@@ -154,18 +168,20 @@ namespace Pizzala.UI
             ShowPage(0);
         }
 
-        // Share + the single end-of-round button live on the boss note (last) page and only
-        // appear once the player flicks all the way there - proof they read to the end.
-        // Deliberately decoupled from the LLM callback: the buttons must show even if the
-        // boss comment never lands (network dead, service missing).
+        // Home + Share + the single end-of-round button live on the boss note (last) page
+        // and only appear once the player flicks all the way there - proof they read to the
+        // end. Deliberately decoupled from the LLM callback: the buttons must show even if
+        // the boss comment never lands (network dead, service missing).
         void ShowEndButtons()
         {
+            if (homeButton != null) homeButton.SetActive(true);
             if (shareButton != null) shareButton.SetActive(true);
             if (playAgainButton != null) playAgainButton.SetActive(true);
         }
 
         void HideEndButtons()
         {
+            if (homeButton != null) homeButton.SetActive(false);
             if (shareButton != null) shareButton.SetActive(false);
             if (playAgainButton != null) playAgainButton.SetActive(false);
         }

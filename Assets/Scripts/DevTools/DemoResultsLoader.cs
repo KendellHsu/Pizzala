@@ -38,7 +38,9 @@ namespace Pizzala.DevTools
         public bool autoLoadOnStart = false;
         public ExperimentCondition autoLoadCondition = ExperimentCondition.Experimental;
 
-        SessionData cached;
+        // Keyed by file name: the memorial-hall idea puts MANY pizza boxes in one scene,
+        // each opening its own session's photos - so one flat cache slot isn't enough.
+        readonly Dictionary<string, SessionData> loadedSessions = new Dictionary<string, SessionData>();
 
         void Start()
         {
@@ -63,6 +65,76 @@ namespace Pizzala.DevTools
             if (Keyboard.current.digit2Key.wasPressedThisFrame) ShowAs(ExperimentCondition.Middle);
             if (Keyboard.current.digit3Key.wasPressedThisFrame) ShowAs(ExperimentCondition.Experimental);
             if (Keyboard.current.spaceKey.wasPressedThisFrame) resultsScreen?.NextPage();
+            // PC stand-in for ray-clicking a photo box (PhotoBoxTrigger needs an XR
+            // interactor, which plain-mouse editor testing doesn't have). Cycles through
+            // every box in the scene, firing each one's own OnActivated - so it tests the
+            // exact per-box wiring (including the session file name typed on the event).
+            if (Keyboard.current.pKey.wasPressedThisFrame) TriggerNextPhotoBox();
+        }
+
+        int debugBoxIndex;
+
+        void TriggerNextPhotoBox()
+        {
+            var boxes = FindObjectsByType<PhotoBoxTrigger>(FindObjectsSortMode.None);
+            if (boxes.Length == 0) { ShowRecordedPhotos(); return; } // no boxes placed yet - old P behaviour
+
+            System.Array.Sort(boxes, (a, b) => string.CompareOrdinal(a.name, b.name));
+            var box = boxes[debugBoxIndex % boxes.Length];
+            debugBoxIndex++;
+            Debug.Log($"DemoResultsLoader: P key - simulating click on box '{box.name}' ({(debugBoxIndex - 1) % boxes.Length + 1}/{boxes.Length}).");
+            box.onActivated?.Invoke();
+        }
+
+        // Hooked up to a clickable prop in the world (see PhotoBoxTrigger) - loads the same
+        // sample session this loader already uses for keys 1/2/3, and jumps straight to its
+        // photo wall.
+        public void ShowRecordedPhotos() => ShowRecordedPhotos(sessionFileName);
+
+        // Per-box variant for a scene with MANY pizza boxes: each box's PhotoBoxTrigger
+        // passes its own session file name (type it into the OnActivated event's string
+        // field in the Inspector), so every box opens the photos of the round it belongs
+        // to. The no-arg overload above stays for the single-box/P-key case.
+        public void ShowRecordedPhotos(string fileName)
+        {
+            if (resultsScreen == null)
+            {
+                Debug.LogError("DemoResultsLoader: resultsScreen not assigned.");
+                return;
+            }
+
+            var session = LoadCached(fileName);
+            if (session == null) return;
+
+            resultsScreen.ShowPhotoWallOnly(session);
+        }
+
+        // Full three-page review (shown as the Experimental condition) for one specific
+        // box's session - the History scene's pizza boxes reach this via PhotoBoxSequence.
+        // The boss comment is fetched once per session and kept on it, so re-opening the
+        // same box doesn't call Gemini again.
+        public void ShowRecordedSession(string fileName)
+        {
+            if (resultsScreen == null)
+            {
+                Debug.LogError("DemoResultsLoader: resultsScreen not assigned.");
+                return;
+            }
+
+            var session = LoadCached(fileName);
+            if (session == null) return;
+
+            session.condition = ExperimentCondition.Experimental;
+            resultsScreen.Show(session);
+
+            if (!string.IsNullOrEmpty(session.bossComment))
+                resultsScreen.SetBossComment(session.bossComment);
+            else if (bossCommentService != null)
+                bossCommentService.GetComment(session.summary, comment =>
+                {
+                    session.bossComment = comment;
+                    resultsScreen.SetBossComment(comment);
+                });
         }
 
         void ShowAs(ExperimentCondition condition)
@@ -73,11 +145,8 @@ namespace Pizzala.DevTools
                 return;
             }
 
-            if (cached == null)
-            {
-                cached = Load();
-                if (cached == null) return;
-            }
+            var cached = LoadCached(sessionFileName);
+            if (cached == null) return;
 
             cached.condition = condition;
             resultsScreen.Show(cached); // puts up the "writing a note..." placeholder for Experimental
@@ -94,10 +163,18 @@ namespace Pizzala.DevTools
             Debug.Log($"DemoResultsLoader: showing {sessionFileName} as {condition}.");
         }
 
-        SessionData Load()
+        SessionData LoadCached(string fileName)
+        {
+            if (loadedSessions.TryGetValue(fileName, out var hit)) return hit;
+            var data = Load(fileName);
+            if (data != null) loadedSessions[fileName] = data;
+            return data;
+        }
+
+        SessionData Load(string fileName)
         {
             string dataRoot = Path.Combine(Path.GetFullPath(Path.Combine(Application.dataPath, "..")), "Data");
-            string jsonPath = Path.Combine(dataRoot, "sessions", sessionFileName);
+            string jsonPath = Path.Combine(dataRoot, "sessions", fileName);
             string photosDir = Path.Combine(dataRoot, "photos");
 
             if (!File.Exists(jsonPath))
