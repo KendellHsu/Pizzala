@@ -113,7 +113,7 @@ namespace Pizzala.Throwing
         void OnCollisionEnter(Collision c)
         {
             var contact = c.GetContact(0);
-            Resolve(c.collider, contact.point, contact.normal);
+            Resolve(c.collider, contact.point, contact.normal, c.relativeVelocity);
         }
 
         void OnTriggerEnter(Collider other)
@@ -129,10 +129,16 @@ namespace Pizzala.Throwing
                 center.y = transform.position.y;
                 normal = transform.position - center;
             }
-            Resolve(other, point, normal.sqrMagnitude > 1e-6f ? normal.normalized : Vector3.up);
+            Rigidbody body = GetComponent<Rigidbody>();
+            Vector3 impactVelocity = body != null ? body.linearVelocity : transform.forward;
+            Resolve(
+                other,
+                point,
+                normal.sqrMagnitude > 1e-6f ? normal.normalized : Vector3.up,
+                impactVelocity);
         }
 
-        void Resolve(Collider col, Vector3 point, Vector3 normal)
+        void Resolve(Collider col, Vector3 point, Vector3 normal, Vector3 impactVelocity)
         {
             if (!inFlight || Time.time - releaseTime < ArmDelay) return;
 
@@ -144,9 +150,31 @@ namespace Pizzala.Throwing
 
             GetComponent<PizzaJelly>()?.Punch();
             GetComponent<PizzaCometTrail>()?.StopEmit();
+            // Face and body use the new 3D shrink-wrap sauce system when the
+            // spawned customer has it. Hand hits intentionally keep their normal
+            // catch / order-resolution behavior.
+            bool useCustomerSurfaceSauce = false;
+            if (zone != null && zone.customer != null)
+            {
+                var customerSurfaceSauce = zone.customer.GetComponent<CustomerSurfaceSauce>();
+                if (customerSurfaceSauce != null && customerSurfaceSauce.Handles(zone))
+                {
+                    useCustomerSurfaceSauce = true;
+                    if (!customerSurfaceSauce.TryCreate(zone, point, impactVelocity, normal, flavor))
+                        Debug.LogWarning($"[SurfaceSauce] Could not create 3D sauce on {zone.customer.name}.");
+                }
+            }
 
             if (GameManager.Instance != null && record != null)
-                GameManager.Instance.OnPizzaLanded(this, record, zone, point, normal, Time.time - releaseTime);
+                GameManager.Instance.OnPizzaLanded(
+                    this,
+                    record,
+                    zone,
+                    point,
+                    normal,
+                    Time.time - releaseTime,
+                    useCustomerSurfaceSauce,
+                    col);
 
             record = null;
 

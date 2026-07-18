@@ -111,7 +111,7 @@ namespace Pizzala.Customers
 
             if (!hitPlayer && Pizzala.Dirt.DirtManager.Instance != null)
             {
-                Pizzala.Dirt.DirtManager.Instance.SpawnSplat(point, normal, flavor); // 閃過→牆上多一塊髒污
+                Pizzala.Dirt.DirtManager.Instance.SpawnSplat(point, normal, flavor, null, col); // 閃過→牆上多一塊髒污
                 gameObject.AddComponent<Pizzala.Dirt.SauceTrail>().Activate(flavor); // 銷毀前的彈跳也留痕
             }
 

@@ -7,6 +7,7 @@
 // ─────────────────────────────────────────────────────────────
 using UnityEngine;
 using Pizzala.Data;
+using Pizzala.Customers;
 
 namespace Pizzala.Dirt
 {
@@ -49,6 +50,10 @@ namespace Pizzala.Dirt
         {
             if (!active || left <= 0 || DirtManager.Instance == null) return;
 
+            // A pizza that has already hit a customer may slide or bounce against
+            // them again. Do not add legacy decal trail marks over the new 3D sauce.
+            if (c.collider.GetComponentInParent<CustomerSurfaceSauce>() != null) return;
+
             // 滑行:隔一段距離、且還在動,才留下一塊
             if (!isImpact)
             {
@@ -58,7 +63,7 @@ namespace Pizzala.Dirt
 
             var contact = c.GetContact(0);
             float scale = Mathf.Lerp(minScale, startScale, (float)left / budget);
-            DirtManager.Instance.SpawnSplatMark(contact.point, contact.normal, flavor, scale);
+            DirtManager.Instance.SpawnSplatMark(contact.point, contact.normal, flavor, scale, c.collider);
 
             lastMarkPos = transform.position;
             left--;

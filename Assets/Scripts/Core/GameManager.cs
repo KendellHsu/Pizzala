@@ -237,7 +237,9 @@ namespace Pizzala.Core
 
         // ══ 披薩落地(PizzaProjectile 碰撞時呼叫)══
         public void OnPizzaLanded(PizzaProjectile pizza, ThrowRecord record,
-                                  CustomerHitZone zone, Vector3 point, Vector3 normal, float flightTime)
+                                  CustomerHitZone zone, Vector3 point, Vector3 normal, float flightTime,
+                                  bool useCustomerSurfaceSauce = false,
+                                  Collider impactCollider = null)
         {
             if (record == null) return;
 
@@ -285,7 +287,9 @@ namespace Pizzala.Core
                     case HitZoneType.Body:
                         record.outcome = ThrowOutcome.MissBody;
                         zone.customer.GetDirty();
-                        if (DirtManager.Instance != null)
+                        // The customer-specific 3D sauce replaces only the old
+                        // character splat. Environment hits still use DirtManager.
+                        if (!useCustomerSurfaceSauce && DirtManager.Instance != null)
                             DirtManager.Instance.SpawnSplat(point, normal, pizza.flavor, zone.customer.transform);
                         break;
                 }
@@ -293,7 +297,8 @@ namespace Pizzala.Core
             else
             {
                 record.outcome = ThrowOutcome.MissEnvironment;
-                if (DirtManager.Instance != null) DirtManager.Instance.SpawnSplat(point, normal, pizza.flavor);
+                if (DirtManager.Instance != null)
+                    DirtManager.Instance.SpawnSplat(point, normal, pizza.flavor, null, impactCollider);
             }
 
             SessionLogger.Instance.Record(record);
