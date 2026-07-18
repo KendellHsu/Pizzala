@@ -149,6 +149,8 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `enforceThrowType` | false | 是否檢查投擲手勢類型 |
 | `autoStart` | false | 關 = 等開始畫面按 B 才開始（正式流程）；開 = 延遲後自動開始，方便沒有開始畫面時測試 |
 | `autoStartDelay` | 5 | 自動開始的延遲（秒） |
+| `debugRoundSeconds` | 0 | **測試用**：>0 覆寫本回合長度（秒），快速跳結算；0 = 用 `ThrowTuning.roundDurationSeconds`。正式版設 0 |
+| `debugEndRoundKey` | `<Keyboard>/f10` | **測試用**：遊玩中按此鍵立刻結束回合、直接跳結算。留空停用 |
 | `bossCommentService` | （空） | Boss 評論服務（Gemini）；**所有玩家**都會用到（留空則用罐頭 fallback 文字，不會卡在「writing...」） |
 | `boothScreen` | （空） | 攤位上即時顯示命中數／剩餘時間的螢幕；留空則跳過 |
 
@@ -394,3 +396,4 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-18 | 合併 partner-mvp 的新 Results 介面：`ResultsScreenController` 新增 `homeButton`（回首頁美術鍵，與 `playAgainButton` 同動作＝回 Intro）與 `ShowPhotoWallOnly()`（photo box 展示用）；三顆按鈕（home/share/playAgain）一起在最後一頁顯示。boss note 改兩行式（hashtag ＋ 短評）prompt/fallback。新增 PhotoBoxSequence/PhotoBoxTrigger 與 Boards 紀念館場景 |
 | 2026-07-18 | 流程驗證修 3 bug：(1) `TutorialController` 影片不播——`Awake`/`Begin` 自動接好 VideoPlayer→RenderTexture→RawImage 管線（缺件自建＋印警告），新增 `videoImage` 欄位；(2) booth 應開局才出現——`GameManager` 於 `Start()`/`EndRound()` 隱藏、`StartRound()` 顯示 booth（`BoothStatusScreen` 加 `Show()`/`Hide()`）；(3) 開始遊戲 trigger——`GameFlowController` 新增 `triggerVrPathLeft`，左右手 trigger 都能在教學最後一頁確認開始 |
 | 2026-07-18 | 開始鍵 trigger→**A 鍵**（右手 primaryButton＋左手 X，`triggerVrPath`/`triggerVrPathLeft`）。教學最後一頁 `startGamePrompt` 加閃爍（`blinkPrompt`/`blinkPeriod`）。影片改 Prepare→Play（切 clip 後才播、避免黑畫面）。**移除 `GameFlowController.startScreenPanel`**（舊 StartScreen 流程殘留、程式從不顯示的死欄位）。倒數文字 `countdownText` 用獨立的 Screen Space - Overlay canvas（沿用舊 GameFlowUI 做法），不掛在 tutorial canvas 上；`TutorialController.HideCanvas()` 恢復為整個 canvas 關閉（PZ_TutorialCanvas 完全消失）。新增 debug 開關 `GameFlowController.freezeCountdown`：凍結倒數在起始數字，方便調 CountDownText 大小/位置 |
+| 2026-07-19 | 開始鍵改回 **trigger**（左右手，`triggerVrPath`/`triggerVrPathLeft`），與「Press trigger to start」提示一致。GameManager 加測試捷徑：`debugRoundSeconds`（>0 覆寫回合長度快速跳結算）、`debugEndRoundKey`（預設 F10，遊玩中按下立刻結束回合跳結算）；正式版 `debugRoundSeconds` 設 0 |

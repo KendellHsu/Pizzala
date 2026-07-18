@@ -17,6 +17,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Pizzala.Data;
 using Pizzala.Throwing;
 using Pizzala.Customers;
@@ -50,6 +51,13 @@ namespace Pizzala.Core
         [Tooltip("關=等開始畫面按 B 才開始(正式流程);開=延遲後自動開始,方便沒有開始畫面時測試")]
         public bool autoStart = false;
         public float autoStartDelay = 5f;
+
+        [Header("Debug (測試用)")]
+        [Tooltip(">0 時覆寫這回合長度(秒),用來快速跳到結算。0=用 ThrowTuning.roundDurationSeconds。正式版設 0。")]
+        public float debugRoundSeconds = 0f;
+        [Tooltip("遊玩中按這個鍵立刻結束回合、直接跳結算畫面(方便驗結算內容)。留空停用。")]
+        public string debugEndRoundKey = "<Keyboard>/f10";
+        InputAction debugEndRoundAction;
 
         [Header("參數資產")]
         public ThrowTuning tuning;
@@ -105,6 +113,17 @@ namespace Pizzala.Core
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
+
+            if (!string.IsNullOrEmpty(debugEndRoundKey))
+            {
+                debugEndRoundAction = new InputAction("DebugEndRound", InputActionType.Button, debugEndRoundKey);
+                debugEndRoundAction.Enable();
+            }
+        }
+
+        void OnDestroy()
+        {
+            debugEndRoundAction?.Dispose();
         }
 
         void Start()
@@ -191,7 +210,8 @@ namespace Pizzala.Core
         IEnumerator RoundLoop()
         {
             // Kept as a field, not a local, so the booth screen can read the countdown.
-            roundEndTime = Time.time + tuning.roundDurationSeconds;
+            float duration = debugRoundSeconds > 0f ? debugRoundSeconds : tuning.roundDurationSeconds;
+            roundEndTime = Time.time + duration;
             while (Time.time < roundEndTime)
             {
                 GiveOrderToRandomIdleCustomer();
@@ -205,6 +225,13 @@ namespace Pizzala.Core
         // several-second steps.
         void Update()
         {
+            if (RoundActive && debugEndRoundAction != null && debugEndRoundAction.WasPressedThisFrame())
+            {
+                Debug.Log("[GameManager] Debug end-round key pressed - jumping to results.");
+                EndRound();
+                return;
+            }
+
             if (!RoundActive || boothScreen == null) return;
             boothScreen.SetHits(Hits);
             boothScreen.SetTimeRemaining(TimeRemaining);
