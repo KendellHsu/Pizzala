@@ -210,7 +210,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `paintWrapDepth` | 0.25 | 染色沿命中法線的作用厚度（公尺），太大會染穿到身體另一側 |
 | `steepThreshold` | 0.6 | normal.y 低於此值視為陡面（0~1） |
 | `dropletHitMask` | ~0（全部） | 液滴落地判定的圖層 |
-| `flavorDropletColors` | — | 液滴顏色，依 PizzaFlavor 列舉順序 |
+| `flavorDropletColors` | 芥末黃 / 深紅 / 粉紅 | 液滴顏色，依 PizzaFlavor 列舉順序（0=Margherita 芥末黃、1=Pepperoni 深紅、2=CosmicPinkMarshmallow 粉紅）；慧星尾巴也共用這份顏色 |
 
 ### SauceTrail（[SauceTrail.cs](../Assets/Scripts/Dirt/SauceTrail.cs)，披薩滑行留痕）
 
@@ -397,3 +397,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-18 | 流程驗證修 3 bug：(1) `TutorialController` 影片不播——`Awake`/`Begin` 自動接好 VideoPlayer→RenderTexture→RawImage 管線（缺件自建＋印警告），新增 `videoImage` 欄位；(2) booth 應開局才出現——`GameManager` 於 `Start()`/`EndRound()` 隱藏、`StartRound()` 顯示 booth（`BoothStatusScreen` 加 `Show()`/`Hide()`）；(3) 開始遊戲 trigger——`GameFlowController` 新增 `triggerVrPathLeft`，左右手 trigger 都能在教學最後一頁確認開始 |
 | 2026-07-18 | 開始鍵 trigger→**A 鍵**（右手 primaryButton＋左手 X，`triggerVrPath`/`triggerVrPathLeft`）。教學最後一頁 `startGamePrompt` 加閃爍（`blinkPrompt`/`blinkPeriod`）。影片改 Prepare→Play（切 clip 後才播、避免黑畫面）。**移除 `GameFlowController.startScreenPanel`**（舊 StartScreen 流程殘留、程式從不顯示的死欄位）。倒數文字 `countdownText` 用獨立的 Screen Space - Overlay canvas（沿用舊 GameFlowUI 做法），不掛在 tutorial canvas 上；`TutorialController.HideCanvas()` 恢復為整個 canvas 關閉（PZ_TutorialCanvas 完全消失）。新增 debug 開關 `GameFlowController.freezeCountdown`：凍結倒數在起始數字，方便調 CountDownText 大小/位置 |
 | 2026-07-19 | 開始鍵改回 **trigger**（左右手，`triggerVrPath`/`triggerVrPathLeft`），與「Press trigger to start」提示一致。GameManager 加測試捷徑：`debugRoundSeconds`（>0 覆寫回合長度快速跳結算）、`debugEndRoundKey`（預設 F10，遊玩中按下立刻結束回合跳結算）；正式版 `debugRoundSeconds` 設 0 |
+| 2026-07-19 | 飛盤抓取優化：`FrisbeeGrabInteractable` 加入身體感知（`GetPlayerBodyForward()`），握點選擇時考慮玩家身體方向，手靠近中心時自動用身體前向決定握點方向，讓任何角度都能順手丟 |
+| 2026-07-19 | 飛盤手感微調：`frisbeeSpinToFly` 6→5（自旋門檻放低）、`frisbeeAeroScale` 3→3.5（升力倍率提高、飛得遠）、`frisbeeCM0` -0.08→-0.05（降低天生低頭、弧度平緩）、`frisbeeCMA` 0.43→0.35（降低俯仰靈敏度）、`frisbeeWobbleDamping` 3→4（章動阻尼增加、飛盤更穩定） |
+| 2026-07-19 | 修 Margherita 改黃披薩後髒污特效仍紅的 bug：Decal 材質 `M_Decal_M_SauceSplat_Margherita_01~03` 的 Base Map 改指 `Mustard_splats_01~03`（原本仍是紅色 `Margherita_splats`）；來源已刪的 04/05 decal 材質+prefab 一併移除，DirtManager `flavorSplats[0]` 只留 3 個黃色 decal。`flavorDropletColors[0]`（液滴/噴濺/滑痕液滴）番茄紅 `{0.75,0.12,0.05}` → 芥末黃 `{0.85,0.62,0.08}`，同步更新 DirtManager.cs 程式碼預設與三個場景（BackBone / BackBoneCopy / BackBone_BoothTest） |
+| 2026-07-19 | 慧星尾巴**恢復依口味著色**（撤銷同日下方 07-18「改為固定白色」那條）：`PizzaCometTrail` 從同物件的 `PizzaProjectile`/`ThrowbackProjectile` 讀 `flavor`，顏色取自 `DirtManager.flavorDropletColors`（和液滴/髒污同一份來源，Margherita 即芥末黃）；無口味或無 DirtManager（單獨測試）退回白色。無新增序列化欄位 |

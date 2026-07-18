@@ -138,7 +138,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start Game
+  m_text: Press Trigger button to start
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -408,7 +408,7 @@ MonoBehaviour:
   - {fileID: 32900000, guid: 6b7ae78c8542b6143a4c408920f87674, type: 3}
   - {fileID: 32900000, guid: 2eb2900a38c740d4dae04dddadff2693, type: 3}
   - {fileID: 32900000, guid: 3086f2e0d8e744b49a57728146bd6ad9, type: 3}
-  startGamePrompt: {fileID: 0}
+  startGamePrompt: {fileID: 2692169410539905643}
   blinkPrompt: 1
   blinkPeriod: 0.8
 --- !u!114 &3797179711220361506

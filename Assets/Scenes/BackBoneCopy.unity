@@ -208,8 +208,6 @@ MonoBehaviour:
     - {fileID: 4427497806924916230, guid: b6921f177fc224b44b278c6573910783, type: 3}
     - {fileID: 163552021033553996, guid: cbe78b161d7549d418a96357951c3bba, type: 3}
     - {fileID: 4017274781107659545, guid: 0f3abcd84ec63c24ea37006683f8660c, type: 3}
-    - {fileID: 7192929625300846159, guid: 97ba435cc3e623840a16d8dde3943669, type: 3}
-    - {fileID: 8770169298189819667, guid: 92fe877b34c191949bb884be89af3cc2, type: 3}
   - prefabs:
     - {fileID: 9055923344710678018, guid: 4ffeddd713451984586af920c1374342, type: 3}
     - {fileID: 8151562672674009154, guid: 73a89860f495ec4438634ddeb19da814, type: 3}
@@ -228,8 +226,6 @@ MonoBehaviour:
   - {fileID: 4427497806924916230, guid: b6921f177fc224b44b278c6573910783, type: 3}
   - {fileID: 163552021033553996, guid: cbe78b161d7549d418a96357951c3bba, type: 3}
   - {fileID: 4017274781107659545, guid: 0f3abcd84ec63c24ea37006683f8660c, type: 3}
-  - {fileID: 7192929625300846159, guid: 97ba435cc3e623840a16d8dde3943669, type: 3}
-  - {fileID: 8770169298189819667, guid: 92fe877b34c191949bb884be89af3cc2, type: 3}
   - {fileID: 9055923344710678018, guid: 4ffeddd713451984586af920c1374342, type: 3}
   - {fileID: 8151562672674009154, guid: 73a89860f495ec4438634ddeb19da814, type: 3}
   - {fileID: 3232326235554198016, guid: 4ee407d0d05cdec4a972d8b8066b73ec, type: 3}
@@ -259,7 +255,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   flavorDropletColors:
-  - {r: 0.75, g: 0.12, b: 0.05, a: 1}
+  - {r: 0.85, g: 0.62, b: 0.08, a: 1}
   - {r: 0.55, g: 0.08, b: 0.03, a: 1}
   - {r: 1, g: 0.45, b: 0.7, a: 1}
   dropletPrefab: {fileID: 0}

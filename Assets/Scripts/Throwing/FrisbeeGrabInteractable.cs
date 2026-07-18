@@ -15,6 +15,7 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using Unity.XR.CoreUtils;
 using Pizzala.Core;
 
 namespace Pizzala.Throwing
@@ -55,10 +56,31 @@ namespace Pizzala.Throwing
             Transform handAttach = interactor.GetAttachTransform(this);
             if (handAttach == null) return;
 
-            // 轉進披薩本地座標,壓平到盤面 XZ,取最近盤緣方向
+            // 取得玩家身體方向(XROrigin 或 Head 的 forward)
+            Vector3 bodyForward = GetPlayerBodyForward();
+
+            // 轉進披薩本地座標
             Vector3 local = transform.InverseTransformPoint(handAttach.position);
             Vector3 planar = new Vector3(local.x, 0f, local.z);
-            Vector3 dir = planar.sqrMagnitude > 1e-6f ? planar.normalized : Vector3.forward;
+
+            // 優化:把身體前向也轉進披薩本地座標,用它作為「偏好」方向
+            // 這樣握點會選在相對身體最自然的方向,丟出去更直順
+            Vector3 bodyForwardLocal = transform.InverseTransformDirection(bodyForward);
+            Vector3 bodyForwardPlanar = new Vector3(bodyForwardLocal.x, 0f, bodyForwardLocal.z).normalized;
+
+            // 如果手已經有明確位置,優先用手的方向;
+            // 如果手太靠近中心,則用身體前向作為握點方向
+            Vector3 dir;
+            if (planar.sqrMagnitude > 0.001f)
+            {
+                dir = planar.normalized;
+            }
+            else
+            {
+                // 手幾乎在中心時,用身體前向決定握點
+                dir = bodyForwardPlanar.sqrMagnitude > 0.1f ? bodyForwardPlanar : Vector3.forward;
+            }
+
             Vector3 rimLocal = dir * discRadius + Vector3.up * gripHeight;
 
             // dynamicAttachTransform 已是 this 的子物件(見 XRI 文件)
@@ -76,6 +98,20 @@ namespace Pizzala.Throwing
                 else
                     dynamicAttachTransform.rotation = transform.rotation * offset;
             }
+        }
+
+        Vector3 GetPlayerBodyForward()
+        {
+            // 尋找玩家頭部或 XROrigin,用其 forward 代表身體方向
+            var head = Camera.main?.transform;
+            if (head != null) return head.forward;
+
+            // 備援:尋找 XROrigin 或 XR Rig
+            var xrOrigin = Object.FindFirstObjectByType<XROrigin>();
+            if (xrOrigin != null) return xrOrigin.transform.forward;
+
+            // 最後備援:用當前世界的 forward
+            return Vector3.forward;
         }
 
         float AutoRadius()

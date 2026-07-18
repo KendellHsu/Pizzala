@@ -86,7 +86,7 @@ namespace Pizzala.Dirt
         [Tooltip("液滴顏色,依 PizzaFlavor 列舉順序;口味未知用第 0 個")]
         public Color[] flavorDropletColors =
         {
-            new Color(0.75f, 0.12f, 0.05f), // Margherita 番茄紅
+            new Color(0.85f, 0.62f, 0.08f), // Margherita 芥末黃
             new Color(0.55f, 0.08f, 0.03f), // Pepperoni 深紅
             new Color(1.00f, 0.45f, 0.70f), // CosmicPinkMarshmallow 粉紅
         };

@@ -6,15 +6,21 @@
 //   不新增 renderer、不加任何物理力,純視覺,不影響飛盤飛行。
 //
 // 觸發時機:
-//   出手(XR selectExited) → StartEmit(),清空舊尾巴、開始發射(固定白色)
+//   出手(XR selectExited) → StartEmit(),清空舊尾巴、開始發射(依口味著色)
 //   被接住(selectEntered) → StopEmit(),既有尾巴自然淡出
 //   落地(PizzaProjectile / ThrowbackProjectile 呼叫)→ StopEmit()
 //   速度低於 cometTrailMinSpeed → 自動收尾(emitting=false)
+//
+// 尾巴顏色:依這顆披薩的口味,取自 DirtManager.flavorDropletColors(和液滴/髒污
+//   同一份顏色來源),口味未知或沒有 DirtManager(單獨測試)時退回白色。
 // ─────────────────────────────────────────────────────────────
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using Pizzala.Core;
+using Pizzala.Data;
+using Pizzala.Dirt;
+using Pizzala.Customers;
 
 namespace Pizzala.Throwing
 {
@@ -26,7 +32,7 @@ namespace Pizzala.Throwing
         const float FbWidth = 0.12f;
         const float FbMinSpeed = 1.5f;
 
-        static readonly Color TrailColor = Color.white;
+        static readonly Color FallbackColor = Color.white;
 
         Rigidbody rb;
         TrailRenderer trail;
@@ -69,7 +75,7 @@ namespace Pizzala.Throwing
 
         void OnReleased(SelectExitEventArgs args) => StartEmit();
 
-        /// <summary>開始拖尾(固定白色)。丟出/丟回時呼叫。</summary>
+        /// <summary>開始拖尾(依口味著色)。丟出/丟回時呼叫。</summary>
         public void StartEmit()
         {
             if (trail == null) return;
@@ -77,10 +83,34 @@ namespace Pizzala.Throwing
             if (t != null && !t.cometTrailEnabled) return;
 
             ApplyTuning(t);
-            ApplyColor();
+            ApplyColor(ResolveColor());
             trail.Clear();
             wantEmit = true;
             trail.emitting = true;
+        }
+
+        /// <summary>取這顆披薩的口味顏色(和液滴/髒污同一份 DirtManager.flavorDropletColors);
+        /// 口味未知或沒有 DirtManager 時退回白色。</summary>
+        Color ResolveColor()
+        {
+            PizzaFlavor? flavor = null;
+            var proj = GetComponent<PizzaProjectile>();
+            if (proj != null) flavor = proj.flavor;
+            else
+            {
+                var back = GetComponent<ThrowbackProjectile>();
+                if (back != null) flavor = back.flavor;
+            }
+
+            var dm = DirtManager.Instance;
+            if (flavor.HasValue && dm != null && dm.flavorDropletColors != null
+                && (int)flavor.Value < dm.flavorDropletColors.Length)
+            {
+                var c = dm.flavorDropletColors[(int)flavor.Value];
+                c.a = 1f; // 透明度由 ApplyColor 的 alpha 漸層決定
+                return c;
+            }
+            return FallbackColor;
         }
 
         /// <summary>停止拖尾(既有軌跡自然淡出)。落地或被接住時呼叫。</summary>
@@ -113,14 +143,16 @@ namespace Pizzala.Throwing
             trail.widthCurve = curve;
         }
 
-        void ApplyColor()
+        void ApplyColor(Color color)
         {
-            var head = TrailColor; head.a = 0.85f; // 頭部亮、較不透明
-            var tail = TrailColor; tail.a = 0f;    // 尾端全透明,慧星收尖感
             trail.colorGradient = new Gradient
             {
-                colorKeys = new[] { new GradientColorKey(TrailColor, 0f), new GradientColorKey(TrailColor, 1f) },
-                alphaKeys = new[] { new GradientAlphaKey(head.a, 0f), new GradientAlphaKey(tail.a, 1f) }
+                colorKeys = new[] { new GradientColorKey(color, 0f), new GradientColorKey(color, 1f) },
+                alphaKeys = new[]
+                {
+                    new GradientAlphaKey(0.85f, 0f), // 頭部亮、較不透明
+                    new GradientAlphaKey(0f, 1f)     // 尾端全透明,慧星收尖感
+                }
             };
         }
     }
