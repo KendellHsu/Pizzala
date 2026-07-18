@@ -119,11 +119,35 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &122623986 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 753752548867944348, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
+  m_PrefabInstance: {fileID: 840677618}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &122623987 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7894551567761477052, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
   m_PrefabInstance: {fileID: 840677618}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &122623988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122623986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d3f103729f63f340972f40c74869bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.UI.PlayerFacingPanel
+  playerHead: {fileID: 0}
+  distance: 1.5
+  heightOffset: -0.1
+  deadzoneDegrees: 10
+  followDelaySeconds: 0.3
+  followSpeed: 6
+  settleDegrees: 1
 --- !u!1 &363429697
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,6 +240,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &837367592 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7622688497872909792, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
+  m_PrefabInstance: {fileID: 840677618}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &840677618
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -516,19 +545,98 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7894551567761477052, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2058637398}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7622688497872909792, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 840677626}
+    - targetCorrespondingSourceObject: {fileID: 2886791867600642607, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1688239510}
+    - targetCorrespondingSourceObject: {fileID: 753752548867944348, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 122623988}
+    - targetCorrespondingSourceObject: {fileID: 7590000533808707712, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1363489444}
   m_SourcePrefab: {fileID: 100100000, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
 --- !u!114 &840677619 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3427562358641529446, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
   m_PrefabInstance: {fileID: 840677618}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 837367592}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec8a085489ec53c4297c48976fb54e08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.UI.ResultsScreenController
+--- !u!114 &840677626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837367592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d3f103729f63f340972f40c74869bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.UI.PlayerFacingPanel
+  playerHead: {fileID: 0}
+  distance: 1.5
+  heightOffset: -0.1
+  deadzoneDegrees: 10
+  followDelaySeconds: 0.3
+  followSpeed: 6
+  settleDegrees: 1
+--- !u!1 &1363489440 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7590000533808707712, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
+  m_PrefabInstance: {fileID: 840677618}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1363489444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363489440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d3f103729f63f340972f40c74869bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.UI.PlayerFacingPanel
+  playerHead: {fileID: 0}
+  distance: 1.5
+  heightOffset: -0.1
+  deadzoneDegrees: 10
+  followDelaySeconds: 0.3
+  followSpeed: 6
+  settleDegrees: 1
+--- !u!1 &1688239508 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2886791867600642607, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
+  m_PrefabInstance: {fileID: 840677618}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1688239510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688239508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d3f103729f63f340972f40c74869bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.UI.PlayerFacingPanel
+  playerHead: {fileID: 0}
+  distance: 1.5
+  heightOffset: -0.1
+  deadzoneDegrees: 10
+  followDelaySeconds: 0.3
+  followSpeed: 6
+  settleDegrees: 1
 --- !u!1 &1753092104
 GameObject:
   m_ObjectHideFlags: 0
