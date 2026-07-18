@@ -65,9 +65,25 @@ namespace Pizzala.DevTools
             if (Keyboard.current.digit2Key.wasPressedThisFrame) ShowAs(ExperimentCondition.Middle);
             if (Keyboard.current.digit3Key.wasPressedThisFrame) ShowAs(ExperimentCondition.Experimental);
             if (Keyboard.current.spaceKey.wasPressedThisFrame) resultsScreen?.NextPage();
-            // PC stand-in for ray-clicking the photo box (PhotoBoxTrigger needs an XR
-            // interactor, which plain-mouse editor testing doesn't have).
-            if (Keyboard.current.pKey.wasPressedThisFrame) ShowRecordedPhotos();
+            // PC stand-in for ray-clicking a photo box (PhotoBoxTrigger needs an XR
+            // interactor, which plain-mouse editor testing doesn't have). Cycles through
+            // every box in the scene, firing each one's own OnActivated - so it tests the
+            // exact per-box wiring (including the session file name typed on the event).
+            if (Keyboard.current.pKey.wasPressedThisFrame) TriggerNextPhotoBox();
+        }
+
+        int debugBoxIndex;
+
+        void TriggerNextPhotoBox()
+        {
+            var boxes = FindObjectsByType<PhotoBoxTrigger>(FindObjectsSortMode.None);
+            if (boxes.Length == 0) { ShowRecordedPhotos(); return; } // no boxes placed yet - old P behaviour
+
+            System.Array.Sort(boxes, (a, b) => string.CompareOrdinal(a.name, b.name));
+            var box = boxes[debugBoxIndex % boxes.Length];
+            debugBoxIndex++;
+            Debug.Log($"DemoResultsLoader: P key - simulating click on box '{box.name}' ({(debugBoxIndex - 1) % boxes.Length + 1}/{boxes.Length}).");
+            box.onActivated?.Invoke();
         }
 
         // Hooked up to a clickable prop in the world (see PhotoBoxTrigger) - loads the same
