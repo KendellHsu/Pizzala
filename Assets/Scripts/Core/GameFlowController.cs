@@ -63,8 +63,10 @@ namespace Pizzala.Core
 
         [Header("Panels (leave empty to skip)")]
         public GameObject pauseMenuPanel;
-        [Tooltip("Shows the 5..1 pre-round count and the 3..1 resume count. Put it under the tutorial canvas so the count appears where the videos were, right after Start Game.")]
+        [Tooltip("Shows the 5..1 pre-round count and the 3..1 resume count. Lives on its own Screen Space - Overlay canvas (the GameFlowUI approach), separate from the tutorial canvas.")]
         public TMP_Text countdownText;
+        [Tooltip("DEBUG: freeze the countdown at its start number so you can size/position the text without it ticking away. Turn off for real play.")]
+        public bool freezeCountdown = false;
 
         [Header("Dev")]
         [Tooltip("Editor-only convenience: when opening BackBone directly (not via Intro), skip the 4 tutorial videos and drop into the countdown. Ignored in builds.")]
@@ -286,6 +288,10 @@ namespace Pizzala.Core
         // only in what happens at zero, so the ticking itself stays in one place.
         void TickCountdown()
         {
+            // Debug: hold the count on-screen at its start number so the text can be sized and
+            // positioned without it ticking to zero and vanishing. Never advances to play.
+            if (freezeCountdown) { UpdateCountdownText(); return; }
+
             // unscaledDeltaTime: during Resuming the game is frozen, so scaled time isn't
             // moving at all; Starting runs before the round, where it makes no difference.
             countdownRemaining -= Time.unscaledDeltaTime;
