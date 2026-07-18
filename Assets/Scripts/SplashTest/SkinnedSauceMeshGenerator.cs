@@ -13,6 +13,20 @@ public class SkinnedSauceMeshGenerator : MonoBehaviour
     [SerializeField, Range(2, 8)] int rings = 4;
     [SerializeField, Range(8, 40)] int segments = 20;
 
+    [Header("Impact-Driven Size")]
+    [Tooltip("When enabled, faster pizza impacts create larger sauce sheets, always clamped by Minimum/Maximum Radius above.")]
+    [SerializeField] bool useImpactDrivenRadius = true;
+    [Tooltip("Impact speed (m/s) that maps to Minimum Radius.")]
+    [SerializeField, Min(0f)] float minimumImpactSpeed = 1.5f;
+    [Tooltip("Impact speed (m/s) that maps to Maximum Radius.")]
+    [SerializeField, Min(0.01f)] float maximumImpactSpeed = 9f;
+    [Tooltip("How much the hand speed at release affects the result. Impact speed remains the primary input.")]
+    [SerializeField, Range(0f, 1f)] float releaseSpeedInfluence = 0.2f;
+    [Tooltip("Hand release speed (m/s) that maps to Maximum Radius when release-speed influence is used.")]
+    [SerializeField, Min(0.01f)] float maximumReleaseSpeed = 9f;
+    [Tooltip("Small variation kept after physical sizing. 0.08 means plus/minus 8% across the allowed radius range.")]
+    [SerializeField, Range(0f, 0.3f)] float radiusRandomVariation = 0.08f;
+
     [Header("Organic Outline")]
     [SerializeField, Range(0f, 0.35f)] float outlineIrregularity = 0.14f;
     [SerializeField, Range(0f, 0.3f)] float ellipseVariation = 0.10f;
@@ -60,17 +74,27 @@ public class SkinnedSauceMeshGenerator : MonoBehaviour
         SkinnedSurfaceProbe.SurfaceHit hit,
         MeshCollider bakedCollider,
         Material overrideMaterial = null,
-        SauceToppingTheme toppingTheme = SauceToppingTheme.None)
+        SauceToppingTheme toppingTheme = SauceToppingTheme.None,
+        float impactSpeed = 0f,
+        float releaseSpeed = 0f)
     {
         using (GenerateMarker.Auto())
-            return GenerateInternal(hit, bakedCollider, overrideMaterial, toppingTheme);
+            return GenerateInternal(
+                hit,
+                bakedCollider,
+                overrideMaterial,
+                toppingTheme,
+                impactSpeed,
+                releaseSpeed);
     }
 
     GameObject GenerateInternal(
         SkinnedSurfaceProbe.SurfaceHit hit,
         MeshCollider bakedCollider,
         Material overrideMaterial,
-        SauceToppingTheme toppingTheme)
+        SauceToppingTheme toppingTheme,
+        float impactSpeed,
+        float releaseSpeed)
     {
         SkinnedMeshRenderer source = hit.renderer;
         Mesh sourceMesh = source != null ? source.sharedMesh : null;
@@ -88,10 +112,7 @@ public class SkinnedSauceMeshGenerator : MonoBehaviour
 
         int seed = unchecked(hit.triangleIndex * 486187739 ^ Time.frameCount);
         var random = new System.Random(seed);
-        float radius = Mathf.Lerp(
-            Mathf.Min(minimumRadius, maximumRadius),
-            Mathf.Max(minimumRadius, maximumRadius),
-            (float)random.NextDouble());
+        float radius = CalculateRadius(random, impactSpeed, releaseSpeed);
         float phaseA = (float)random.NextDouble() * Mathf.PI * 2f;
         float phaseB = (float)random.NextDouble() * Mathf.PI * 2f;
         float ellipseAngle = (float)random.NextDouble() * Mathf.PI * 2f;
@@ -190,6 +211,7 @@ public class SkinnedSauceMeshGenerator : MonoBehaviour
         var surfacePoints = new Vector3[topVertexCount];
         var surfaceNormals = new Vector3[topVertexCount];
         var weights = new BoneWeight[topVertexCount];
+        bool reportedInvalidTriangleRemap = false;
         using (FinalSurfaceMarker.Auto())
         {
             for (int i = 0; i < topVertexCount; i++)
@@ -214,11 +236,47 @@ public class SkinnedSauceMeshGenerator : MonoBehaviour
                     barycentric = hit.barycentricCoordinate;
                 }
 
-                int start = triangle * 3;
-                weights[i] = BlendWeights(
-                    sourceWeights[sourceTriangles[start]],
-                    sourceWeights[sourceTriangles[start + 1]],
-                    sourceWeights[sourceTriangles[start + 2]], barycentric);
+                if (TryBlendTriangleWeights(
+                        sourceTriangles,
+                        sourceWeights,
+                        triangle,
+                        barycentric,
+                        out weights[i]))
+                    continue;
+
+                // RaycastHit.triangleIndex belongs to the temporary baked mesh.
+                // Most skinned meshes preserve topology, but a spawned/imported
+                // character may not. Never use that index blindly against the
+                // original mesh's bone-weight arrays.
+                if (!reportedInvalidTriangleRemap)
+                {
+                    reportedInvalidTriangleRemap = true;
+                    Debug.LogWarning(
+                        $"[SplashTest] {source.name}: baked triangle {triangle} could not be used " +
+                        "with the source mesh. Remapping sauce vertices to valid source triangles.");
+                }
+
+                if (!TryClosestSurfaceAnywhere(
+                        surfacePoints[i],
+                        searchContext,
+                        out Vector3 remappedPoint,
+                        out Vector3 remappedNormal,
+                        out int remappedTriangle,
+                        out Vector3 remappedBarycentric)
+                    || !TryBlendTriangleWeights(
+                        sourceTriangles,
+                        sourceWeights,
+                        remappedTriangle,
+                        remappedBarycentric,
+                        out weights[i]))
+                {
+                    Debug.LogWarning(
+                        $"[SplashTest] {source.name}: could not recover a valid bone-weight triangle for sauce vertex {i}.");
+                    return null;
+                }
+
+                surfacePoints[i] = remappedPoint;
+                surfaceNormals[i] = remappedNormal;
             }
         }
 
@@ -281,6 +339,35 @@ public class SkinnedSauceMeshGenerator : MonoBehaviour
                 seed);
         }
         return sauceObject;
+    }
+
+    float CalculateRadius(System.Random random, float impactSpeed, float releaseSpeed)
+    {
+        float minRadius = Mathf.Min(minimumRadius, maximumRadius);
+        float maxRadius = Mathf.Max(minimumRadius, maximumRadius);
+
+        // Keep the old fully-random behaviour available for isolated tests that
+        // do not provide an impact velocity, or when the feature is disabled.
+        if (!useImpactDrivenRadius || impactSpeed <= 0.0001f)
+        {
+            return Mathf.Lerp(minRadius, maxRadius, (float)random.NextDouble());
+        }
+
+        float minImpact = Mathf.Min(minimumImpactSpeed, maximumImpactSpeed);
+        float maxImpact = Mathf.Max(minimumImpactSpeed, maximumImpactSpeed);
+        float size01 = Mathf.InverseLerp(minImpact, maxImpact, impactSpeed);
+
+        // The real collision speed is the main source of truth. Release speed
+        // adds a small hand-throw contribution only when gameplay recorded it.
+        if (releaseSpeed > 0.0001f && releaseSpeedInfluence > 0f)
+        {
+            float release01 = Mathf.InverseLerp(0f, Mathf.Max(0.01f, maximumReleaseSpeed), releaseSpeed);
+            size01 = Mathf.Lerp(size01, release01, releaseSpeedInfluence);
+        }
+
+        float randomOffset = ((float)random.NextDouble() * 2f - 1f) * radiusRandomVariation;
+        size01 = Mathf.Clamp01(size01 + randomOffset);
+        return Mathf.Lerp(minRadius, maxRadius, size01);
     }
 
     void EnsureCachedTopology()
@@ -671,6 +758,38 @@ public class SkinnedSauceMeshGenerator : MonoBehaviour
         float faceW = vc * denominator;
         bary = new Vector3(1f - faceV - faceW, faceV, faceW);
         return a + ab * faceV + ac * faceW;
+    }
+
+    static bool TryBlendTriangleWeights(
+        int[] triangles,
+        BoneWeight[] sourceWeights,
+        int triangle,
+        Vector3 barycentric,
+        out BoneWeight result)
+    {
+        result = default;
+        if (triangles == null || sourceWeights == null || triangles.Length < 3 || triangle < 0)
+            return false;
+
+        // Check before multiplication so an unexpected large value cannot overflow.
+        if (triangle > (triangles.Length - 3) / 3)
+            return false;
+
+        int start = triangle * 3;
+        int a = triangles[start];
+        int b = triangles[start + 1];
+        int c = triangles[start + 2];
+        if ((uint)a >= (uint)sourceWeights.Length
+            || (uint)b >= (uint)sourceWeights.Length
+            || (uint)c >= (uint)sourceWeights.Length)
+            return false;
+
+        result = BlendWeights(
+            sourceWeights[a],
+            sourceWeights[b],
+            sourceWeights[c],
+            barycentric);
+        return true;
     }
 
     static BoneWeight BlendWeights(BoneWeight a, BoneWeight b, BoneWeight c, Vector3 bary)

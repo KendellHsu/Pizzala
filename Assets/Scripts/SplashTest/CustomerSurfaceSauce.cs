@@ -51,7 +51,8 @@ namespace Pizzala.Customers
             Vector3 roughContactPoint,
             Vector3 incomingVelocity,
             Vector3 roughContactNormal,
-            PizzaFlavor flavor)
+            PizzaFlavor flavor,
+            float releaseSpeed = 0f)
         {
             if (!Handles(hitZone) || surfaceProbe == null) return false;
 
@@ -67,7 +68,8 @@ namespace Pizzala.Customers
                 roughColliderCenter,
                 GetSauceMaterial(flavor),
                 GetToppingTheme(flavor),
-                out _);
+                out _,
+                releaseSpeed);
         }
 
         Material GetSauceMaterial(PizzaFlavor flavor)

@@ -95,7 +95,8 @@ public class SkinnedSurfaceProbe : MonoBehaviour
         Vector3 roughColliderCenter,
         Material sauceMaterial,
         SauceToppingTheme toppingTheme,
-        out SurfaceHit result)
+        out SurfaceHit result,
+        float releaseSpeed = 0f)
     {
         using (TryProbeMarker.Auto())
             return TryProbeInternal(
@@ -105,7 +106,8 @@ public class SkinnedSurfaceProbe : MonoBehaviour
                 roughColliderCenter,
                 sauceMaterial,
                 toppingTheme,
-                out result);
+                out result,
+                releaseSpeed);
     }
 
     bool TryProbeInternal(
@@ -115,7 +117,8 @@ public class SkinnedSurfaceProbe : MonoBehaviour
         Vector3 roughColliderCenter,
         Material sauceMaterial,
         SauceToppingTheme toppingTheme,
-        out SurfaceHit result)
+        out SurfaceHit result,
+        float releaseSpeed)
     {
         result = default;
         if (targets.Count == 0) BuildTargets();
@@ -307,7 +310,12 @@ public class SkinnedSurfaceProbe : MonoBehaviour
         {
             sauceTarget.collider.enabled = true;
             GameObject createdSauce = skinnedSauceGenerator.Generate(
-                result, sauceTarget.collider, sauceMaterial, toppingTheme);
+                result,
+                sauceTarget.collider,
+                sauceMaterial,
+                toppingTheme,
+                incomingVelocity.magnitude,
+                releaseSpeed);
             sauceTarget.collider.enabled = false;
             if (createdSauce != null) return true;
 
