@@ -153,6 +153,7 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `debugEndRoundKey` | `<Keyboard>/f10` | **測試用**：遊玩中按此鍵立刻結束回合、直接跳結算。留空停用 |
 | `bossCommentService` | （空） | Boss 評論服務（Gemini）；**所有玩家**都會用到（留空則用罐頭 fallback 文字，不會卡在「writing...」） |
 | `boothScreen` | （空） | 攤位上即時顯示命中數／剩餘時間的螢幕；留空則跳過 |
+| `dodgeWarningController` | （自動尋找） | Main Camera 下 DodgeWarningCanvas 的控制器；留空會在開始時自動尋找 |
 
 ---
 
@@ -297,6 +298,16 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 |---|---|---|
 | `holdSeconds` | 1.2 | 滿版停留秒數 |
 | `fadeSeconds` | 2 | 淡出秒數 |
+
+### DodgeWarningController（[DodgeWarningController.cs](../Assets/Scripts/UI/DodgeWarningController.cs)）
+
+| 參數 | 預設值 | 說明 |
+|---|---|---|
+| `playerHead` | （自動抓父層 Camera） | 水平視野與角度判定基準 |
+| `leftWarning` | `LeftWarning`（依名稱自動找） | 左側／左後方客人準備丟回時顯示 |
+| `rightWarning` | `RightWarning`（依名稱自動找） | 右側／右後方客人準備丟回時顯示 |
+| `noWarningHalfAngle` | 45 | 正前方左右各 45 度內不顯示提示 |
+| `debugLogs` | false | 輸出威脅加入與解除紀錄 |
 
 ### Billboard（[Billboard.cs](../Assets/Scripts/UI/Billboard.cs)）
 

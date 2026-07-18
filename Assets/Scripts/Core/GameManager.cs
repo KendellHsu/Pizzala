@@ -69,6 +69,8 @@ namespace Pizzala.Core
         public SnapshotCamera snapshotCamera;
         public Transform overviewCameraPoint;
         public FaceSplatOverlay faceSplatOverlay;
+        [Tooltip("場景 Main Camera 下 DodgeWarningCanvas 上的控制器；留空會自動尋找")]
+        public DodgeWarningController dodgeWarningController;
         public ResultsScreenController resultsScreen;
         public ActivityTracker activityTracker;
         public BossCommentService bossCommentService; // experimental group only; leave empty to skip
@@ -129,6 +131,8 @@ namespace Pizzala.Core
         void Start()
         {
             if (head == null && Camera.main != null) head = Camera.main.transform;
+            if (dodgeWarningController == null)
+                dodgeWarningController = FindFirstObjectByType<DodgeWarningController>();
             foreach (var c in customers)
             {
                 if (c == null) continue;
@@ -435,18 +439,27 @@ namespace Pizzala.Core
         {
             float telegraphStart = Time.time;
             Vector3 headStart = head.position;
+            dodgeWarningController?.BeginThreat(customer);
 
             customer.IsThrowingBack = true; // 丟回期間定住,不遊走(會自動轉身面向玩家)
             yield return customer.Telegraph(tuning.telegraphSeconds, null);
 
-            if (customer == null) yield break; // 預警期間客人剛好離場(動態生成的會despawn)
+            if (customer == null)
+            {
+                dodgeWarningController?.EndThreat(customer);
+                yield break;
+            }
 
             // 先起手播出手動畫,等揮臂到放手那一刻(throwbackReleaseDelay)披薩才真正離手,
             // 讓披薩飛出的時機對上動作。延遲期間 IsThrowingBack 維持,客人定住面向玩家。
             customer.PlayThrow();
             if (tuning.throwbackReleaseDelay > 0f)
                 yield return new WaitForSeconds(tuning.throwbackReleaseDelay);
-            if (customer == null) yield break; // 延遲期間客人剛好離場
+            if (customer == null)
+            {
+                dodgeWarningController?.EndThreat(customer);
+                yield break;
+            }
 
             // 放手點取延遲後的最新手部位置(客人在起手期間可能轉身面向玩家)
             Vector3 origin = customer.throwOrigin != null
@@ -455,7 +468,13 @@ namespace Pizzala.Core
 
             var go = Instantiate(prefab, origin, Quaternion.identity);
             var proj = go.GetComponent<ThrowbackProjectile>();
-            if (proj == null) { Destroy(go); customer.IsThrowingBack = false; yield break; }
+            if (proj == null)
+            {
+                Destroy(go);
+                customer.IsThrowingBack = false;
+                dodgeWarningController?.EndThreat(customer);
+                yield break;
+            }
             proj.flavor = flavor;
 
             // 出生點在客人胸前、BodyZone 膠囊「內部」,不忽略碰撞會被客人自己擋下來
@@ -469,6 +488,7 @@ namespace Pizzala.Core
             proj.onResolved = h => { resolved = true; hitPlayer = h; };
             customer.ClearBoxPizza();                          // 盒中那顆在披薩被丟出的同一刻消失
             proj.Launch(head.position, tuning.throwbackSpeed); // 鎖定發射瞬間的頭部位置,不追蹤
+            dodgeWarningController?.EndThreat(customer);
 
             customer.IsThrowingBack = false; // 出手完成,恢復走動
 
@@ -523,6 +543,7 @@ namespace Pizzala.Core
                 if (tb != null) Destroy(tb.gameObject);
             foreach (var c in activeCustomers)
                 if (c != null) c.IsThrowingBack = false;
+            dodgeWarningController?.ClearAllThreats();
 
             StopAllCoroutines();
             if (activityTracker != null) activityTracker.End();
