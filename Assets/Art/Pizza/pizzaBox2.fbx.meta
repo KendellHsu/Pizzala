@@ -1,59 +1,9 @@
 fileFormatVersion: 2
-guid: caf9495b911a54a8dbd6d813ac704384
+guid: 81aa9d24d5e894c49b1c1d9cd62d3b42
 ModelImporter:
   serializedVersion: 24300
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: clay
-    second: {fileID: 2100000, guid: 7b4c804141b214274965257415052140, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: dark_couch_real
-    second: {fileID: 2100000, guid: 3e22682dfb0014e29af3771d45cec399, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: floor
-    second: {fileID: 2100000, guid: a7743ba311ee548a19c66c77479c506f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: glass
-    second: {fileID: 2100000, guid: 915c43ee4196b45cd96f0c804a7af96c, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: metal
-    second: {fileID: 2100000, guid: 9beae6c5cfbca461fb8335ee5cab3f89, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: sauce
-    second: {fileID: 2100000, guid: 2973fe6d72ae1421f906ea567838efa6, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: sauce.001
-    second: {fileID: 2100000, guid: 55595c52e07764be4b589dafae029b0e, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: sphere_frame
-    second: {fileID: 2100000, guid: 04933ec44bacb4836aef5992c3d27ef4, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: table4
-    second: {fileID: 2100000, guid: 53f358e7a29f149d2a2b69a969a7425b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: wall
-    second: {fileID: 2100000, guid: 0703d516648244289bbcece512ffb1bd, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
