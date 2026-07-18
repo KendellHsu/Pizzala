@@ -28,7 +28,6 @@
 // backgroundPanel (white rounded backdrop) is shown for Control/P1, hidden for the photo
 // wall and boss note pages (sketch: 不用背景框).
 // ─────────────────────────────────────────────────────────────
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -84,20 +83,26 @@ namespace Pizzala.UI
         // work without the designer having to keep slot 1/2/3... in any particular priority.
         int[] displayOrder;
 
-        [Header("P3: Boss Note (Experimental only)")]
+        [Header("P3: Boss Note (last page, everyone)")]
         public GameObject bossNotePanel;    // torn-paper note container
         public TMP_Text bossCommentText;    // filled in later by BossCommentService
 
-        [Header("P3: Post-Note Buttons (children of bossNotePanel, appear once the note is ready)")]
+        [Header("P3: End Buttons (children of bossNotePanel, appear on the last page)")]
         public GameObject shareButton;
         public GameObject playAgainButton;
-        [Tooltip("Seconds after the boss comment text arrives before the buttons appear.")]
+        public GameObject newPlayerButton;
+        [Tooltip("DEPRECATED - buttons now appear the moment the player reaches the last page, " +
+                 "not on a timer after the comment arrives. Field kept only to avoid breaking " +
+                 "existing prefab/scene serialization; no longer read.")]
         public float postNoteButtonDelay = 5f;
 
         SessionData currentSession;
         int currentPage;
         int pageCount;
-        Coroutine postNoteButtonsRoutine;
+        // Every Texture2D LoadPhoto() allocates (portrait + up to 8 wall cards each Show()).
+        // Nothing Unity-owned frees these, so across repeated Play Again rounds they pile up
+        // in memory on the Quest - Hide() destroys them all. Tracked here so we never leak.
+        readonly List<Texture2D> loadedTextures = new List<Texture2D>();
 
         public bool HasNextPage => currentSession != null && currentPage + 1 < pageCount;
         public bool HasPrevPage => currentSession != null && currentPage > 0;
@@ -113,11 +118,10 @@ namespace Pizzala.UI
         // screen, so the results don't linger behind the start menu.
         public void Hide()
         {
-            if (postNoteButtonsRoutine != null) { StopCoroutine(postNoteButtonsRoutine); postNoteButtonsRoutine = null; }
-            if (shareButton != null) shareButton.SetActive(false);
-            if (playAgainButton != null) playAgainButton.SetActive(false);
+            HideEndButtons();
             HideAllPanels();
             if (backgroundPanel != null) backgroundPanel.SetActive(false);
+            ReleaseLoadedTextures(); // free this round's photos before the next round loads its own
             currentSession = null;
         }
 
@@ -138,20 +142,29 @@ namespace Pizzala.UI
         public void Show(SessionData session)
         {
             currentSession = session;
-            pageCount = session.condition switch
-            {
-                ExperimentCondition.Control => 1,
-                ExperimentCondition.Middle => 2,
-                _ => 3, // Experimental
-            };
-            // Reset here, not in HideAllPanels() - that also runs on every ordinary page
-            // turn within the same session, which would cancel a reveal already in flight
-            // (or already shown) just from paging P1 -> P2 -> P3.
-            if (postNoteButtonsRoutine != null) { StopCoroutine(postNoteButtonsRoutine); postNoteButtonsRoutine = null; }
+            // Every player now sees all three pages (portrait / photo wall / boss note) -
+            // condition no longer decides the count. It's kept only as a data label.
+            pageCount = 3;
+            HideEndButtons(); // start hidden; ShowPage reveals them only on the last page
+            ShowPage(0);
+        }
+
+        // The Share / Play Again / New Player trio lives on the boss note (last) page and
+        // only appears once the player flicks all the way there - proof they read to the end.
+        // Deliberately decoupled from the LLM callback: the buttons must show even if the
+        // boss comment never lands (network dead, service missing).
+        void ShowEndButtons()
+        {
+            if (shareButton != null) shareButton.SetActive(true);
+            if (playAgainButton != null) playAgainButton.SetActive(true);
+            if (newPlayerButton != null) newPlayerButton.SetActive(true);
+        }
+
+        void HideEndButtons()
+        {
             if (shareButton != null) shareButton.SetActive(false);
             if (playAgainButton != null) playAgainButton.SetActive(false);
-
-            ShowPage(0);
+            if (newPlayerButton != null) newPlayerButton.SetActive(false);
         }
 
         // Driven by GameFlowController off the right thumbstick (and by DemoResultsLoader
@@ -174,44 +187,36 @@ namespace Pizzala.UI
             currentPage = page;
             HideAllPanels();
 
-            if (currentSession.condition == ExperimentCondition.Control)
-            {
-                ShowControl(currentSession);
-                return;
-            }
-
-            // Middle and Experimental share P1 (portrait+data) and P2 (photo wall);
-            // only Experimental reaches P3 (boss note) - pageCount already caps this.
+            // All three pages for everyone now: P1 portrait+data, P2 photo wall, P3 boss note.
             switch (page)
             {
                 case 0: ShowDataPortrait(currentSession); break;
                 case 1: ShowPhotoWall(currentSession); break;
                 case 2: ShowBossNote(currentSession); break;
             }
+
+            // The end buttons appear only on the final page. HideAllPanels() above already
+            // turned bossNotePanel (their parent) off/on per page; we still toggle them
+            // explicitly so paging back off the last page hides them again.
+            if (page == pageCount - 1) ShowEndButtons();
+            else HideEndButtons();
         }
 
-        // Called by GameManager once BossCommentService's async request resolves
-        // (success or fallback) - the boss note page already put a "writing..." placeholder up.
+        // Called by GameManager once BossCommentService's async request resolves (success
+        // or fallback). Also writes it onto currentSession so that flicking off the boss
+        // note page and back rebuilds it from the stored comment instead of the placeholder.
+        // No longer touches the end buttons - those are driven purely by reaching the last
+        // page (ShowPage), so a dead/absent LLM can never leave the player unable to continue.
         public void SetBossComment(string text)
         {
-            if (bossCommentText != null) bossCommentText.text = text;
-
-            if (postNoteButtonsRoutine != null) StopCoroutine(postNoteButtonsRoutine);
-            postNoteButtonsRoutine = StartCoroutine(RevealPostNoteButtons());
+            if (currentSession != null) currentSession.bossComment = text;
+            if (bossCommentText != null && currentPage == pageCount - 1) bossCommentText.text = text;
         }
 
-        // Buttons are children of bossNotePanel, so they only ever render while that page
-        // is actually showing - no need to track which page the player is on here, Unity's
-        // parent/child active-state cascading handles it for free.
-        IEnumerator RevealPostNoteButtons()
-        {
-            yield return new WaitForSeconds(postNoteButtonDelay);
-            if (shareButton != null) shareButton.SetActive(true);
-            if (playAgainButton != null) playAgainButton.SetActive(true);
-            postNoteButtonsRoutine = null;
-        }
-
-        // ── Control: plain performance stats, laid out as two aligned columns ──
+        // ── DEPRECATED: the old Control-condition single stats page. No longer reached now
+        // that everyone sees the three-page results. Kept (with controlPanel/statsText/
+        // statsValuesText) so existing prefab/scene refs don't go Missing; remove in a later
+        // cleanup pass once those serialized fields are pruned. ──
         void ShowControl(SessionData session)
         {
             if (controlPanel != null) controlPanel.SetActive(true);
@@ -428,12 +433,25 @@ namespace Pizzala.UI
             return filled;
         }
 
-        // ── P3: boss note + LLM comment (Experimental only) ──
+        // ── P3: boss note + LLM comment (last page, everyone) ──
         void ShowBossNote(SessionData session)
         {
             if (bossNotePanel != null) bossNotePanel.SetActive(true);
             if (backgroundPanel != null) backgroundPanel.SetActive(false);
-            if (bossCommentText != null) bossCommentText.text = "The boss is writing a note...";
+            // Show the comment if it's already in hand (SetBossComment stores it on the
+            // session); only fall back to the placeholder while it's genuinely still pending.
+            // Otherwise flicking away from P3 and back would wipe an arrived comment.
+            if (bossCommentText != null)
+                bossCommentText.text = string.IsNullOrEmpty(session.bossComment)
+                    ? "The boss is writing a note..."
+                    : session.bossComment;
+        }
+
+        // Hook the Share button's OnClick here. Real share behaviour (upload / QR / etc.)
+        // isn't decided yet - for now it just logs so the button is verifiably wired.
+        public void OnSharePressed()
+        {
+            Debug.Log("[ResultsScreen] Share pressed (behaviour not implemented yet).");
         }
 
         static List<PhotoRecord> SortedByTime(List<PhotoRecord> src)
@@ -460,7 +478,15 @@ namespace Pizzala.UI
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path)) return null;
             var tex = new Texture2D(2, 2);
-            return tex.LoadImage(File.ReadAllBytes(path)) ? tex : null;
+            if (!tex.LoadImage(File.ReadAllBytes(path))) { Destroy(tex); return null; }
+            loadedTextures.Add(tex); // freed in Hide() so repeated rounds don't leak
+            return tex;
+        }
+
+        void ReleaseLoadedTextures()
+        {
+            foreach (var t in loadedTextures) if (t != null) Destroy(t);
+            loadedTextures.Clear();
         }
     }
 }
