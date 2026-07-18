@@ -89,6 +89,7 @@ namespace Pizzala.UI
         public TMP_Text bossCommentText;    // filled in later by BossCommentService
 
         [Header("P3: Post-Note Buttons (children of bossNotePanel, appear once the note is ready)")]
+        public GameObject homeButton;   // left of shareButton; action not wired yet, same as share
         public GameObject shareButton;
         public GameObject playAgainButton;
         [Tooltip("Seconds after the boss comment text arrives before the buttons appear.")]
@@ -98,6 +99,7 @@ namespace Pizzala.UI
         int currentPage;
         int pageCount;
         Coroutine postNoteButtonsRoutine;
+        bool bossCommentReady; // the real comment (not the placeholder) has arrived
 
         // Jumps straight to the photo wall for a given session, skipping the normal paged
         // Control/Middle/Experimental flow - for standalone display contexts (a clickable
@@ -145,6 +147,8 @@ namespace Pizzala.UI
             // turn within the same session, which would cancel a reveal already in flight
             // (or already shown) just from paging P1 -> P2 -> P3.
             if (postNoteButtonsRoutine != null) { StopCoroutine(postNoteButtonsRoutine); postNoteButtonsRoutine = null; }
+            bossCommentReady = false;
+            if (homeButton != null) homeButton.SetActive(false);
             if (shareButton != null) shareButton.SetActive(false);
             if (playAgainButton != null) playAgainButton.SetActive(false);
 
@@ -192,12 +196,21 @@ namespace Pizzala.UI
         public void SetBossComment(string text)
         {
             if (bossCommentText != null) bossCommentText.text = text;
+            bossCommentReady = true;
 
             // The comment arrives async - if the whole canvas got deactivated in the
             // meantime (e.g. the photo-box scene keeps it hidden until clicked),
             // StartCoroutine would throw. Text is already set above; skip the reveal.
             if (!isActiveAndEnabled) return;
 
+            // The button delay counts from when the player can actually SEE the note:
+            // if they're on the note page right now, start counting; if the comment
+            // arrived early (they're still on P1/P2), ShowBossNote starts it on page open.
+            if (bossNotePanel != null && bossNotePanel.activeSelf) StartButtonReveal();
+        }
+
+        void StartButtonReveal()
+        {
             if (postNoteButtonsRoutine != null) StopCoroutine(postNoteButtonsRoutine);
             postNoteButtonsRoutine = StartCoroutine(RevealPostNoteButtons());
         }
@@ -208,6 +221,7 @@ namespace Pizzala.UI
         IEnumerator RevealPostNoteButtons()
         {
             yield return new WaitForSeconds(postNoteButtonDelay);
+            if (homeButton != null) homeButton.SetActive(true);
             if (shareButton != null) shareButton.SetActive(true);
             if (playAgainButton != null) playAgainButton.SetActive(true);
             postNoteButtonsRoutine = null;
@@ -435,7 +449,11 @@ namespace Pizzala.UI
         {
             if (bossNotePanel != null) bossNotePanel.SetActive(true);
             if (backgroundPanel != null) backgroundPanel.SetActive(false);
-            if (bossCommentText != null) bossCommentText.text = "The boss is writing a note...";
+
+            // Only show the placeholder while the comment is genuinely still in flight -
+            // paging away and back must not stomp a comment that already arrived.
+            if (bossCommentReady) StartButtonReveal();
+            else if (bossCommentText != null) bossCommentText.text = "The boss is writing a note...";
         }
 
         static List<PhotoRecord> SortedByTime(List<PhotoRecord> src)

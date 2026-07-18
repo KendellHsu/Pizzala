@@ -109,6 +109,34 @@ namespace Pizzala.DevTools
             resultsScreen.ShowPhotoWallOnly(session);
         }
 
+        // Full three-page review (shown as the Experimental condition) for one specific
+        // box's session - the History scene's pizza boxes reach this via PhotoBoxSequence.
+        // The boss comment is fetched once per session and kept on it, so re-opening the
+        // same box doesn't call Gemini again.
+        public void ShowRecordedSession(string fileName)
+        {
+            if (resultsScreen == null)
+            {
+                Debug.LogError("DemoResultsLoader: resultsScreen not assigned.");
+                return;
+            }
+
+            var session = LoadCached(fileName);
+            if (session == null) return;
+
+            session.condition = ExperimentCondition.Experimental;
+            resultsScreen.Show(session);
+
+            if (!string.IsNullOrEmpty(session.bossComment))
+                resultsScreen.SetBossComment(session.bossComment);
+            else if (bossCommentService != null)
+                bossCommentService.GetComment(session.summary, comment =>
+                {
+                    session.bossComment = comment;
+                    resultsScreen.SetBossComment(comment);
+                });
+        }
+
         void ShowAs(ExperimentCondition condition)
         {
             if (resultsScreen == null)
