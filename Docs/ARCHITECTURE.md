@@ -70,10 +70,20 @@ graph TD
 - **事件流**：客人對 GameManager 用 C# event（`OnOrderTimeout`、`OnOrderResolved`）；其餘是直接方法呼叫。
 - `Assets/Scripts/DevTools/` 的兩支 TestTrigger 是可獨立測試客人點餐／丟回的開發工具，不進正式流程。
 
+## 開場串接（前導 → 教學 → 遊戲）
+
+整體流程由 `GameFlowController`（狀態機）＋兩個新場景腳本串起：
+
+1. **Intro 場景**（`Assets/Scenes/Intro.unity`，build index 0）：標題畫面按「Start Game」→ `IntroSequenceController` 播前導 Timeline（`PlayableDirector`）。Timeline 上的對話框停等點放 Signal Emitter → `OnDialoguePause()` 暫停等玩家按 trigger 續播。播完 `LoadScene(BackBone)`。
+2. **BackBone 進場 → 教學**：`GameFlowController` 開場進 `Tutorial` 狀態，`TutorialController` 用 `VideoPlayer` 播 4 段教學影片；搖桿左右翻頁（與結算共用 `StickFlickReader`），最後一頁按 trigger「開始遊戲」→ 倒數 → `StartRound()`。
+3. **結算 → 循環**：`ResultsScreenController` 三頁；翻到最後一頁出現 Share ＋ 單一「回到開頭」按鈕（標「New Player」/「Play Again」皆可，行為相同，不分兩種）。按下一律載回 Intro 全流程——沒有「跳過前導直接重玩」的路徑，每一局都會重看一次教學。
+
+> **不再分實驗組/對照組**：所有玩家看完整三頁結算 + boss note；`GameManager.condition` 只當資料標籤。
+
 ## 規劃中／未實作（與現況區隔）
 
 - **醬料液體化**：現在是平面 decal 貼在撞擊點，貼在人身上或斜面會懸浮；目標是像液體潑灑到地面（[Problem.md](Problem.md) 第 2 點）。
-- **新 UI 美術接線**：開始／暫停／回首頁／評分等 UI 圖已交付，尚未做成可互動的 UI 流程。
+- **Intro/教學場景與 prefab 組裝**：程式（IntroSequenceController / TutorialController / PZ_DialogueBox 契約）已就緒，Intro 場景、Timeline、對話框/教學 canvas 尚待在 Unity 內組裝（見 PREFABS.md 對話框契約、交付給 Kendell 的場景清單）。
 - 其他新發現的問題記在 [Problem.md](Problem.md)，要動工就照 [WORKFLOW.md](WORKFLOW.md) 開功能分支。
 
 ---
@@ -81,3 +91,4 @@ graph TD
 ## 更新紀錄
 
 - 2026-07-16：建立文件（進度總覽、遊戲循環、模組相依、規劃中項目）。
+- 2026-07-18：Game flow 重構——加入開場串接（Intro Timeline 前導 → 教學影片 → 遊戲）、GameFlowController 新增 Tutorial 狀態、結算單一「回到開頭」按鈕（不分 Play Again/New Player，一律回 Intro 重來）；移除結算的實驗分組（所有人三頁）。

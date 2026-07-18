@@ -137,6 +137,12 @@ namespace Pizzala.UI
             transform.rotation = Quaternion.LookRotation(dir, Vector3.up) * Quaternion.Euler(tiltUpDegrees, 0f, 0f);
         }
 
+        // GameManager drives these so the booth only exists during a live round - it's
+        // meaningless (and blocks the view) on the title/tutorial screens. Toggling the
+        // root re-arms SnapToPlayer via OnEnable, so it reappears already in front of you.
+        public void Show() => gameObject.SetActive(true);
+        public void Hide() => gameObject.SetActive(false);
+
         public void SetHits(int hits)
         {
             if (hitsText != null) hitsText.text = $"HITS  {hits}";

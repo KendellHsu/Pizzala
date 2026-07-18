@@ -74,6 +74,12 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 8145357290035699824}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 012529577629a064a87ee581bc650b0c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1829655044708208947}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 012529577629a064a87ee581bc650b0c, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 241373418729702042}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       insertIndex: -1
@@ -87,9 +93,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1025783569522375}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 012529577629a064a87ee581bc650b0c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2222222222222222001}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 012529577629a064a87ee581bc650b0c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2222222222222222002}
@@ -159,9 +162,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2175576954044425211}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable
+  m_Script: {fileID: 11500000, guid: 959a3ae15ae220049aa32c7c26ae2327, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Throwing.FrisbeeGrabInteractable
   m_InteractionManager: {fileID: 0}
   m_Colliders: []
   m_InteractionLayers:
@@ -411,18 +414,6 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 0
---- !u!114 &2222222222222222001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2175576954044425211}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fb28260fdf958240bf775007fbc0ae7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2222222222222222002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,3 +450,28 @@ MonoBehaviour:
   flingInherit: 0.4
   dripSplatScale: 0.3
   flingSplatScale: 0.25
+--- !u!114 &8145357290035699824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2175576954044425211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48bf85f671c04b8ea502b65761892433, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Throwing.PizzaJelly
+  visualTransform: {fileID: 0}
+--- !u!114 &1829655044708208947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2175576954044425211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67fb275b873e40608cef4cd205873685, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Throwing.PizzaCometTrail

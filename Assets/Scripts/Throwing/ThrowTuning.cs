@@ -64,6 +64,9 @@ namespace Pizzala.Throwing
         [Tooltip("每次停頓的秒數上限")]
         public float customerWanderPauseMaxSeconds = 2.5f;
 
+        [Tooltip("走路動畫播 1x 時對應的移動速度 m/s;移動越快動畫播越快(避免快走腳步打滑)。調小=同速下動畫更快")]
+        public float customerWalkAnimBaseSpeed = 0.5f;
+
         [Header("客人動態生成(CustomerSpawner 讀取)")]
         [Tooltip("回合開始時 Spawner 先補幾個客人(場景預擺的不算)")]
         public int initialSpawnCount = 2;
@@ -80,11 +83,21 @@ namespace Pizzala.Throwing
         [Tooltip("訂單結束(滿意/生氣)後停留幾秒才離場,讓玩家看到表情")]
         public float customerLeaveDelay = 2.5f;
 
+        [Tooltip("超時客人撿地上 pizza 反擊:走到離目標披薩多近算「撿到」(公尺)")]
+        public float customerPickupReach = 0.8f;
+
         [Tooltip("丟回前的預警時間(秒),給玩家反應窗口")]
         public float telegraphSeconds = 0.8f;
 
         [Tooltip("丟回披薩的飛行速度 m/s(越慢越好躲)")]
         public float throwbackSpeed = 5f;
+
+        [Tooltip("出手動畫開始後,等幾秒披薩才真正離手發射;調到動畫揮臂放手那一刻,讓披薩飛出的時機對上動作")]
+        public float throwbackReleaseDelay = 0.3f;
+
+        [Tooltip("被砸到臉時觸發丟回的機率(0~1);1=一定丟回,0=從不。丟錯口味的丟回不受此影響")]
+        [Range(0f, 1f)]
+        public float faceHitThrowbackChance = 1f;
 
         [Header("回合設定")]
         public float roundDurationSeconds = 180f;
@@ -148,6 +161,39 @@ namespace Pizzala.Throwing
         [Tooltip("晃動阻尼(1/s):抑制盤面翻擺(垂直盤軸的角速度),讓自旋很快收乾淨、飛行更穩。\n" +
                  "效果隨自旋大小縮放(轉得快才收得快),所以軟 throw 照樣翻滾。0 = 純物理、最會晃;調高 = 更穩但較不真實")]
         public float frisbeeWobbleDamping = 3f;
+
+        [Header("披薩果凍軟身(PizzaJelly 讀取,純視覺變形、不影響物理)")]
+        [Tooltip("果凍變形總開關;關掉 = 回到完全剛體的視覺")]
+        public bool jellyEnabled = true;
+
+        [Tooltip("彈簧剛性:越大回彈越快越硬(果凍越「緊」);調低=更軟更誇張")]
+        public float jellyStiffness = 100f;
+
+        [Tooltip("彈簧阻尼:越大晃動衰減越快(越不 Q);調低會多晃 2~3 下才停,更有果凍感")]
+        public float jellyDamping = 9f;
+
+        [Tooltip("壓扁軸最大變形比例上限 0~0.8;越大越誇張,注意太大會穿出 collider")]
+        [Range(0f, 0.8f)]
+        public float jellyMaxDeform = 0.5f;
+
+        [Tooltip("飛行中的呼吸感振幅(壓扁軸比例);很小就好,0 = 飛行不變形")]
+        public float jellyFlightAmount = 0.05f;
+
+        [Tooltip("撞擊瞬間的壓扁強度(壓扁軸比例,隨撞擊速度縮放);0 = 撞擊不變形,想要更誇張就調高")]
+        public float jellyImpactAmount = 0.55f;
+
+        [Header("慧星尾巴(PizzaCometTrail 讀取,驅動披薩上的 TrailRenderer)")]
+        [Tooltip("飛行拖尾總開關")]
+        public bool cometTrailEnabled = true;
+
+        [Tooltip("尾巴長度(秒):軌跡點保留多久,越大尾巴拖越長")]
+        public float cometTrailTime = 0.45f;
+
+        [Tooltip("尾巴頭部最大寬度(公尺),往尾端收尖成慧星狀")]
+        public float cometTrailWidth = 0.12f;
+
+        [Tooltip("速度低於此值(m/s)就停止拖尾(落地滑行不再有尾巴)")]
+        public float cometTrailMinSpeed = 1.5f;
 
         [Header("飛盤抓取(FrisbeeEdgeGrab 讀取)")]
         [Tooltip("盤半徑(公尺);≤ 0 會從披薩的 BoxCollider 自動推算")]

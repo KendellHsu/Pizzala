@@ -158,12 +158,19 @@ namespace Pizzala.Data
             SessionActive = false;
         }
 
-        public string SaveToDisk()
+        public string SaveToDisk() => SaveToDisk(Session);
+
+        // 存指定的 session,不看目前的 Session 屬性。給 GameManager.EndRound 的
+        // LLM callback 用:comment 可能晚幾秒才回來,那時玩家早已按了 Play Again,
+        // BeginSession 已把 Session 換成新的半空回合。傳當次捕捉到的 session 進來
+        // 才不會把 boss comment 寫進(並覆蓋存檔成)錯的那一場。
+        public string SaveToDisk(SessionData session)
         {
+            if (session == null) { Debug.LogWarning("[SessionLogger] SaveToDisk: session 是 null,跳過"); return null; }
             string dir = Path.Combine(Application.persistentDataPath, "sessions");
             Directory.CreateDirectory(dir);
-            string path = Path.Combine(dir, $"session_{Session.sessionId}_{Session.condition}.json");
-            File.WriteAllText(path, JsonUtility.ToJson(Session, true), Encoding.UTF8);
+            string path = Path.Combine(dir, $"session_{session.sessionId}_{session.condition}.json");
+            File.WriteAllText(path, JsonUtility.ToJson(session, true), Encoding.UTF8);
             Debug.Log($"[SessionLogger] 已儲存:{path}");
             return path;
         }

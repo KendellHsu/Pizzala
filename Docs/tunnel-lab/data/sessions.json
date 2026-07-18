@@ -1,0 +1,22 @@
+[
+  {
+    "sessionId": "demo-001",
+    "playerName": "阿豪",
+    "score": 1280,
+    "hits": 14,
+    "misses": 3,
+    "bossComment": "#手滑大師\n醬料噴得比披薩還準,建議下次先擦手。",
+    "playerPersona": "混亂善良的外送刺客",
+    "playerCardImage": "demo-001.png"
+  },
+  {
+    "sessionId": "demo-002",
+    "playerName": "小婷",
+    "score": 2040,
+    "hits": 21,
+    "misses": 1,
+    "bossComment": "#神之右手\n幾乎場場命中,主廚我想退休把店交給你。",
+    "playerPersona": "冷靜精準的披薩狙擊手",
+    "playerCardImage": "demo-002.png"
+  }
+]

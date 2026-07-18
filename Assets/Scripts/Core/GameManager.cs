@@ -2,7 +2,8 @@
 // GameManager.cs — 回合流程總指揮(訂單、判定、丟回、結算)
 // 掛載:"Systems" 物件。
 // Inspector 必填:
-//   condition   — Control(對照組)/ Experimental(實驗組)★實驗分組開關
+//   condition   — 純資料標籤(進 JSON 檔名/欄位供分析),已不再影響體驗流程;
+//                 所有玩家一律看完整結算三頁 + boss note
 //   tuning      — ThrowTuning 資產
 //   customers   — 場上所有客人
 //   snapshotCamera / overviewCameraPoint / faceSplatOverlay /
@@ -16,6 +17,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Pizzala.Data;
 using Pizzala.Throwing;
 using Pizzala.Customers;
@@ -31,14 +33,16 @@ namespace Pizzala.Core
         public static GameManager Instance { get; private set; }
 
         [Header("實驗設定")]
-        public ExperimentCondition condition = ExperimentCondition.Control;
+        [Tooltip("純資料標籤,只寫進 session JSON 的檔名/欄位供分析,不再影響體驗流程。" +
+                 "所有玩家一律看完整三頁結算 + boss note。2026-07 起 condition 不代表體驗差異。")]
+        public ExperimentCondition condition = ExperimentCondition.Experimental;
         public string participantId = "P00";
 
         [Header("玩法開關(保險絲)")]
         public bool enableThrowback = true;
 
-        [Tooltip("訂單超時也丟回?關=只有實際拿到披薩的客人(丟錯口味、被砸臉)才丟回")]
-        public bool throwbackOnTimeout = false;
+        [Tooltip("訂單超時的客人是否去撿地上 pizza 丟回玩家?撿不到(場上沒可撿的)就直接離場。關=超時直接離場")]
+        public bool throwbackOnTimeout = true;
 
         public bool enforceFlavor = true;
         public bool enforceThrowType = false;
@@ -47,6 +51,13 @@ namespace Pizzala.Core
         [Tooltip("關=等開始畫面按 B 才開始(正式流程);開=延遲後自動開始,方便沒有開始畫面時測試")]
         public bool autoStart = false;
         public float autoStartDelay = 5f;
+
+        [Header("Debug (測試用)")]
+        [Tooltip(">0 時覆寫這回合長度(秒),用來快速跳到結算。0=用 ThrowTuning.roundDurationSeconds。正式版設 0。")]
+        public float debugRoundSeconds = 0f;
+        [Tooltip("遊玩中按這個鍵立刻結束回合、直接跳結算畫面(方便驗結算內容)。留空停用。")]
+        public string debugEndRoundKey = "<Keyboard>/f10";
+        InputAction debugEndRoundAction;
 
         [Header("參數資產")]
         public ThrowTuning tuning;
@@ -103,6 +114,17 @@ namespace Pizzala.Core
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
+
+            if (!string.IsNullOrEmpty(debugEndRoundKey))
+            {
+                debugEndRoundAction = new InputAction("DebugEndRound", InputActionType.Button, debugEndRoundKey);
+                debugEndRoundAction.Enable();
+            }
+        }
+
+        void OnDestroy()
+        {
+            debugEndRoundAction?.Dispose();
         }
 
         void Start()
@@ -114,6 +136,7 @@ namespace Pizzala.Core
                 nextCustomerId = Mathf.Max(nextCustomerId, c.customerId + 1);
                 AttachCustomer(c);
             }
+            if (boothScreen != null) boothScreen.Hide(); // off during title/tutorial; shown at StartRound
             if (autoStart) StartCoroutine(AutoStartRoutine());
         }
 
@@ -154,6 +177,7 @@ namespace Pizzala.Core
             if (DirtManager.Instance != null) DirtManager.Instance.ResetCount();
             SessionLogger.Instance.BeginSession(condition, participantId);
             if (activityTracker != null) activityTracker.Begin();
+            if (boothScreen != null) boothScreen.Show(); // booth appears only once play actually starts
             RoundActive = true;
             StartCoroutine(RoundLoop());
         }
@@ -187,7 +211,8 @@ namespace Pizzala.Core
         IEnumerator RoundLoop()
         {
             // Kept as a field, not a local, so the booth screen can read the countdown.
-            roundEndTime = Time.time + tuning.roundDurationSeconds;
+            float duration = debugRoundSeconds > 0f ? debugRoundSeconds : tuning.roundDurationSeconds;
+            roundEndTime = Time.time + duration;
             while (Time.time < roundEndTime)
             {
                 GiveOrderToRandomIdleCustomer();
@@ -201,6 +226,13 @@ namespace Pizzala.Core
         // several-second steps.
         void Update()
         {
+            if (RoundActive && debugEndRoundAction != null && debugEndRoundAction.WasPressedThisFrame())
+            {
+                Debug.Log("[GameManager] Debug end-round key pressed - jumping to results.");
+                EndRound();
+                return;
+            }
+
             if (!RoundActive || boothScreen == null) return;
             boothScreen.SetHits(Hits);
             boothScreen.SetTimeRemaining(TimeRemaining);
@@ -210,7 +242,8 @@ namespace Pizzala.Core
         {
             var idle = new List<CustomerController>();
             foreach (var c in activeCustomers)
-                if (c != null && !c.HasActiveOrder && !c.IsLeaving) idle.Add(c);
+                // isActiveAndEnabled:排除場景裡被停用的客人(對 inactive 物件 StartCoroutine 會炸)
+                if (c != null && c.isActiveAndEnabled && !c.HasActiveOrder && !c.IsLeaving) idle.Add(c);
             if (idle.Count == 0) return;
 
             var pick = idle[Random.Range(0, idle.Count)];
@@ -237,7 +270,9 @@ namespace Pizzala.Core
 
         // ══ 披薩落地(PizzaProjectile 碰撞時呼叫)══
         public void OnPizzaLanded(PizzaProjectile pizza, ThrowRecord record,
-                                  CustomerHitZone zone, Vector3 point, Vector3 normal, float flightTime)
+                                  CustomerHitZone zone, Vector3 point, Vector3 normal, float flightTime,
+                                  bool useCustomerSurfaceSauce = false,
+                                  Collider impactCollider = null)
         {
             if (record == null) return;
 
@@ -277,13 +312,17 @@ namespace Pizzala.Core
                             record.photoPath = snapshotCamera.CaptureAt(zone.customer.faceAnchor);
                             SessionLogger.Instance.AddCustomerFacePhoto(record.photoPath, "Hit in the face");
                         }
-                        TryThrowback(zone.customer, pizza.flavor); // 砸到臉的那顆被丟回來
+                        // 砸到臉:依機率決定要不要丟回(不像丟錯口味那樣一定丟)
+                        if (Random.value < tuning.faceHitThrowbackChance)
+                            TryThrowback(zone.customer, pizza.flavor);
                         break;
 
                     case HitZoneType.Body:
                         record.outcome = ThrowOutcome.MissBody;
                         zone.customer.GetDirty();
-                        if (DirtManager.Instance != null)
+                        // The customer-specific 3D sauce replaces only the old
+                        // character splat. Environment hits still use DirtManager.
+                        if (!useCustomerSurfaceSauce && DirtManager.Instance != null)
                             DirtManager.Instance.SpawnSplat(point, normal, pizza.flavor, zone.customer.transform);
                         break;
                 }
@@ -291,7 +330,8 @@ namespace Pizzala.Core
             else
             {
                 record.outcome = ThrowOutcome.MissEnvironment;
-                if (DirtManager.Instance != null) DirtManager.Instance.SpawnSplat(point, normal, pizza.flavor);
+                if (DirtManager.Instance != null)
+                    DirtManager.Instance.SpawnSplat(point, normal, pizza.flavor, null, impactCollider);
             }
 
             SessionLogger.Instance.Record(record);
@@ -313,29 +353,36 @@ namespace Pizzala.Core
             if (flavorOk && throwOk)
             {
                 record.outcome = ThrowOutcome.Hit;
+                customer.ShowPizzaInBox(pizza.flavor); // 盒中生成對應口味 pizza
+                customer.CloseBox();                    // 正確才關盒
                 Hits++;
                 customer.ResolveOrder(true);
-                Destroy(pizza.gameObject, 0.5f); // 客人收下披薩
+                Destroy(pizza.gameObject, 0.5f);        // 消除丟中的那顆披薩
             }
             else
             {
+                // 丟錯口味:不解決訂單、客人不離場,繼續等正確口味(倒數照跑)。
+                // 只把錯的那顆呈現在盒中,再原樣丟回;盒中那顆會在丟回發射瞬間清掉。
                 record.outcome = ThrowOutcome.WrongFlavor;
-                customer.ResolveOrder(false);
-                Destroy(pizza.gameObject, 0.5f);        // 客人接住那顆錯的
-                TryThrowback(customer, pizza.flavor);   // 再原樣丟回來
+                customer.ShowPizzaInBox(pizza.flavor);
+                Destroy(pizza.gameObject, 0.5f);        // 消除丟中的那顆
+                TryThrowback(customer, pizza.flavor);   // 原樣丟回來(客人續等餐)
             }
         }
 
         void HandleOrderTimeout(CustomerController customer)
         {
+            // 超時的丟回改由客人自己「撿地上 pizza 反擊」處理(見 CustomerController.PatienceCountdown),
+            // 這裡只記統計,不再從 throwOrigin 憑空生一顆丟。
             missedOrders++;
-            if (!throwbackOnTimeout)
-            {
-                Debug.Log($"[GameManager] 客人 {customer.customerId} 訂單超時(沒拿到披薩,不丟回)");
-                return;
-            }
-            Debug.Log($"[GameManager] 客人 {customer.customerId} 訂單超時 → 準備丟回");
-            TryThrowback(customer, customer.CurrentOrder);
+            Debug.Log($"[GameManager] 客人 {customer.customerId} 訂單超時");
+        }
+
+        // 給超時撿地上 pizza 的客人呼叫:走完整的丟回流程(預警→出手→發射),
+        // 從客人當前的 throwOrigin 發射(此時客人已走到地上那顆 pizza 旁)。
+        public void ThrowBackFromCustomer(CustomerController customer, PizzaFlavor flavor)
+        {
+            TryThrowback(customer, flavor);
         }
 
         CustomerController FindNearestActiveOrderCustomer(Vector3 point)
@@ -359,6 +406,23 @@ namespace Pizzala.Core
             StartCoroutine(ThrowbackRoutine(customer, flavor, prefab));
         }
 
+        // Dev 測試專用:略過 enableThrowback/RoundActive,直接跑真正的丟回流程
+        // (預警閃紅 → 出手動畫 → throwbackReleaseDelay → 發射),方便單獨對時間軸。
+        // 由 DevTools/ThrowAnimTestTrigger 呼叫。
+        public void DebugTriggerThrowback(CustomerController customer, PizzaFlavor flavor)
+        {
+            if (customer == null) { Debug.LogWarning("[GameManager] DebugTriggerThrowback: customer 是 null"); return; }
+            if (head == null) { Debug.LogWarning("[GameManager] DebugTriggerThrowback: head 未設定,且場上找不到 Camera.main"); return; }
+            var prefab = PickThrowbackPrefab(flavor);
+            if (prefab == null)
+            {
+                Debug.LogWarning($"[GameManager] DebugTriggerThrowback: 口味 {flavor} 沒有對應的丟回 Prefab"
+                                + "(throwbackPrefabsByFlavor 該格是空的,且後備 throwbackPrefab 也沒填)");
+                return;
+            }
+            StartCoroutine(ThrowbackRoutine(customer, flavor, prefab));
+        }
+
         GameObject PickThrowbackPrefab(PizzaFlavor flavor)
         {
             if (throwbackPrefabsByFlavor != null && (int)flavor < throwbackPrefabsByFlavor.Length
@@ -377,6 +441,14 @@ namespace Pizzala.Core
 
             if (customer == null) yield break; // 預警期間客人剛好離場(動態生成的會despawn)
 
+            // 先起手播出手動畫,等揮臂到放手那一刻(throwbackReleaseDelay)披薩才真正離手,
+            // 讓披薩飛出的時機對上動作。延遲期間 IsThrowingBack 維持,客人定住面向玩家。
+            customer.PlayThrow();
+            if (tuning.throwbackReleaseDelay > 0f)
+                yield return new WaitForSeconds(tuning.throwbackReleaseDelay);
+            if (customer == null) yield break; // 延遲期間客人剛好離場
+
+            // 放手點取延遲後的最新手部位置(客人在起手期間可能轉身面向玩家)
             Vector3 origin = customer.throwOrigin != null
                              ? customer.throwOrigin.position
                              : customer.transform.position + Vector3.up * 1.4f;
@@ -395,6 +467,7 @@ namespace Pizzala.Core
 
             bool resolved = false, hitPlayer = false;
             proj.onResolved = h => { resolved = true; hitPlayer = h; };
+            customer.ClearBoxPizza();                          // 盒中那顆在披薩被丟出的同一刻消失
             proj.Launch(head.position, tuning.throwbackSpeed); // 鎖定發射瞬間的頭部位置,不追蹤
 
             customer.IsThrowingBack = false; // 出手完成,恢復走動
@@ -440,10 +513,21 @@ namespace Pizzala.Core
             if (!RoundActive) return;
             RoundActive = false;
             ResumeRound(); // ending while paused would leave timeScale at 0 and freeze the results screen
+            if (boothScreen != null) boothScreen.Hide(); // clear the booth before the results screen comes up
+
+            // Sweep in-flight throwbacks before we stop coroutines: an unresolved one would
+            // otherwise keep flying and splat the player mid-results. And clear every
+            // customer's IsThrowingBack - StopAllCoroutines() can cut ThrowbackRoutine
+            // between setting the flag and clearing it, freezing that customer for good.
+            foreach (var tb in FindObjectsByType<ThrowbackProjectile>(FindObjectsSortMode.None))
+                if (tb != null) Destroy(tb.gameObject);
+            foreach (var c in activeCustomers)
+                if (c != null) c.IsThrowingBack = false;
+
             StopAllCoroutines();
             if (activityTracker != null) activityTracker.End();
 
-            // 環境髒亂總覽照(實驗組素材)
+            // 環境髒亂總覽照
             if (snapshotCamera != null && overviewCameraPoint != null)
                 SessionLogger.Instance.AddEnvironmentPhoto(snapshotCamera.CaptureFrom(overviewCameraPoint), "Store overview");
 
@@ -458,9 +542,18 @@ namespace Pizzala.Core
                 act != null ? act.TurnDegreesTotal : 0f);
 
             var session = SessionLogger.Instance.Session;
-            if (resultsScreen != null) resultsScreen.Show(session); // starts on page 1; NextPage() reaches the boss note page
+            if (resultsScreen != null) resultsScreen.Show(session); // starts on page 1; the stick flicks through to the boss note page
 
-            if (bossCommentService != null && session.condition == ExperimentCondition.Experimental)
+            // Save NOW, unconditionally, so the round's data is on disk the instant it ends.
+            // The boss comment can land seconds later (network) - by then the player may have
+            // hit Play Again, which calls BeginSession() and swaps SessionLogger.Session out
+            // from under us. So the callback re-saves THIS captured session explicitly.
+            SessionLogger.Instance.SaveToDisk(session);
+
+            // Every player now gets a boss note (condition no longer gates it). With the
+            // service present we ask the LLM; without it we still fill a canned line so the
+            // note page is never stuck on the "writing..." placeholder.
+            if (bossCommentService != null)
             {
                 // Async - don't block EndRound() on the network call. Save happens once the
                 // comment (or its fallback) is in hand, so the logged JSON always has it.
@@ -469,12 +562,15 @@ namespace Pizzala.Core
                     session.bossComment = comment;
                     session.playerPersona = persona; // website-only, deliberately not shown anywhere in-game
                     if (resultsScreen != null) resultsScreen.SetBossComment(comment);
-                    SessionLogger.Instance.SaveToDisk();
+                    SessionLogger.Instance.SaveToDisk(session); // re-save the captured session, not whatever Session now points to
                 });
             }
             else
             {
-                SessionLogger.Instance.SaveToDisk();
+                string comment = BossCommentService.GetFallbackComment(session.summary);
+                session.bossComment = comment;
+                if (resultsScreen != null) resultsScreen.SetBossComment(comment);
+                SessionLogger.Instance.SaveToDisk(session);
             }
 
             // Clay player card for the history website - runs in parallel with the comment

@@ -1,0 +1,11 @@
+# Tunnel Lab 專屬忽略清單
+
+# 1MB 測試檔:server.py 首次收到 /download/sample.bin 請求時自動生成,不進版控
+data/sample.bin
+
+# cloudflared 憑證/金鑰若不小心被複製進來,絕對不能進版控
+*.pem
+*cert*
+cert.pem
+config.yml
+*.cloudflared*

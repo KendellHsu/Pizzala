@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pizzala Tunnel Lab — 連線測試</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", sans-serif;
+    max-width: 640px; margin: 0 auto; padding: 24px 18px 60px; line-height: 1.6;
+  }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  .sub { color: #888; font-size: .85rem; margin-bottom: 24px; }
+  .card {
+    border: 1px solid #8883; border-radius: 12px; padding: 16px; margin: 14px 0;
+  }
+  .card h2 { font-size: 1rem; margin: 0 0 10px; }
+  button {
+    font-size: 1rem; padding: 10px 16px; border-radius: 10px; border: 0;
+    background: #e11d48; color: #fff; cursor: pointer; width: 100%;
+  }
+  button:active { opacity: .8; }
+  pre {
+    background: #8881; border-radius: 8px; padding: 10px; margin: 12px 0 0;
+    white-space: pre-wrap; word-break: break-all; font-size: .8rem; min-height: 1.2em;
+  }
+  .ok  { color: #16a34a; font-weight: 600; }
+  .err { color: #dc2626; font-weight: 600; }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 999px;
+    font-size: .75rem; background: #16a34a22; color: #16a34a; margin-left: 6px;
+  }
+</style>
+</head>
+<body>
+  <h1>🍕 Pizzala Tunnel Lab</h1>
+  <div class="sub" id="host">載入中…</div>
+
+  <div class="card">
+    <h2>① 連線 <span class="badge" id="loadBadge">頁面已載入 ✓</span></h2>
+    <p style="margin:0;font-size:.85rem;color:#888">
+      你看到這一頁,代表「手機 → 網域 → 本機 8787」的<b>連線</b>已經通了。
+      下面兩顆按鈕進一步驗證<b>資料能不能正常往返</b>。
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>② 資料回得來嗎?(GET /api/ping)</h2>
+    <button onclick="ping()">測試 Ping</button>
+    <pre id="pingOut"></pre>
+  </div>
+
+  <div class="card">
+    <h2>③ 資料傳得上去嗎?(POST /api/echo)</h2>
+    <button onclick="echo()">上傳一段文字並取回</button>
+    <pre id="echoOut"></pre>
+  </div>
+
+  <div class="card">
+    <h2>④ 大檔下載穩不穩?(1 MB)</h2>
+    <button onclick="dl()">下載測試檔並計時</button>
+    <pre id="dlOut"></pre>
+  </div>
+
+<script>
+  document.getElementById('host').textContent = '目前網址:' + location.href;
+
+  async function ping() {
+    const out = document.getElementById('pingOut');
+    out.textContent = '連線中…';
+    const t0 = performance.now();
+    try {
+      const r = await fetch('/api/ping', { cache: 'no-store' });
+      const j = await r.json();
+      const ms = Math.round(performance.now() - t0);
+      const via = j.via ? `\n經過 Cloudflare tunnel(CF-Connecting-IP=${j.via}）✓` : '\n(未偵測到 CF header — 可能是本機直連)';
+      out.innerHTML = `<span class="ok">✓ 成功 ${ms}ms</span>\n` +
+        `伺服器時間:${j.time}\n你的來源 IP:${j.client}` + via;
+    } catch (e) {
+      out.innerHTML = `<span class="err">✗ 失敗:${e.message}</span>`;
+    }
+  }
+
+  async function echo() {
+    const out = document.getElementById('echoOut');
+    out.textContent = '上傳中…';
+    const payload = '手機上傳測試 @ ' + new Date().toISOString() + ' / ' + 'x'.repeat(200);
+    const t0 = performance.now();
+    try {
+      const r = await fetch('/api/echo', { method: 'POST', body: payload });
+      const j = await r.json();
+      const ms = Math.round(performance.now() - t0);
+      const match = j.echo === payload;
+      out.innerHTML = `<span class="${match?'ok':'err'}">` +
+        (match ? '✓ 上傳的內容原樣取回,資料完整' : '✗ 取回內容與送出不一致!') +
+        `</span>\n往返 ${ms}ms,伺服器收到 ${j.receivedBytes} bytes`;
+    } catch (e) {
+      out.innerHTML = `<span class="err">✗ 失敗:${e.message}</span>`;
+    }
+  }
+
+  async function dl() {
+    const out = document.getElementById('dlOut');
+    out.textContent = '下載中…';
+    const t0 = performance.now();
+    try {
+      const r = await fetch('/download/sample.bin?t=' + Date.now(), { cache: 'no-store' });
+      const buf = await r.arrayBuffer();
+      const ms = Math.round(performance.now() - t0);
+      const kb = (buf.byteLength / 1024).toFixed(0);
+      const mbps = ((buf.byteLength * 8) / (ms / 1000) / 1e6).toFixed(1);
+      out.innerHTML = `<span class="ok">✓ 下載完成</span>\n${kb} KB,耗時 ${ms}ms,約 ${mbps} Mbps`;
+    } catch (e) {
+      out.innerHTML = `<span class="err">✗ 失敗:${e.message}</span>`;
+    }
+  }
+</script>
+</body>
+</html>

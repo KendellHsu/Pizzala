@@ -6,6 +6,7 @@
 // ─────────────────────────────────────────────────────────────
 using UnityEngine;
 using Pizzala.Data;
+using Pizzala.Customers;
 
 namespace Pizzala.Dirt
 {
@@ -41,8 +42,12 @@ namespace Pizzala.Dirt
             if (Physics.Raycast(transform.position, step.normalized, out var hit,
                                 step.magnitude + Skin, hitMask, QueryTriggerInteraction.Ignore))
             {
-                if (DirtManager.Instance != null)
-                    DirtManager.Instance.SpawnSplatMark(hit.point, hit.normal, flavor, splatScale);
+                // Customer face/body impacts are reserved for the 3D shrink-wrap
+                // sauce system. Keep legacy droplet marks for environment only.
+                bool hitSurfaceSauceCustomer =
+                    hit.collider.GetComponentInParent<CustomerSurfaceSauce>() != null;
+                if (!hitSurfaceSauceCustomer && DirtManager.Instance != null)
+                    DirtManager.Instance.SpawnSplatMark(hit.point, hit.normal, flavor, splatScale, hit.collider);
                 Destroy(gameObject);
                 return;
             }
