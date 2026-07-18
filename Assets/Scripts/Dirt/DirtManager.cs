@@ -15,6 +15,7 @@
 // ─────────────────────────────────────────────────────────────
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using Pizzala.Data;
 
 namespace Pizzala.Dirt
@@ -28,6 +29,8 @@ namespace Pizzala.Dirt
 
     public class DirtManager : MonoBehaviour
     {
+        const uint EnvironmentDecalReceiverLayer = 1u << 1;
+
         public static DirtManager Instance { get; private set; }
 
         [Tooltip("依 PizzaFlavor 列舉順序:0=Margherita 1=Pepperoni 2=CosmicPinkMarshmallow;該口味有填就優先從中挑")]
@@ -104,7 +107,8 @@ namespace Pizzala.Dirt
         }
 
         public void SpawnSplat(Vector3 point, Vector3 normal,
-                               PizzaFlavor? flavor = null, Transform parent = null)
+                               PizzaFlavor? flavor = null, Transform parent = null,
+                               Collider impactCollider = null)
         {
             bool onCharacter = parent != null;
             bool steep = normal.y < steepThreshold;
@@ -118,7 +122,8 @@ namespace Pizzala.Dirt
             if (onCharacter)
                 Debug.Log($"[DirtManager] 染色結果 painted={painted}(false=走 Decal 後備)");
             if (!painted)
-                SpawnSplatVisual(point, normal, flavor, parent, onCharacter ? characterSplatScale : 1f);
+                SpawnSplatVisual(point, normal, flavor, parent,
+                    onCharacter ? characterSplatScale : 1f, impactCollider);
 
             var count = (onCharacter || steep) ? dropletCountSteep : dropletCount;
             SpawnDroplets(point, normal, flavor, Random.Range(count.x, count.y + 1));
@@ -128,9 +133,10 @@ namespace Pizzala.Dirt
 
         // 純視覺髒污(液滴落地、滑行痕跡用):不噴新液滴、不計入 DirtCount
         public void SpawnSplatMark(Vector3 point, Vector3 normal,
-                                   PizzaFlavor? flavor, float scaleMul)
+                                   PizzaFlavor? flavor, float scaleMul,
+                                   Collider impactCollider = null)
         {
-            SpawnSplatVisual(point, normal, flavor, null, scaleMul);
+            SpawnSplatVisual(point, normal, flavor, null, scaleMul, impactCollider);
         }
 
         // 飛行中甩出的液滴(SauceSpray 用):給定位置與初速直接發射,
@@ -148,7 +154,8 @@ namespace Pizzala.Dirt
         }
 
         void SpawnSplatVisual(Vector3 point, Vector3 normal,
-                              PizzaFlavor? flavor, Transform parent, float scaleMul)
+                              PizzaFlavor? flavor, Transform parent, float scaleMul,
+                              Collider impactCollider)
         {
             var pool = PickPool(flavor);
             if (pool == null || pool.Length == 0) return;
@@ -159,6 +166,8 @@ namespace Pizzala.Dirt
                       * Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)); // 隨機旋轉增加變化
             var go = Instantiate(prefab, point + normal * surfaceOffset, rot);
             go.transform.localScale *= Random.Range(0.8f, 1.3f) * scaleMul;
+            if (parent == null)
+                RestrictDecalToEnvironment(go, impactCollider);
             if (parent != null) // 砸中客人時跟著客人
             {
                 // 掛到最近的骨頭,動畫(走路/丟回)時髒污才不會在身上滑動
@@ -171,6 +180,27 @@ namespace Pizzala.Dirt
         }
 
         // ── Texture-space 染色 ───────────────────────────────────
+
+        static void RestrictDecalToEnvironment(GameObject splat, Collider impactCollider)
+        {
+            if (impactCollider != null)
+            {
+                AddEnvironmentDecalLayer(impactCollider.GetComponent<Renderer>());
+                AddEnvironmentDecalLayer(impactCollider.GetComponentInParent<Renderer>());
+
+                foreach (var renderer in impactCollider.GetComponentsInChildren<Renderer>(true))
+                    AddEnvironmentDecalLayer(renderer);
+            }
+
+            foreach (var projector in splat.GetComponentsInChildren<DecalProjector>(true))
+                projector.renderingLayerMask = EnvironmentDecalReceiverLayer;
+        }
+
+        static void AddEnvironmentDecalLayer(Renderer renderer)
+        {
+            if (renderer != null)
+                renderer.renderingLayerMask |= EnvironmentDecalReceiverLayer;
+        }
 
         readonly Dictionary<int, Texture[]> paintTexCache = new Dictionary<int, Texture[]>();
 

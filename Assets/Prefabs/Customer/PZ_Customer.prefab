@@ -631,6 +631,10 @@ GameObject:
   - component: {fileID: 7673911599087104307}
   - component: {fileID: 2520638019367460530}
   - component: {fileID: -7146520938614133232}
+  - component: {fileID: 7924387123456789011}
+  - component: {fileID: 7924387123456789012}
+  - component: {fileID: 7924387123456789013}
+  - component: {fileID: 7924387123456789014}
   m_Layer: 0
   m_Name: PZ_Customer
   m_TagString: Untagged
@@ -714,6 +718,114 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7924387123456789011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8000398149439542082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd0bece4c9f1004469532fb064e7736a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkinnedSurfaceProbe
+  sourceRenderers: []
+  castDistance: 0.8
+  normalDisplayLength: 0.25
+  includeInactiveRenderers: 0
+--- !u!114 &7924387123456789012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8000398149439542082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6cdaf1f4a8eeb84992cbb7189cea6f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkinnedSauceMeshGenerator
+  minimumRadius: 0.05
+  maximumRadius: 0.1
+  thickness: 0.012
+  edgeThickness: 0.006
+  surfaceOffset: 0.003
+  rings: 4
+  segments: 20
+  outlineIrregularity: 0.14
+  ellipseVariation: 0.1
+  roundedLobeCount: 3
+  roundedLobeLength: 0.16
+  roundedLobeWidth: 0.38
+  wrapIterations: 16
+  constraintIterations: 2
+  wrapStrength: 0.65
+  useLocalSurfaceCandidates: 1
+  candidateRadiusMultiplier: 1.35
+  fallbackToFullMeshSearch: 1
+  sauceMaterials:
+  - {fileID: 2100000, guid: 0a1096b71c0a7454780755614e954e56, type: 2}
+  - {fileID: 2100000, guid: 0a23d6d38a520924a8cc6cb6c9499550, type: 2}
+  - {fileID: 2100000, guid: df4898b4543dd794e9837c720839fd21, type: 2}
+  fallbackColor: {r: 0.65, g: 0.08, b: 0.025, a: 1}
+--- !u!114 &7924387123456789013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8000398149439542082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d2fa905db04ac287f9f3b35518e2a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SauceToppingSpawner
+  toppingProfiles:
+  - theme: 0
+    toppingPrefabs: []
+    minimumCount: 3
+    maximumCount: 6
+    minimumScale: 0.65
+    maximumScale: 1.15
+    surfaceOffset: 0.008
+    usableSauceRadius: 0.82
+    placeholderKinds: 0000000001000000
+  - theme: 1
+    toppingPrefabs: []
+    minimumCount: 3
+    maximumCount: 6
+    minimumScale: 0.65
+    maximumScale: 1.15
+    surfaceOffset: 0.008
+    usableSauceRadius: 0.82
+    placeholderKinds: 020000000300000004000000
+  - theme: 2
+    toppingPrefabs: []
+    minimumCount: 3
+    maximumCount: 6
+    minimumScale: 0.65
+    maximumScale: 1.15
+    surfaceOffset: 0.008
+    usableSauceRadius: 0.82
+    placeholderKinds: 05000000
+--- !u!114 &7924387123456789014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8000398149439542082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c0fec8e22a84b9d90a88c7c3692a782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Customers.CustomerSurfaceSauce
+  createOnFace: 1
+  createOnBody: 1
+  margheritaSauceMaterial: {fileID: 2100000, guid: df4898b4543dd794e9837c720839fd21, type: 2}
+  pepperoniSauceMaterial: {fileID: 2100000, guid: 0a23d6d38a520924a8cc6cb6c9499550, type: 2}
+  cosmicPinkMarshmallowSauceMaterial: {fileID: 2100000, guid: 0a1096b71c0a7454780755614e954e56, type: 2}
 --- !u!1 &8258847632833827711
 GameObject:
   m_ObjectHideFlags: 0

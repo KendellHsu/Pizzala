@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f91814fcbc86e584795cc30a493528c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Customers.ThrowbackProjectile
-  flavor: 0
+  flavor: 2
 --- !u!96 &5587863366015429
 TrailRenderer:
   serializedVersion: 4
