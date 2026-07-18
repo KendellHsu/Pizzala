@@ -65,6 +65,27 @@ namespace Pizzala.DevTools
             if (Keyboard.current.spaceKey.wasPressedThisFrame) resultsScreen?.NextPage();
         }
 
+        // Hooked up to a clickable prop in the world (see PhotoBoxTrigger) - loads the same
+        // sample session this loader already uses for keys 1/2/3, and jumps straight to its
+        // photo wall. Stand-in for the eventual memorial-hall pizza box, which will load
+        // whichever specific past session it belongs to instead of this one fixed sample.
+        public void ShowRecordedPhotos()
+        {
+            if (resultsScreen == null)
+            {
+                Debug.LogError("DemoResultsLoader: resultsScreen not assigned.");
+                return;
+            }
+
+            if (cached == null)
+            {
+                cached = Load();
+                if (cached == null) return;
+            }
+
+            resultsScreen.ShowPhotoWallOnly(cached);
+        }
+
         void ShowAs(ExperimentCondition condition)
         {
             if (resultsScreen == null)

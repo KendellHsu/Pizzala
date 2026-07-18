@@ -99,6 +99,17 @@ namespace Pizzala.UI
         int pageCount;
         Coroutine postNoteButtonsRoutine;
 
+        // Jumps straight to the photo wall for a given session, skipping the normal paged
+        // Control/Middle/Experimental flow - for standalone display contexts (a clickable
+        // prop showing one past session's photos, e.g. the memorial-hall pizza box) that
+        // aren't part of the results report itself and shouldn't be gated by condition.
+        public void ShowPhotoWallOnly(SessionData session)
+        {
+            currentSession = session;
+            HideAllPanels();
+            ShowPhotoWall(session);
+        }
+
         public bool HasNextPage => currentSession != null && currentPage + 1 < pageCount;
         public bool HasPrevPage => currentSession != null && currentPage > 0;
 
