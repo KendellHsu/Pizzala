@@ -83,6 +83,16 @@ namespace Pizzala.UI
             SetCanvasActive(true);
             currentPage = 0;
             ShowPage(0);
+
+            // One-shot diagnostic: makes "the tutorial isn't showing" answerable from the
+            // Console instead of hunting in the Scene view - is the canvas actually on, where
+            // is it in the world, and did the video pipeline come up?
+            var root = canvasRoot != null ? canvasRoot : gameObject;
+            Debug.Log($"[TutorialController] Begin: canvas '{root.name}' activeInHierarchy={root.activeInHierarchy} " +
+                      $"worldPos={root.transform.position} scale={root.transform.lossyScale} | " +
+                      $"videoPlayer={(videoPlayer != null ? videoPlayer.name : "NULL")} " +
+                      $"targetTexture={(videoPlayer != null && videoPlayer.targetTexture != null ? "set" : "NULL")} " +
+                      $"videoImage={(videoImage != null ? videoImage.name : "NULL")} pages={PageCount}");
         }
 
         public void HideCanvas() => SetCanvasActive(false);
