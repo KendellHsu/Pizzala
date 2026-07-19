@@ -298,6 +298,18 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | `triggerVrPath` | `<XRController>{RightHand}/trigger` | 續播/開始 trigger |
 | `triggerKeyboardPath` | `<Keyboard>/y` | trigger 的鍵盤替身 |
 
+### DialogueTimelineController（[DialogueTimelineController.cs](../Assets/Scripts/Timeline/DialogueTimelineController.cs)，intro.unity 前導動畫）
+
+art 組製作的前導動畫（`Assets/Art/scene/pizza_disk_v2/intro.unity`）用的對話控制器。Timeline 的 Signal Emitter 呼叫 `PauseAndShowDialogue(line)` 暫停並顯示一句台詞，玩家按 VR trigger（`OnContinue()`）續播到下一個 Signal。翻頁改由 trigger 觸發（原本是鍵盤空白鍵）。
+
+| 參數 | 預設值 | 說明 |
+|---|---|---|
+| `director` | （空） | 前導動畫的 PlayableDirector |
+| `dialoguePanel` | （空） | 台詞對話框；停等時顯示，續播時隱藏 |
+| `dialogueText` | （空） | 對話框的 TMP_Text |
+| `triggerVrPath` | `<XRController>{RightHand}/trigger` | 翻到下一句的右手 trigger |
+| `triggerKeyboardPath` | `<Keyboard>/space` | trigger 的鍵盤替身（桌面測試） |
+
 ### ResultsScreenController（[ResultsScreenController.cs](../Assets/Scripts/UI/ResultsScreenController.cs)，結算三頁）
 
 所有玩家固定看三頁（data portrait / photo wall / boss note）。兩顆按鈕（Share ＋ 單一「回到開頭」按鈕，標籤可寫「New Player」或「Play Again」，行為相同不分兩種）在翻到最後一頁時一起出現，與 LLM callback 解耦。
@@ -429,3 +441,4 @@ Pizzala 所有可以在 Unity 編輯器裡調整的參數都整理在這裡。
 | 2026-07-19 | 合併 `customer_splash`：砸中客人改長 **3D 醬料網格**（沿蒙皮表面、跟著動畫走）並撒對應口味 3D 配料（Margherita 葉子／Pepperoni 香腸／Cosmic 藍莓辣椒菇），移除客人身上原本容易穿模的 Decal（**環境仍用 DirtManager 的 Decal/染色不變**）。`SkinnedSauceMeshGenerator` 新增依撞擊速度決定醬料大小的欄位：`useImpactDrivenRadius`(true)、`minimumImpactSpeed`(1.5)、`maximumImpactSpeed`(9)、`releaseSpeedInfluence`(0.2)、`maximumReleaseSpeed`(9)、`radiusRandomVariation`(0.08)，`maximumRadius` 0.1→0.15；`releaseSpeed` 一路由 `PizzaProjectile`→`CustomerSurfaceSauce`→`SkinnedSurfaceProbe`→`SkinnedSauceMeshGenerator` 傳入。另修蒙皮 triangle index 越界（baked mesh 與原 mesh 拓樸不一致時 remap 到有效三角形，失敗才放棄）。客人 prefab（PZ_Customer 及 Soldier/UncleB/bathrobeDad variant）補上 BodyZone 膠囊碰撞尺寸。`MAT_Sauce_Red` 更名 `MAT_Sauce_Yellow`（GUID 不變）、客人 Margherita/Pepperoni 醬料材質對調 |
 | 2026-07-19 | 效能優化（3D 醬料）：先前六顆 NPC 模型 `isReadable` 開 Read/Write 修好醬料生成後出現卡頓。三管齊下——(1) `SkinnedSauceMeshGenerator` 新增 `maxActiveSauceSheets`(12)：跨全部客人的醬料片 FIFO 上限，超過回收最舊（連同配料），修長時間遊玩無限累積；(2) 醬料片 `SkinnedMeshRenderer.updateWhenOffscreen` true→**false**，畫面外不再每幀重新蒙皮；(3) 新增 Editor 工具 `Tools/Pizzala/Optimize Sauce Topping Assets`：把 `splats_object` 下配料掃描高模 import 設定壓下來（Mesh Compression High＋optimize＋不匯入動畫，貼圖上限 2048→512＋Android ASTC 6x6）。配料 fbx 有 6~66 MB 的掃描高模、每次命中生成 3~6 顆是主要 GPU 負擔 |
 | 2026-07-19 | 3D 醬料調整：(1) `CustomerSurfaceSauce` 新增 `disableSurfaceSauce`(false)：整個關掉某客人的 3D 醬料、退回舊的 2D 角色髒污 Decal——已在 **Soldier** variant override 為 true（效果不明顯故停用）；`Handles()` 回 false 時 `GameManager` 走 `DirtManager.SpawnSplat` 舊路徑。(2) base `PZ_Customer` 的 `SauceToppingSpawner` 三種口味配料量 `minimumCount` 3→6、`maximumCount` 6→10（原本太少）。醬料片上限維持 12，不受配料增量影響 |
+| 2026-07-19 | 合併 art 分支前導動畫（`Assets/Art/scene/pizza_disk_v2/intro.unity` ＋ `PZ_SpaceshipTimeline.playable` ＋ CamAnim 相機動畫 ＋ 沙漠場景美術，只挑 intro 相關檔、未動 BackBone/restaurant/TMP 範例）。新增控制器 [DialogueTimelineController.cs](../Assets/Scripts/Timeline/DialogueTimelineController.cs)：翻頁（下一句台詞）從**鍵盤空白鍵改為 VR trigger 觸發**，做法比照 `IntroSequenceController` 用 `InputAction`。新增序列化欄位 `triggerVrPath`(`<XRController>{RightHand}/trigger`)、`triggerKeyboardPath`(`<Keyboard>/space`，桌面測試替身) |
