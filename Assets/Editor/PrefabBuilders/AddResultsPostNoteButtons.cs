@@ -1,5 +1,6 @@
 // ─────────────────────────────────────────────────────────────
-// AddResultsPostNoteButtons.cs — adds ShareButton (left) and PlayAgainButton (right) as
+// AddResultsPostNoteButtons.cs — adds ShareButton (bottom-right corner) and PlayAgainButton
+// (just to its left) as
 // children of BossNotePanel in PZ_ResultsCanvas.prefab, and wires them into
 // ResultsScreenController.shareButton/playAgainButton. Both start inactive - the
 // controller reveals them itself postNoteButtonDelay seconds after SetBossComment() lands
@@ -7,9 +8,9 @@
 // render while that page is showing, for free, via normal Unity active-state cascading.
 //
 // Same visual language as the rest of the UI (white rounded panel, black pixel-font text).
-// Positioned just below the note's bottom edge so they don't sit on top of the paper
-// texture. Click behaviour is NOT wired up here - what Share/Play Again actually do hasn't
-// been decided yet.
+// Anchored to the note's bottom-right corner (anchor+pivot (1,0)) and pulled inward by
+// ButtonMargin so they sit just inside the paper. Click behaviour is NOT wired up here -
+// what Share/Play Again actually do hasn't been decided yet.
 //
 // Run: Tools > Pizzala > Add Results Post-Note Buttons. Safe to re-run (replaces them).
 // ─────────────────────────────────────────────────────────────
@@ -33,8 +34,13 @@ namespace Pizzala.EditorTools
 
         const float ButtonWidth = 480f;
         const float ButtonHeight = 160f;
-        const float ButtonY = -40f;      // below the note's bottom edge (anchored at y=0 on the note)
-        const float ButtonXOffset = 550f; // distance from centre, each side
+        // Anchored to the note's bottom-right corner (anchor+pivot (1,0)). These are the
+        // inward margins from that corner: positive X pulls left off the right edge,
+        // positive Y lifts up off the bottom edge, so the button sits just inside the note.
+        const float ButtonMarginX = 60f;
+        const float ButtonMarginY = 60f;
+        // Play Again sits to the left of Share, one button-width + gap further in.
+        const float ButtonGap = 40f;
 
         [MenuItem("Tools/Pizzala/Add Results Post-Note Buttons")]
         public static void Run()
@@ -55,10 +61,11 @@ namespace Pizzala.EditorTools
             var existingPlayAgain = bossNotePanel.Find("PlayAgainButton");
             if (existingPlayAgain != null) Object.DestroyImmediate(existingPlayAgain.gameObject);
 
-            var shareButton = BuildButton("ShareButton", bossNotePanel, font, "SHARE",
-                                          new Vector2(-ButtonXOffset, ButtonY));
-            var playAgainButton = BuildButton("PlayAgainButton", bossNotePanel, font, "PLAY AGAIN",
-                                              new Vector2(ButtonXOffset, ButtonY));
+            // Bottom-right corner of the note: Share hugs the corner, Play Again to its left.
+            var shareAnchored = new Vector2(-ButtonMarginX, ButtonMarginY);
+            var playAgainAnchored = new Vector2(-ButtonMarginX - ButtonWidth - ButtonGap, ButtonMarginY);
+            var shareButton = BuildButton("ShareButton", bossNotePanel, font, "SHARE", shareAnchored);
+            var playAgainButton = BuildButton("PlayAgainButton", bossNotePanel, font, "PLAY AGAIN", playAgainAnchored);
 
             shareButton.SetActive(false);
             playAgainButton.SetActive(false);
@@ -86,9 +93,9 @@ namespace Pizzala.EditorTools
             go.transform.SetParent(parent, false);
 
             var rect = (RectTransform)go.transform;
-            rect.anchorMin = new Vector2(0.5f, 0f);
-            rect.anchorMax = new Vector2(0.5f, 0f);
-            rect.pivot = new Vector2(0.5f, 1f); // hangs downward from the anchor point
+            rect.anchorMin = new Vector2(1f, 0f); // bottom-right corner of the note
+            rect.anchorMax = new Vector2(1f, 0f);
+            rect.pivot = new Vector2(1f, 0f);     // button's own bottom-right corner sits at the anchor
             rect.sizeDelta = new Vector2(ButtonWidth, ButtonHeight);
             rect.anchoredPosition = anchoredPosition;
 
