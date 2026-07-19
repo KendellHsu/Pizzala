@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 34325304}
   - component: {fileID: 34325306}
   - component: {fileID: 34325305}
+  - component: {fileID: 34325307}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -166,7 +167,7 @@ MonoBehaviour:
   debugEndRoundKey: <Keyboard>/f10
   tuning: {fileID: 11400000, guid: 4e881b7e256069844b54e9a2abec2645, type: 2}
   customers:
-  - {fileID: 588798223}
+  - {fileID: 0}
   head: {fileID: 0}
   snapshotCamera: {fileID: 1869289667}
   overviewCameraPoint: {fileID: 258325563}
@@ -174,6 +175,7 @@ MonoBehaviour:
   resultsScreen: {fileID: 1737487650}
   activityTracker: {fileID: 34325300}
   bossCommentService: {fileID: 34325304}
+  playerCardService: {fileID: 34325307}
   boothScreen: {fileID: 959524898}
   throwbackPrefab: {fileID: 2722252330292994515, guid: 822b80b1b7a7e744baf91859aa67ce7a, type: 3}
   throwbackPrefabsByFlavor:
@@ -312,7 +314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e846980543ea0ad46bf8a2b623a315e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Core.GameFlowController
-  gameManager: {fileID: 0}
+  gameManager: {fileID: 34325299}
   resultsScreen: {fileID: 1737487650}
   tutorialController: {fileID: 123890125}
   rayLengthSwitcher: {fileID: 34325306}
@@ -322,7 +324,7 @@ MonoBehaviour:
   freezeCountdown: 0
   skipTutorialInEditor: 1
   startCountdownSeconds: 5
-  resumeCountdownSeconds: 3
+  resumeCountdownSeconds: 0
   logStateChanges: 1
   triggerVrPath: <XRController>{RightHand}/trigger
   triggerVrPathLeft: <XRController>{LeftHand}/trigger
@@ -349,6 +351,22 @@ MonoBehaviour:
   uiRayDistance: 5
   playRayDistance: 0
   hideRayVisualInPlay: 1
+--- !u!114 &34325307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34325298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27fec33fa564904aadaeaf4999cf7d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.LLM.PlayerCardService
+  model: gemini-3-pro-image
+  styleRefFiles:
+  - style_refs/Clean1.png
+  - style_refs/Saucy.png
 --- !u!114 &123890125 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4399186983352184653, guid: 344d93c225220444cbe185f4d80c2baa, type: 3}
@@ -785,17 +803,6 @@ Transform:
   - {fileID: 910467993}
   m_Father: {fileID: 970037736}
   m_LocalEulerAnglesHint: {x: 0, y: 120, z: 0}
---- !u!114 &588798223 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8899478085186037112, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-  m_PrefabInstance: {fileID: 965417417}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 013b618b00c5e0c40ab9bcd11c0d6855, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Customers.CustomerController
 --- !u!1 &591625766 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1767192433, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
@@ -1370,63 +1377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 289786a15c41b624099a2268f1a72023, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pizzala.UI.BoothStatusScreen
---- !u!1001 &965417417
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3676453755521911545, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.67
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676453755521911545, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676453755521911545, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676453755521911545, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676453755521911545, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676453755521911545, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676453755521911545, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676453755521911545, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676453755521911545, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676453755521911545, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3926375247755323528, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
-      propertyPath: m_Name
-      value: PZ_Customer_bathrobeDad
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9937e7e6880499f45ae75c7f79839a7b, type: 3}
 --- !u!1 &970037735
 GameObject:
   m_ObjectHideFlags: 0
@@ -1453,7 +1403,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 1, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 774136558}
@@ -2647,6 +2597,7 @@ PrefabInstance:
     - {fileID: 6905256779858901940, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
     - {fileID: 8977597438731402630, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
     - {fileID: 872591381181504753, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
+    - {fileID: 6962780534995619344, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 753752548867944348, guid: b2ede14a207fce649b1689eff22fb73d, type: 3}
@@ -3727,4 +3678,3 @@ SceneRoots:
   - {fileID: 996907876}
   - {fileID: 1737487649}
   - {fileID: 5464327577255556276}
-  - {fileID: 965417417}
