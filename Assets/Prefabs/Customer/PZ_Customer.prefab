@@ -759,6 +759,7 @@ MonoBehaviour:
   releaseSpeedInfluence: 0.2
   maximumReleaseSpeed: 9
   radiusRandomVariation: 0.08
+  maxActiveSauceSheets: 12
   outlineIrregularity: 0.14
   ellipseVariation: 0.1
   roundedLobeCount: 3
@@ -796,8 +797,8 @@ MonoBehaviour:
     - {fileID: 2308335721455282792, guid: 4ee057ae9bfa4ccdb776945ec8977dc8, type: 3}
     - {fileID: 2308335721455282706, guid: e0f1e5d5dffc4b80ad59ac6dce4d176a, type: 3}
     - {fileID: 2308335721455282804, guid: 2f7cb80ddab74a5da4bffaf70022a425, type: 3}
-    minimumCount: 3
-    maximumCount: 6
+    minimumCount: 6
+    maximumCount: 10
     minimumScale: 0.65
     maximumScale: 1.15
     surfaceOffset: 0.008
@@ -808,8 +809,8 @@ MonoBehaviour:
     - {fileID: 7386750647209702896, guid: 5aaa72857c0041a98d7e7c7a1df5bc23, type: 3}
     - {fileID: 7386750647209702906, guid: 82ca433db6744c04a173dff8a570bcfe, type: 3}
     - {fileID: 7386750647209702884, guid: 5f8aa3d677d04c448607e8f465f0de36, type: 3}
-    minimumCount: 3
-    maximumCount: 6
+    minimumCount: 6
+    maximumCount: 10
     minimumScale: 0.65
     maximumScale: 1.15
     surfaceOffset: 0.008
@@ -820,8 +821,8 @@ MonoBehaviour:
     - {fileID: 1440175739763480128, guid: 47fe759e93c94203a3efed400d1f3292, type: 3}
     - {fileID: 1440175739763480138, guid: 1fb578bdd51e466fa4677dac8668728b, type: 3}
     - {fileID: 1440175739763480180, guid: a8839341e6684d49bb3efdb2043e1f20, type: 3}
-    minimumCount: 3
-    maximumCount: 6
+    minimumCount: 6
+    maximumCount: 10
     minimumScale: 0.65
     maximumScale: 1.15
     surfaceOffset: 0.008
@@ -861,7 +862,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6089317645360186358
 Transform:
   m_ObjectHideFlags: 0

@@ -15,6 +15,9 @@ namespace Pizzala.Customers
     public class CustomerSurfaceSauce : MonoBehaviour
     {
         [Header("Handled Customer Hit Zones")]
+        [Tooltip("整個關掉這個客人的 3D 醬料（改回舊的 2D 角色髒污 Decal）。" +
+            "用在效果不明顯或效能敏感的角色，例如 Soldier。")]
+        [SerializeField] bool disableSurfaceSauce = false;
         [SerializeField] bool createOnFace = true;
         [SerializeField] bool createOnBody = true;
 
@@ -36,7 +39,7 @@ namespace Pizzala.Customers
         /// </summary>
         public bool Handles(CustomerHitZone hitZone)
         {
-            if (hitZone == null) return false;
+            if (disableSurfaceSauce || hitZone == null) return false;
 
             return hitZone.zone switch
             {
