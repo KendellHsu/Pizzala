@@ -356,6 +356,10 @@ namespace Pizzala.Core
                 customer.ShowPizzaInBox(pizza.flavor); // 盒中生成對應口味 pizza
                 customer.CloseBox();                    // 正確才關盒
                 Hits++;
+                Pizzala.Audio.GameAudioController.PlayHappy(
+                    customer.faceAnchor != null
+                        ? customer.faceAnchor.position
+                        : customer.transform.position + Vector3.up * 1.5f);
                 customer.ResolveOrder(true);
                 Destroy(pizza.gameObject, 0.5f);        // 消除丟中的那顆披薩
             }
@@ -363,6 +367,10 @@ namespace Pizzala.Core
             {
                 // 丟錯口味:不解決訂單、客人不離場,繼續等正確口味(倒數照跑)。
                 // 只把錯的那顆呈現在盒中,再原樣丟回;盒中那顆會在丟回發射瞬間清掉。
+                Pizzala.Audio.GameAudioController.PlayAngry(
+                    customer.faceAnchor != null
+                        ? customer.faceAnchor.position
+                        : customer.transform.position + Vector3.up * 1.5f);
                 record.outcome = ThrowOutcome.WrongFlavor;
                 customer.ShowPizzaInBox(pizza.flavor);
                 Destroy(pizza.gameObject, 0.5f);        // 消除丟中的那顆

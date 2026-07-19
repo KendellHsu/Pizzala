@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6303159702742888430
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8349080529508280037}
+  - component: {fileID: 6423674950555128924}
+  m_Layer: 0
+  m_Name: PZ_GameAudio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8349080529508280037
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6303159702742888430}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6423674950555128924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6303159702742888430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebf210b1cc634241a1f0b61d54de130a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pizzala.Audio.GameAudioController
+  bgmClip: {fileID: 8300000, guid: 87e501411c62962418ec9ea13f131922, type: 3}
+  countdownStartClip: {fileID: 8300000, guid: eca5da27231b2884d80455b7596f3300, type: 3}
+  countdownEndClip: {fileID: 8300000, guid: 27ec7ffef586a65449b4ef3ecf8bff9c, type: 3}
+  hitClip: {fileID: 8300000, guid: fe35a379a24e4564e8d32b940e6cf730, type: 3}
+  uiClickClip: {fileID: 8300000, guid: 292e6582695a448418277a0e964d8705, type: 3}
+  throwingFrisbeeClip: {fileID: 8300000, guid: 7f50d14f715a3f54d8b3ab0522625c3f, type: 3}
+  angryClips:
+  - {fileID: 8300000, guid: b95e66bf346ffc745ac69f8daeca19c0, type: 3}
+  - {fileID: 8300000, guid: ccde1f32d494c174f8d34e0b4226436f, type: 3}
+  - {fileID: 8300000, guid: 9a38f40a69739d0419a0a78f8ba73248, type: 3}
+  - {fileID: 8300000, guid: be1e53615b017a348b708964d22249d0, type: 3}
+  - {fileID: 8300000, guid: 0b14d4c90b175fd42bd5c2af6b3b7fee, type: 3}
+  happyClips:
+  - {fileID: 8300000, guid: 56f09a90efa88324eb517fdf973543cd, type: 3}
+  - {fileID: 8300000, guid: 05644120a47f2d44eb0298b5a6bc9452, type: 3}
+  - {fileID: 8300000, guid: e12b46c5f54223046b48953c07f2434b, type: 3}
+  - {fileID: 8300000, guid: fd6a32ba10af6cd43a76c342ecc157c8, type: 3}
+  - {fileID: 8300000, guid: c85c36710892a524ea5d3c81523460e8, type: 3}
+  bgmVolume: 0.4
+  countdownVolume: 1
+  sfxVolume: 1
+  voiceVolume: 1
+  uiVolume: 1
