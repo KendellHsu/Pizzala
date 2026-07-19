@@ -45,3 +45,11 @@ Assets/StreamingAssets/gemini_api_key.txt.meta
 
 # 從同學那邊拿來參考用的真實測試數據,不用進版控
 /Data/
+
+# 後端(Python) — 虛擬環境與快取,每台機器自己 pip install
+Backend/__pycache__/
+Backend/.venv/
+Backend/venv/
+# 前端 build 好丟進來的靜態檔,不進這個 repo 的版控
+Backend/public/*
+!Backend/public/.gitkeep

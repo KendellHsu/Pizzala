@@ -30,6 +30,7 @@ namespace Pizzala.DevTools
     {
         public ResultsScreenController resultsScreen;
         public BossCommentService bossCommentService; // optional - Experimental preview calls Gemini for real if set
+        public PlayerCardService playerCardService;   // optional - C key generates a clay card from the loaded session
 
         [Tooltip("Filename only - looked up under <repo root>/Data/sessions/")]
         public string sessionFileName = "session_20260716_105321_Control.json";
@@ -70,6 +71,27 @@ namespace Pizzala.DevTools
             // every box in the scene, firing each one's own OnActivated - so it tests the
             // exact per-box wiring (including the session file name typed on the event).
             if (Keyboard.current.pKey.wasPressedThisFrame) TriggerNextPhotoBox();
+            // Prompt-iteration shortcut: generate the clay player card for whichever
+            // session file is set, without having to play a whole round to reach EndRound.
+            if (Keyboard.current.cKey.wasPressedThisFrame) TestGenerateCard();
+        }
+
+        void TestGenerateCard()
+        {
+            if (playerCardService == null)
+            {
+                Debug.LogWarning("DemoResultsLoader: playerCardService not assigned - add a PlayerCardService component and wire it.");
+                return;
+            }
+            var session = LoadCached(sessionFileName);
+            if (session == null) return;
+
+            Debug.Log($"DemoResultsLoader: generating player card from {sessionFileName} " +
+                      $"(hits {session.summary.hits}/{session.summary.totalThrows}, dirt {session.summary.dirtCount}, " +
+                      $"faceHits {session.summary.playerFaceHits})...");
+            playerCardService.GenerateCard(session, () =>
+                Debug.Log($"DemoResultsLoader: card done -> playerCardImage='{session.playerCardImage}' " +
+                          $"(under {Application.persistentDataPath}/photos/)"));
         }
 
         int debugBoxIndex;
@@ -130,9 +152,10 @@ namespace Pizzala.DevTools
             if (!string.IsNullOrEmpty(session.bossComment))
                 resultsScreen.SetBossComment(session.bossComment);
             else if (bossCommentService != null)
-                bossCommentService.GetComment(session.summary, comment =>
+                bossCommentService.GetComment(session.summary, (comment, persona) =>
                 {
                     session.bossComment = comment;
+                    session.playerPersona = persona;
                     resultsScreen.SetBossComment(comment);
                 });
         }
@@ -153,9 +176,10 @@ namespace Pizzala.DevTools
 
             if (condition == ExperimentCondition.Experimental && bossCommentService != null)
             {
-                bossCommentService.GetComment(cached.summary, comment =>
+                bossCommentService.GetComment(cached.summary, (comment, persona) =>
                 {
                     cached.bossComment = comment;
+                    cached.playerPersona = persona;
                     resultsScreen.SetBossComment(comment);
                 });
             }

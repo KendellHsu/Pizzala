@@ -72,6 +72,7 @@ namespace Pizzala.Core
         public ResultsScreenController resultsScreen;
         public ActivityTracker activityTracker;
         public BossCommentService bossCommentService; // experimental group only; leave empty to skip
+        public PlayerCardService playerCardService;   // clay player card for the history website; leave empty to skip
         public BoothStatusScreen boothScreen;         // live hits/time on the booth; leave empty to skip
 
         [Tooltip("後備丟回披薩(下面陣列沒填到的口味用這個)")]
@@ -554,9 +555,12 @@ namespace Pizzala.Core
             // note page is never stuck on the "writing..." placeholder.
             if (bossCommentService != null)
             {
-                bossCommentService.GetComment(session.summary, comment =>
+                // Async - don't block EndRound() on the network call. Save happens once the
+                // comment (or its fallback) is in hand, so the logged JSON always has it.
+                bossCommentService.GetComment(session.summary, (comment, persona) =>
                 {
                     session.bossComment = comment;
+                    session.playerPersona = persona; // website-only, deliberately not shown anywhere in-game
                     if (resultsScreen != null) resultsScreen.SetBossComment(comment);
                     SessionLogger.Instance.SaveToDisk(session); // re-save the captured session, not whatever Session now points to
                 });
@@ -568,6 +572,13 @@ namespace Pizzala.Core
                 if (resultsScreen != null) resultsScreen.SetBossComment(comment);
                 SessionLogger.Instance.SaveToDisk(session);
             }
+
+            // Clay player card for the history website - runs in parallel with the comment
+            // call above; whichever lands later just re-saves the same JSON with its field
+            // filled in. Its coroutine lives on PlayerCardService, so this GameManager's
+            // StopAllCoroutines() above can't kill it.
+            if (playerCardService != null)
+                playerCardService.GenerateCard(session, () => SessionLogger.Instance.SaveToDisk());
         }
 
         // 依中彈次數挑一張「玩家髒臉」合成圖存檔(美術產出 2~3 個髒度層次)
