@@ -322,8 +322,8 @@ MonoBehaviour:
   pauseMenuPanel: {fileID: 671535620}
   countdownText: {fileID: 1994593805}
   freezeCountdown: 0
-  skipTutorialInEditor: 1
-  startCountdownSeconds: 5
+  skipTutorialInEditor: 0
+  startCountdownSeconds: 3
   resumeCountdownSeconds: 0
   logStateChanges: 1
   triggerVrPath: <XRController>{RightHand}/trigger
@@ -1403,7 +1403,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.3, z: 0}
-  m_LocalScale: {x: 0.8, y: 1, z: 0.8}
+  m_LocalScale: {x: 0.9, y: 1, z: 0.9}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 774136558}
@@ -1915,6 +1915,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1680501587, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 58445280694286476, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1178791450436251564, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
